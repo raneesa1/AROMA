@@ -7,6 +7,7 @@ router.get('/login',usercontroller.login)
 router.post('/login',usercontroller.loginpost)
 router.get('/home',usercontroller.signupget)
 router.post('/signup',usercontroller.signuppost)
+router.get('/product',usercontroller.productget)
 
 
 module.exports=router

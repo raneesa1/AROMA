@@ -131,8 +131,8 @@ select.noStyle {
 }
 .form-box h1 {
   font-size: 30px;
-  margin-bottom:40px;
-  margin-top:30px;
+  margin-bottom: 40px;
+  margin-top: 30px;
   position: relative;
   color: rgb(0, 0, 0);
 }
@@ -215,4 +215,32 @@ form a {
   color: #eaeaea;
   background: #000000;
   border-radius: 3px;
+}
+
+.icon-box {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: 6px; /* Add spacing between icons if needed */
+}
+
+.icon-box svg {
+  width: 12px; /* Adjust the width to make the icons smaller */
+  height: 12px; /* Adjust the height accordingly */
+  fill: #000; /* Modify the color if needed */
+}
+.d-flex p {
+  padding: 3px; /* Adjust the top padding to bring the text closer */
+  margin: 0; /* Remove any margin to make it closer to the line */
+  color: #000000;
+  font-family: Tahoma;
+}
+
+.flexMain {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  margin-bottom: 0;
+  height: 50px; /* Adjust the height as needed */
+  width: 100%; /* Adjust the width as needed */
 }

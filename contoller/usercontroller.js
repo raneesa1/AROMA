@@ -59,6 +59,9 @@ const signuppost=async(req,res)=>{
         res.redirect('/home')
     }
 }
+const productget=(req,res)=>{
+    res.render('product')
+}
 
-module.exports={home,login,loginpost,signupget,signuppost}
+module.exports={home,login,loginpost,signupget,signuppost,productget}
 
