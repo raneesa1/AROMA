@@ -1,0 +1,46 @@
+.brandname {
+  height: 200px;
+  background-color: rgb(182, 182, 182);
+  padding-top: 70px;
+  font-family: gills sans;
+}
+.product-box {
+  border: 1px solid #ddd;
+  padding: 5px;
+  padding-bottom: 12px;
+  text-align: center;
+  width: 230px;
+}
+
+.product-title {
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+.product-description {
+  font-size: 9px;
+}
+
+.product-price {
+  font-size: 18px;
+  color: #030202;
+  margin: 5px 0;
+}
+
+.add-to-cart {
+  /* background-color: #000000; */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 9px;
+  cursor: pointer;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+*body{
+  background-image: url('../photos/landing.webp')
+}
