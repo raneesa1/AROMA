@@ -102,7 +102,7 @@ select.noStyle {
   position: absolute;
   left: 35%;
   right: 50%;
-  top: 20%;
+  top: 10%;
 }
 * {
   margin: 0;
@@ -122,7 +122,7 @@ select.noStyle {
   font-family: lucida;
   max-width: 450px;
   position: absolute;
-  top: -75%;
+  top: -86%;
   left: 50%;
   background: #fff;
   transform: translate(-50%, 50%);
@@ -211,6 +211,7 @@ form a {
   font-size: 9px;
   border: none;
   height: 23px;
+  font-family: tahoma;
   width: 43px;
   color: #eaeaea;
   background: #000000;

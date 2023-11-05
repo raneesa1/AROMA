@@ -140,13 +140,24 @@
             <div class="input-field">
               <input type="email" placeholder="email" name="email" />
             </div>
+            <div class="input-field" id="numberfield">
+              <input
+                type="text"
+                placeholder="phone number"
+                name="phonenumber"
+              />
+            </div>
             <div class="input-field">
               <input type="password" placeholder="password" name="password" />
             </div>
+
             <p id="forget" style="display: none">
               <a href="">Forgot password?</a>
             </p>
           </div>
+          <% if (err) { %>
+          <div class="alert alert-danger"><%= err %></div>
+          <% } %>
           <div class="submitbtn">
             <button type="submit" id="submitbtn">Submit</button>
           </div>
@@ -157,12 +168,14 @@
       let signupbtn = document.getElementById("signupbtn");
       let loginbtn = document.getElementById("loginbtn");
       let namefield = document.getElementById("namefield");
+      let numberfield = document.getElementById("numberfield");
       let title = document.getElementById("title");
 
       loginbtn.onclick = function () {
         document.getElementById("forget").style.display = "block";
 
         namefield.style.maxHeight = "0";
+        numberfield.style.maxHeight = "0";
         title.innerHTML = "Login";
         signupbtn.classList.add("disabled-btn");
         loginbtn.classList.remove("disabled-btn");
@@ -172,6 +185,7 @@
       signupbtn.onclick = function () {
         document.getElementById("forget").style.display = "none";
         namefield.style.maxHeight = "60px";
+        numberfield.style.maxHeight = "60px";
         title.innerHTML = "Sign up";
         signupbtn.classList.remove("disabled-btn");
         loginbtn.classList.add("disabled-btn");
