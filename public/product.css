@@ -163,3 +163,14 @@ select.noStyle {
   margin: 0 auto; /* Center the carousel */
 }
 
+/* Remove the blue color */
+a {
+  color: inherit; /* Use the text color of the parent element */
+  text-decoration: none; /* Remove the underline */
+}
+
+/* Add a different color when the anchor tag is hovered */
+a:hover {
+  color: #007bff; /* Change to the desired color on hover (e.g., Bootstrap's primary blue) */
+  text-decoration: none; /* Remove the underline on hover */
+}

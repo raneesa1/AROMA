@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/userm.css" />
+
+    <title>user Management</title>
+  </head>
+  <body>
+    <div style="background-color: black; height: 4px" class="w-100"></div>
+
+    <div id="menuHolder">
+      <div
+        role="navigation"
+        class="sticky-top border-bottom border-top"
+        id="mainNavigation"
+      >
+        <div class="flexMain">
+          <div class="flex2"></div>
+          <div
+            class="flex3"
+            id="siteBrand"
+            style="font-size: 32px; margin-bottom: 0px; padding-bottom: 0"
+          >
+            AROMA
+          </div>
+
+          <div class="flex2 text-end d-block d-md-none">
+            <button class="whiteLink siteLink">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+
+          <div class="flex2 text-end d-none d-md-block align-content-lg-end">
+            <div class="d-flex justify-content-end align-items-center pr-5">
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      style="color: black"
+                      fill="currentColor"
+                      class="bi bi-search"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                      /></svg></i
+                ></a>
+              </div>
+
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-person-circle"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                      <path
+                        fill-rule="evenodd"
+                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                      /></svg></i
+                ></a>
+              </div>
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      style="color: rgb(0, 0, 0)"
+                      fill="currentColor"
+                      class="bi bi-heart"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.920 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                      /></svg></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+     <div class="menu-section text-decoration-none">
+        <a href=""><div class="menu-item">DASHBOARD</div></a>
+        <a href="/admin/product"><div class="menu-item">PRODUCTS</div></a>
+        <a href="/admin/category"><div class="menu-item">CATEGORY</div></a>
+        <a href=""><div class="menu-item">ORDERS</div></a>
+        <a href=""><div class="menu-item">COUPON</div></a>
+        <a href=""><div class="menu-item">BANNER</div></a>
+        <a href=""> <div class="menu-item">TRANSACTION</div></a>
+        <a href="/admin/user"> <div class="menu-item">MANAGE USER</div></a>
+        <a href=""> <div class="menu-item">MANAGE ADMIN</div></a>
+        <a href=""><div class="menu-item">LOGOUT</div></a>
+      </div>
+
+      <div class="table-edit">
+        <p class="text-center m-3 p-2">USER MANAGEMENT</p>
+        <table class="table table-bordered text-center">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone No</th>
+              <th>Status</th>
+              <th>Joined Date</th>
+              <th>Edit Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Add your table rows here -->
+            <%userdata.forEach((data,index)=>{%>
+            <tr>
+              <td><%-data.name%></td>
+              <td><%-data.email%></td>
+              <td><%-data.phonenumber%></td>
+              <td>
+                <% if (data.status) { %> Blocked <% } else { %> active <% } %>
+              </td>
+              <td>
+                <%let date1=new Date(data.date)%>
+                <%-date1.getDate()%>-<%-date1.getMonth()+1%>-<%-date1.getFullYear()%>
+              </td>
+              <td>
+                <a
+                  href="/admin/block/<%-data._id%>"
+                  onclick="return confirm('are you sure you want to block this user?')"
+                >
+                  <i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      style="color: rgb(209, 35, 35)"
+                      fill="currentColor"
+                      class="bi bi-lock-fill"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"
+                      /></svg></i
+                ></a>
+                <a
+                  href="/admin/unblock/<%-data._id%>"
+                  onclick="return confirm('are you sure you want to unblock this user?')"
+                >
+                  <i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      style="color: green"
+                      fill="currentColor"
+                      class="bi bi-unlock-fill"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"
+                      /></svg></i
+                ></a>
+                <a
+                  href="/admin/delete/<%-data._id%>"
+                  onclick="return confirm('are you sure you want to delete this user?')"
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-trash"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"
+                      />
+                      <path
+                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"
+                      /></svg></i
+                ></a>
+              </td>
+              <!-- Add more rows for additional products -->
+            </tr>
+            <% })%>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bootstrap and JavaScript dependencies -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

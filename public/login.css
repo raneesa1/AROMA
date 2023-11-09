@@ -122,7 +122,7 @@ select.noStyle {
   font-family: lucida;
   max-width: 450px;
   position: absolute;
-  top: -86%;
+  top: -110%;
   left: 50%;
   background: #fff;
   transform: translate(-50%, 50%);
@@ -174,7 +174,7 @@ form p {
 form a {
   text-decoration: none;
   color: #000;
-  padding-left: 19px;
+  /* padding-left: 19px; */
 }
 .btn-field {
   width: 50%;
@@ -244,4 +244,50 @@ form a {
   margin-bottom: 0;
   height: 50px; /* Adjust the height as needed */
   width: 100%; /* Adjust the width as needed */
+}
+
+.g {
+  color: #000000; /* Blue */
+  font-family: tahoma;
+  text-decoration: none;
+}
+
+.o {
+  color: #0f9d58; /* Green */
+}
+
+.o2 {
+  color: #f4b400; /* Yellow */
+}
+
+.g2 {
+  color: #4285f4; /* Blue */
+}
+
+.l {
+  color: #db4437; /* Red */
+}
+
+.e {
+  color: #0f9d58; /* Green */
+}
+
+.google-text {
+  /* font-size: 12px; */
+  /* margin-top: 10px; */
+  border-color: #9d9d9d;
+  background-color: #ffffff;
+  /* font-weight: bold; */
+  padding: 2px;
+  height: 22px;
+  margin-top: 8px;
+  width: 200px;
+  font-family: tahoma;
+  text-decoration: none;
+  align-items: center;
+  text-align: center;
+  border-radius: 7px;
+  font-size: 10px;
+  border: 1px solid #bcbcbc;
+  display: inline-block;
 }

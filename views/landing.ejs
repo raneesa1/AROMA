@@ -133,55 +133,27 @@
     <div class="container">
       <!-- Added a container for the product grid -->
       <div class="row">
+        <% products.forEach(product => { %>
+        <a href="/products">
+          <div class="col-md-4 ">
+            <!-- Create a column for each product -->
+            <div class="product-box m-3">
+              <img
+                src="<%= product.image[0] %>"
+                alt="Product Name"
+                width="140"
+                height="140"
+              />
+              <h4 class="product-title text-decoration-none"><%= product.name%></h4>
+              <p class="product-description"><%= product.description %></p>
+              <p class="product-price">&#8377;<%= product.price %></p>
+              <a class="add-to-cart">View details</a>
+            </div>
+          </div>
+        </a>
         <!-- Start of the product grid row -->
-        <div class="col-md-4">
-          <!-- Create a column for each product -->
-          <div class="product-box m-3">
-            <img
-              src="/photos/bluedechannel.webp"
-              alt="Product Name"
-              width="140"
-              height="140"
-            />
-            <h4 class="product-title">BLUE DE CHANNEL</h4>
-            <p class="product-description">EAU PARFUM SPRAY</p>
-            <p class="product-price">10,700</p>
-            <a class="add-to-cart">View details</a>
-          </div>
-        </div>
 
-        <div class="col-md-4">
-          <!-- Create a column for each product -->
-          <div class="product-box m-3">
-            <img
-              src="/photos/paris-biarritz.webp"
-              alt="Product Name"
-              width="140"
-              height="140"
-            />
-            <h4 class="product-title">BLUE DE CHANNEL</h4>
-            <p class="product-description">EAU PARFUM SPRAY</p>
-            <p class="product-price">12,030</p>
-            <a class="add-to-cart">View details</a>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <!-- Create a column for each product -->
-          <div class="product-box m-3">
-            <img
-              src="/photos/paris-edimourg.webp"
-              alt="Product Name"
-              width="140"
-              height="140"
-            />
-            <h4 class="product-title">BLUE DE CHANNEL</h4>
-            <p class="product-description">EAU PARFUM SPRAY</p>
-            <p class="product-price">15,000</p>
-            <a class="add-to-cart">View details</a>
-          </div>
-        </div>
-        <!-- End of the product grid row -->
+        <% }); %>
       </div>
     </div>
 

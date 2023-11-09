@@ -5,16 +5,13 @@ require('dotenv').config()
 const userSchema=new mongoose.Schema({
     name:{
         type:String,
-        required:true,
     },
     email:{
         type: String,
-        required: true,
-        unique: true,
+
     },
     password:{
         type:String,
-        required:true
 
     },
     phonenumber:{
@@ -31,6 +28,10 @@ const userSchema=new mongoose.Schema({
         type:String,
         enum:['user']
     },
+    status: {
+    type: Boolean,
+    default: false, 
+  }
 })
 const user=mongoose.model(process.env.USER_COLLECTION,userSchema)
 module.exports=user

@@ -1,14 +1,13 @@
 const express=require('express')
 const router=express.Router()
 const usercontroller=require('../contoller/usercontroller')
-const {body,validationresult}= require('express-validator')
 
 
-router.get('/', usercontroller.home);
+router.get('/', usercontroller.getlanding);
 router.get('/login', usercontroller.login);
-router.post('/login',usercontroller.postloginwithvalidation);
+router.post('/login',usercontroller.loginpost);
 router.get('/signup', usercontroller.signupget); 
-router.post('/signup', usercontroller.postsignupwithvalidation);
+router.post('/signup', usercontroller.signuppost);
 router.get('/home',usercontroller.gethome)
 router.get('/product', usercontroller.productget);
 router.get('/cart', usercontroller.cartget);
