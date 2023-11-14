@@ -6,26 +6,29 @@
 }
 .product-box {
   border: 1px solid #ddd;
-  padding: 5px;
+ margin: 29px; 
+  align-items: center;
   padding-bottom: 12px;
+  margin: 10px 0;
   text-align: center;
-  width: 150px;
+  width: 300px;
   border: none;
-  /* border: none; */
+
 }
 
 .product-title {
-  font-size: 10px;
+  font-size: 15px;
   margin: 4px 0;
 }
 
 .product-description {
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .product-price {
-  font-size: 12px;
+  font-size: 14px;
   color: #030202;
+  font-weight: 500;
   margin: 5px 0;
 }
 
@@ -112,6 +115,7 @@ button.siteLink {
 #mainNavigation {
   transition: transform 200ms linear;
   background: #fff;
+  height: 130px;
 }
 .drawMenu > #menuDrawer {
   transform: translateX(0%);
@@ -127,14 +131,17 @@ a.nav-menu-item:hover {
   border-left: 10px solid black;
 }
 a.nav-menu-item {
-  transition: border 200ms linear;
-  text-decoration: none;
-  display: block;
-  padding: 18px;
-  padding-left: 32px;
-  border-bottom: 1px solid #eaeaea;
-  font-weight: bold;
-  color: #000000;
+  a.nav-menu-item {
+    transition: border 200ms linear;
+    text-decoration: none;
+    display: block;
+    /* padding: 18px; */
+
+    /* padding-top: 30px; Adjust this value to bring the text down */
+    border-bottom: 1px solid #eaeaea;
+    font-weight: bold;
+    color: #000000;
+  }
 }
 select.noStyle {
   border: none;
@@ -167,8 +174,8 @@ select.noStyle {
   margin-left: 6px; /* Add spacing between icons if needed */
 }
 .icon-box svg {
-  width: 12px; /* Adjust the width to make the icons smaller */
-  height: 12px; /* Adjust the height accordingly */
+  width: 20px; /* Adjust the width to make the icons smaller */
+  height: 20px; /* Adjust the height accordingly */
   fill: #000; /* Modify the color if needed */
 }
 .banner-font {
@@ -227,4 +234,24 @@ a {
 a:hover {
   color: #000000; /* Change to the desired color on hover (e.g., Bootstrap's primary blue) */
   text-decoration: none; /* Remove the underline on hover */
+}
+.col-size {
+  /* width: 25%; You can adjust the percentage as needed */
+  padding: 0;
+}
+
+
+/* Add a media query to control the column width on smaller screens */
+@media (max-width: 768px) {
+  .col-size {
+    width: 50%; /* Adjust for smaller screens if necessary */
+  }
+}
+.product-container {
+  display: flex;
+  flex-wrap: wrap; /* Wrap products to the next row when needed */
+  justify-content: center; /* Center products horizontally */
+  align-items: center; /* Center products vertically */
+
+/* padding-left: 500px; */
 }

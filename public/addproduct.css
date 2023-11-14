@@ -111,21 +111,21 @@ select.noStyle {
 .box {
   /* padding: 12px; Reduce padding for a smaller box */
   padding-top: 0%;
-  padding: 6px;
+  /* padding: 6px; */
   margin: 4%;
-  padding: 12px;
+  /* padding: 12px; */
   height: auto; /* Adjust the height as needed */
   color: rgb(0, 0, 0);
   /* border: 1px solid #eaeaea; Add a border for better visibility */
-  width: 600px;
-  font-size: 12px;
-  justify-content: center;
+  width: 100%;
+  font-size: 18px;
+  /* justify-content: center; */
   /* gap: 12px; */
-  position: absolute;
+  /* position: absolute; */
   /* margin: 12px; */
-  left: 18%;
-  right: 50%;
-  top: 2%;
+  /* left: 18%; */
+  /* right: 50%; */
+  /* top: 2%; */
 }
 
 * {
@@ -142,8 +142,8 @@ select.noStyle {
 }
 
 .icon-box svg {
-  width: 12px;
-  height: 12px;
+  width: 20px;
+  height: 20px;
   fill: #000;
 }
 
@@ -154,3 +154,4 @@ input.form-control {
 textarea[name="description"] {
   font-size: 14px; /* Adjust the font size as needed */
 }
+

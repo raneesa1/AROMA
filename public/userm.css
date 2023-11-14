@@ -109,14 +109,14 @@ select.noStyle {
   height: 500px;
   color: rgb(0, 0, 0);
   border: 200px;
-  width: 340px;
+  width: 100%;
   font-size: 12px;
-  justify-content: center;
+  /* justify-content: center;/ */
   gap: 12px;
   /* align-items: center; */
-  position: absolute;
-  left: 35%;
-  right: 50%;
+  /* position: absolute; */
+  /* left: 35%; */
+  /* right: 50%; */
   top: 20%;
 }
 * {
@@ -131,8 +131,8 @@ select.noStyle {
   margin-left: 6px; /* Add spacing between icons if needed */
 }
 .icon-box svg {
-  width: 12px; /* Adjust the width to make the icons smaller */
-  height: 12px; /* Adjust the height accordingly */
+  width: 20px; /* Adjust the width to make the icons smaller */
+  height: 20px; /* Adjust the height accordingly */
   fill: #000; /* Modify the color if needed */
 }
 .menu-section {
@@ -146,20 +146,21 @@ select.noStyle {
 }
 
 .menu-item {
-  margin: 10px 0; /* Adjust margin between menu items */
+  margin: 14px 0; /* Adjust margin between menu items */
   font-family: tahoma;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: bold;
   color: #6d6d6d;
+  width: 170px;
   text-decoration: none;
 }
-.menu-item:hover{
+.menu-item:hover {
   color: #000;
 }
 
 table.table-bordered thead th {
   border: none; /* Remove border from table header cells */
-  font-size: 12px;
+  font-size: 16px;
   color: #696969;
   font-weight: 600;
   font-family: arial;
@@ -169,8 +170,12 @@ table.table-bordered thead th {
 }
 table.table-bordered td {
   border: none; /*Remove border from table data cells */
-  font-size: 11px;
+  font-size: 15px;
 }
 .table-edit {
   margin: 12px;
+  padding: 12px;
+  width: 100%;
+
 }
+

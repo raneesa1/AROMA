@@ -33,10 +33,9 @@
             class="flex3 text-center m-4"
             id="siteBrand"
             style="
-              font-size: 32px;
+              font-size: 52px;
               margin-left: 200px;
-              margin-bottom: 0px;
-              padding-bottom: 0;
+              padding-top: 22px;
             "
           >
             AROMA
@@ -106,18 +105,19 @@
           </div>
         </div>
         <div
-          class="d-flex"
+          class="d-flex justify-content-center "
           style="
-            padding-left: 365px;
+            /* align-items: center; */
+            text-align: center;
             font-size: medium;
-            font-size: 9px;
+            font-size: 15px;
             padding-top: 0;
           "
         >
-          <p class="pl-4">WOMEN</p>
-          <p class="pl-4">MEN</p>
-          <p class="pl-4">SHOP</p>
-          <p class="pl-4">HELP</p>
+          <p class="p-3 mt-3  ">WOMEN</p>
+          <p class="p-3 mt-3">MEN</p>
+          <p class="p-3 mt-3">SHOP</p>
+          <p class="p-3 mt-3">HELP</p>
         </div>
       </div>
     </div>
@@ -125,26 +125,28 @@
       <img
         src="../photos/landing.webp"
         alt="banner loading"
-        height="300px"
+        height="400px"
         width="100%"
       />
     </div>
-    <h5 class="text-center" style="margin-top: 32px">THE ESSENTIALS</h5>
-    <div class="container">
+    <h2 class="text-center" style="margin-top: 32px">THE ESSENTIALS</h2>
+    <div class="container product-container align-content-center justify-content-center ">
       <!-- Added a container for the product grid -->
-      <div class="row">
+      <div class="row ">
         <% products.forEach(product => { %>
-        <a href="/products">
-          <div class="col-md-4 ">
+        <a href="/products?id=<%=product._id%>">
+          <div class="col col-size">
             <!-- Create a column for each product -->
-            <div class="product-box m-3">
+            <div class="product-box ">
               <img
                 src="<%= product.image[0] %>"
                 alt="Product Name"
-                width="140"
-                height="140"
+                width="200"
+                height="200"
               />
-              <h4 class="product-title text-decoration-none"><%= product.name%></h4>
+              <h4 class="product-title text-decoration-none">
+                <%= product.name%>
+              </h4>
               <p class="product-description"><%= product.description %></p>
               <p class="product-price">&#8377;<%= product.price %></p>
               <a class="add-to-cart">View details</a>
@@ -162,8 +164,8 @@
       <img
         src="/photos/variousinterpretations.webp"
         alt=""
-        width="43%"
-        height="340px"
+        width="45%"
+        height="590px"
       />
     </div>
     <div class="d-flex p-5 m-5 pt-0 mt-0">
@@ -171,7 +173,7 @@
         src="/photos/bluedechanel-banner.webp"
         alt=""
         width="43%"
-        height="340px"
+        height="540px"
       />
       <p class="p-5 m-5 banner-font">DISCOVER THE BLUE DE CHANEL LINE</p>
     </div>
@@ -181,7 +183,7 @@
         src="/photos/takeyourchoice-banner.webp"
         alt=""
         width="43%"
-        height="340px"
+        height="540px"
       />
     </div>
     <div class="footer-head">

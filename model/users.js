@@ -24,9 +24,9 @@ const userSchema=new mongoose.Schema({
     date:{
         type:Date,
     },
-    role:{
-        type:String,
-        enum:['user']
+    isAdmin:{
+        type:Boolean,
+        default:false
     },
     status: {
     type: Boolean,

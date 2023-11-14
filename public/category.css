@@ -53,7 +53,7 @@ button.siteLink {
 #siteBrand {
   font-family: lucida;
   letter-spacing: -1px;
-  font-size: 32px;
+  font-size: 52px;
   color: #252525;
   line-height: 1em;
   margin-bottom: 0;
@@ -109,14 +109,14 @@ select.noStyle {
   height: 500px;
   color: rgb(0, 0, 0);
   border: 200px;
-  width: 340px;
+  width: 100%;
   font-size: 12px;
-  justify-content: center;
+  /* justify-content: center;/ */
   gap: 12px;
   /* align-items: center; */
-  position: absolute;
-  left: 35%;
-  right: 50%;
+  /* position: absolute; */
+  /* left: 35%; */
+  /* right: 50%; */
   top: 20%;
 }
 * {
@@ -146,32 +146,72 @@ select.noStyle {
 }
 
 .menu-item {
-  margin: 10px 0; /* Adjust margin between menu items */
+  margin: 14px 0; /* Adjust margin between menu items */
   font-family: tahoma;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: bold;
   color: #6d6d6d;
+  width: 170px;
   text-decoration: none;
 }
 .menu-item:hover {
   color: #000;
 }
 
-.menu-section a {
-  text-decoration: none;
-}
 table.table-bordered thead th {
   border: none; /* Remove border from table header cells */
-  font-size: 12px;
+  font-size: 18px;
   color: #696969;
   font-weight: 600;
   font-family: arial;
 }
+.menu-section a {
+  text-decoration: none;
+}
 
+.menu-section .menu-item a {
+  text-decoration: none;
+}
 table.table-bordered td {
   border: none; /*Remove border from table data cells */
-  font-size: 11px;
+  font-size: 16px;
 }
 .table-edit {
   margin: 12px;
+  padding: 12px;
+  width: 100%;
+}
+
+.addproduct-btn {
+  font-size: 14px;
+  border: none;
+  /* padding-bottom: 2px; */
+  height: 33px;
+  font-family: tahoma;
+  width: 130px;
+  text-decoration: none;
+
+  color: #eaeaea;
+  background: #000000;
+  border-radius: 3px;
+}
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+.addproduct-btn {
+  margin-left: auto;
+}
+table {
+  width: 100%; /* Set the width of the table to 100% */
+  font-size: 16px; /* Adjust the font size of the table text */
+}
+.table-bordered tbody ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }

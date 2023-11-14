@@ -1,0 +1,156 @@
+.d-flex p {
+  padding: 3px; /* Adjust the top padding to bring the text closer */
+  margin: 0; /* Remove any margin to make it closer to the line */
+  color: #000000;
+}
+
+.flexMain {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  margin-bottom: 0;
+  height: 50px;
+  width: 100%;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.flex2 {
+  flex: 2;
+}
+
+.flex3 {
+  flex: 45;
+}
+
+button.siteLink {
+  margin-left: -5px;
+  border: none;
+  padding: 24px;
+  display: inline-block;
+  min-width: 115px;
+}
+
+.whiteLink {
+  background: #fff;
+}
+
+.whiteLink:active {
+  background: #000;
+  color: #fff;
+}
+
+.blackLink {
+  color: #fff;
+  background: #232323;
+  transition: all 300ms linear;
+}
+
+.blackLink:active {
+  color: #000;
+  background: #fff;
+}
+
+#siteBrand {
+  font-family: lucida;
+  letter-spacing: -1px;
+  font-size: 24px; /* Reduce the font size */
+  color: #252525;
+  line-height: 1em;
+  margin-bottom: 0;
+}
+
+#menuDrawer {
+  background: #fff;
+  position: fixed;
+  height: 100vh;
+  overflow: auto;
+  z-index: 12312;
+  top: 0;
+  left: 0;
+  border-right: 1px solid #eaeaea;
+  min-width: 25%;
+  max-width: 320px;
+  width: 100%;
+  transform: translateX(-100%);
+  transition: transform 200ms linear;
+}
+
+#mainNavigation {
+  transition: transform 200ms linear;
+  background: #fff;
+}
+
+.fa-times {
+  cursor: pointer;
+}
+
+a.nav-menu-item:hover {
+  margin-left: 2px;
+  border-left: 10px solid black;
+}
+
+a.nav-menu-item {
+  transition: border 200ms linear;
+  text-decoration: none;
+  display: block;
+  padding: 18px;
+  padding-left: 32px;
+  border-bottom: 1px solid #eaeaea;
+  font-weight: bold;
+  color: #000000;
+}
+
+select.noStyle {
+  border: none;
+  outline: none;
+}
+
+.box {
+  /* padding: 12px; Reduce padding for a smaller box */
+  padding-top: 0%;
+  /* padding: 6px; */
+  margin: 4%;
+  /* padding: 12px; */
+  height: auto; /* Adjust the height as needed */
+  color: rgb(0, 0, 0);
+  /* border: 1px solid #eaeaea; Add a border for better visibility */
+  width: 100%;
+  font-size: 18px;
+  /* justify-content: center; */
+  /* gap: 12px; */
+  /* position: absolute; */
+  /* margin: 12px; */
+  /* left: 18%; */
+  /* right: 50%; */
+  /* top: 2%; */
+}
+
+* {
+  margin: 0;
+  padding: 0%;
+  /* box-sizing: border-box; */
+}
+
+.icon-box {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: 6px;
+}
+
+.icon-box svg {
+  width: 20px;
+  height: 20px;
+  fill: #000;
+}
+
+/* Reduce the font size of input fields */
+input.form-control {
+  font-size: 14px; /* Adjust the font size as needed */
+}
+textarea[name="description"] {
+  font-size: 14px; /* Adjust the font size as needed */
+}

@@ -6,6 +6,7 @@ const productrouter=require('./router/productrouter')
 const session=require('express-session')
 const bcrypt=require('bcrypt')
 const multer=require('multer')
+const nodemailer=require('nodemailer');
 const port=3000
 
 

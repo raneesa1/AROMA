@@ -32,12 +32,7 @@
           <div
             class="flex3 text-center m-4"
             id="siteBrand"
-            style="
-              font-size: 32px;
-              margin-left: 200px;
-              margin-bottom: 0px;
-              padding-bottom: 0;
-            "
+            style="font-size: 52px; margin-left: 200px; padding-top: 22px"
           >
             AROMA
           </div>
@@ -68,7 +63,7 @@
                 ></a>
               </div>
               <div class="icon-box">
-                <a href=""
+                <a href="login"
                   ><i
                     ><svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -106,23 +101,25 @@
           </div>
         </div>
         <div
-          class="d-flex"
+          class="d-flex justify-content-center"
           style="
-            padding-left: 365px;
+            /* align-items: center; */
+            text-align: center;
             font-size: medium;
-            font-size: 9px;
+            font-size: 15px;
             padding-top: 0;
           "
         >
-          <p class="pl-4">WOMEN</p>
-          <p class="pl-4">MEN</p>
-          <p class="pl-4">SHOP</p>
-          <p class="pl-4">HELP</p>
+          <% categorydata.forEach(category => { %>
+          <p class="p-3 mt-3"><%=category.name%></p>
+          <% })%>
+          <p class="p-3 mt-3">SHOP</p>
+          <p class="p-3 mt-3">HELP</p>
         </div>
       </div>
     </div>
     <div class="product-containe d-flex">
-      <div class="product-image pt-5">
+      <div class="product-image col-lg-6 col-md-6 col-sm-12 pt-5">
         <div
           id="productImageCarousel"
           class="carousel slide"
@@ -130,24 +127,20 @@
           data-ride="carousel"
         >
           <div class="carousel-inner">
-            <%products.forEach((product,index)=>{%>
-               <% if (Array.isArray(product.image) && product.image.length > 0) { %>
-        <% product.image.forEach((image, index) => { %>
-            
+            <% if (Array.isArray(products.image) && products.image.length > 0) {
+            %> <% products.image.forEach((image, index) => { %>
+
             <div class="carousel-item <%= index === 0 ? ' active' : '' %>">
               <img
-                src="<%= product.image[index]%>"
+                src="<%= products.image[index]%>"
                 class="d-block w-100"
-                alt="<%=product.name%>"
+                alt="<%=products.name%>"
                 data-toggle="modal"
                 data-target="#imageZoomModal<%= index + 1 %>"
-
               />
             </div>
 
-              <% }); %>
-      <% } %>
-            <% }); %>
+            <% }); %> <% } %>
             <!-- <div class="carousel-item">
               <img
                 src="/photos/bleudechanel-2.webp"
@@ -173,37 +166,74 @@
             role="button"
             data-slide="next"
           >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="carousel-control-next-icon" aria-hidden="true"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-arrow-left-short"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
+                />
+              </svg>
+            </span>
             <span class="sr-only">Next</span>
           </a>
         </div>
       </div>
-      <div class="product-details pb-5 pt-5 pr-5 pl-0 mt-5">
-        <% products.forEach((product, index) => { %>
-        <h1 class="product-title" style="font-size: 20px">
-          <%= product.name %>
+      <div class="product-details col-lg-6 col-md-6 col-sm-12">
+        <h1 class="product-title" style="font-size: 30px">
+          <%= products.name %>
         </h1>
-        <p class="product-description" style="font-size: 9px; font-weight: 300">
-          <%= product.description %>
+        <hr class="first-hr" />
+        <p
+          class="product-description m-0 p-0"
+          style="font-size: 23px; font-weight: 300"
+        >
+          <%= products.description %>
         </p>
         <a href=""
-          ><p class="product-price" style="font-size: 9px; font-weight: 100">
+          ><p
+            class="product-price m-0 pt-0 pb-4"
+            style="font-size: 15px; font-weight: 100"
+          >
             view more detials
           </p></a
         >
-        <p class="product-price">&#8377;<%= product.price %></p>
+        <div class="d-flex">
+          <p class="product-price">&#8377;<%= products.price %></p>
+          <button class="fav-btn btn" style="padding-left: 290px">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              class="bi bi-heart"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+              />
+            </svg>
+          </button>
+        </div>
+
         <hr />
-        <% }); %>
-        <p style="font-size: 9px; font-weight: 600">2 SIZE AVAILABLE</p>
+
+        <p style="font-size: 14px; font-weight: 600">2 SIZE AVAILABLE</p>
         <div class="btn-block">
           <button
             type="button"
             style="
               border-color: rgb(48, 54, 54);
               margin-top: 12px;
-              width: 300px;
+              width: 380px;
               font-family: tahoma;
-              font-size: 10px;
+              font-size: 15px;
             "
             class="btn dropdown-toggle"
             data-toggle="dropdown"
@@ -218,11 +248,83 @@
           </ul>
         </div>
         <button class="add-to-cart-btn">
-          <a class="add-to-cart-btn" href="cart">ADD TO CART</a>
+          <a class="add-to-cart-btn" href="">ADD TO CART</a>
         </button>
       </div>
     </div>
 
+    <div class="product-info-box text-center">
+      <h3 class="product-info-title">PRODUCT INFORMATION</h3>
+      <hr />
+      <h6>PRODUCT DETAILS</h6>
+      <P style="color: rgb(149, 149, 149)"> <%= products.description %> </P>
+      <hr />
+      <H6>ADDITIONAL INFORMATION</H6>
+      <P style="color: rgb(149, 149, 149)"> <%= products.description %> </P>
+      <hr />
+    </div>
+    <h1 class="text-center pt-5">PERFECT MATCH</h1>
+    <div
+      class="container product-container align-content-center justify-content-center"
+    >
+      <!-- Added a container for the product grid -->
+      <div
+        class="row align-content-center justify-content-center product-details-middle"
+      >
+        <% related.forEach(product => { %>
+        <a href="/products?id=<%=product._id%>">
+          <div class="col col-size">
+            <!-- Create a column for each product -->
+            <div
+              class="product-box align-content-center justify-content-center"
+            >
+              <img
+                src="<%= product.image[0] %>"
+                alt="Product Name"
+                width="200"
+                height="200"
+              />
+              <div class="product-details-middle">
+                <h4 class="product-title text-decoration-none">
+                  <%= product.name%>
+                </h4>
+
+                <p class="product-description"><%= product.description %></p>
+                <p class="product-price">&#8377;<%= product.price %></p>
+                <a class="add-to-cart">View details</a>
+              </div>
+            </div>
+          </div>
+        </a>
+        <!-- Start of the product grid row -->
+
+        <% }); %>
+      </div>
+    </div>
+    <div class="footer-head">
+      <footer>
+        <h4 class="text-center p-5" style="font-family: lucida">AROMA</h4>
+        <div class="row-style">
+          <div class="col-style" style="color: rgb(160, 160, 160)">
+            <p style="font-size: 11px; color: rgb(255, 255, 255)">
+              EXPLORE AROMA.COM
+            </p>
+            <p style="font-size: 11px">WOMEN</p>
+            <p style="font-size: 11px">MEN</p>
+            <p style="font-size: 11px">SHOP</p>
+          </div>
+          <div class="col-style" style="color: rgb(160, 160, 160)">
+            <p style="font-size: 11px; color: rgb(255, 255, 255)">
+              ONLINE SERVICES
+            </p>
+            <p style="font-size: 11px">MY ACCOUNT</p>
+            <p style="font-size: 11px">HELP</p>
+            <p style="font-size: 11px">MY CART</p>
+            <p style="font-size: 11px">MY WHISHLIST</p>
+          </div>
+        </div>
+      </footer>
+    </div>
     <script>
       // for drop down text placement
       var dropdownButton = document.getElementById("dropdownButton");
@@ -261,31 +363,36 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
-    <!-- Modal for zoomed image -->
-    <div
-      class="modal fade"
-      id="imageZoomModal1"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="imageZoomModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-body">
-            <img
-              src="/photos/bluedechannel.webp"
-              alt="Zoomed Image"
-              width="100%"
-              height="100%"
-              class="zoomed-image"
-              id="zoomedImage"
-            />
+    <div>
+      <% if (Array.isArray(products.image) && products.image.length > 0) { %> <%
+      products.image.forEach((image, index) => { %>
+      <!-- Modal for zoomed image -->
+      <div
+        class="modal fade"
+        id="imageZoomModal<%= index + 1 %>"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="imageZoomModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-body">
+              <img
+                src="<%= products.image[index]%>"
+                alt="Zoomed Image"
+                width="100%"
+                height="100%"
+                class="zoomed-image"
+                id="zoomedImage"
+              />
+            </div>
           </div>
         </div>
       </div>
+      <% }); %> <% } %>
     </div>
-    <div
+    <!-- <div
       class="modal fade"
       id="imageZoomModal2"
       tabindex="-1"
@@ -307,6 +414,6 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </body>
 </html>

@@ -14,7 +14,8 @@ const ProductSchema = new mongoose.Schema({
    date:{type:Date},
   stock: { type: Number },
   price: { type: Number },
-  specification:{type:Array}
+  specification:{type:Array},
+  status:{type:Boolean , default: false }
 });
 
 

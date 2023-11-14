@@ -21,7 +21,6 @@
   </head>
   <body>
     <div style="background-color: black; height: 4px" class="w-100"></div>
-
     <div id="menuHolder">
       <div
         role="navigation"
@@ -33,12 +32,7 @@
           <div
             class="flex3 text-center m-4"
             id="siteBrand"
-            style="
-              font-size: 32px;
-              margin-left: 200px;
-              margin-bottom: 0px;
-              padding-bottom: 0;
-            "
+            style="font-size: 52px; margin-left: 200px; padding-top: 22px"
           >
             AROMA
           </div>
@@ -68,9 +62,8 @@
                       /></svg></i
                 ></a>
               </div>
-
               <div class="icon-box">
-                <a href=""
+                <a href="login"
                   ><i
                     ><svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -108,25 +101,26 @@
           </div>
         </div>
         <div
-          class="d-flex"
+          class="d-flex justify-content-center"
           style="
-            padding-left: 365px;
+            /* align-items: center; */
+            text-align: center;
             font-size: medium;
-            font-size: 9px;
+            font-size: 15px;
             padding-top: 0;
           "
         >
-          <p class="pl-4">WOMEN</p>
-          <p class="pl-4">MEN</p>
-          <p class="pl-4">SHOP</p>
-          <p class="pl-4">HELP</p>
+          <p class="p-3 mt-3">WOMEN</p>
+          <p class="p-3 mt-3">MEN</p>
+          <p class="p-3 mt-3">SHOP</p>
+          <p class="p-3 mt-3">HELP</p>
         </div>
       </div>
     </div>
 
     <div class="fillbox">
       <form class="form-box" id="loginForm" action="/signup" method="post">
-        <h1 id="title">Sign up</h1>
+        <h1 id="title" class="title">Sign up</h1>
         <div class="btn-field">
           <button type="button" id="signupbtn">Sign up</button>
           <button type="button" id="loginbtn" class="disabled-btn">
@@ -134,38 +128,53 @@
           </button>
         </div>
         <div>
-          <div class="input-field" id="namefield">
-            <input type="name" placeholder="name" name="name" />
+          <%if(err){%>
+          <div class="d-flex justify-content-center">
+            <p style="padding-bottom: 0px" class="m-2 text-danger">
+              <%=err%><a href="">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-x-circle"
+                  viewBox="0 0 16 16"
+                  style="color: rgb(0, 0, 0)"
+                >
+                  <path
+                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                  />
+                  <path
+                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+                  />
+                </svg>
+              </a>
+            </p>
           </div>
+          <%}%>
+          <div class="input-field" id="namefield">
+            <input type="name" placeholder="name" name="name" id="#name" />
+            <div
+              class="text-danger"
+              style="font-size: small; margin-left: 20px"
+              id="nameError"
+            ></div>
+          </div>
+
           <div class="group">
             <div class="input-field">
-              <input type="email" placeholder="email" name="email" />
+              <input
+                type="email"
+                placeholder="email"
+                name="email"
+                id="#email"
+              />
+              <div
+                class="text-danger"
+                style="font-size: small; margin-left: 20px"
+                id="emailError"
+              ></div>
             </div>
-            <% if (typeof err !== 'undefined' && err !== '') { %>
-            <div class="pl-3">
-              <p style="padding-bottom: 0px; color: red">
-                <%= err %>
-                <a href="">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="12"
-                    height="12"
-                    fill="currentColor"
-                    class="bi bi-x-circle"
-                    viewBox="0 0 16 16"
-                    style="color: rgb(159, 14, 14)"
-                  >
-                    <path
-                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                    />
-                    <path
-                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
-                    />
-                  </svg>
-                </a>
-              </p>
-            </div>
-            <% } %>
 
             <div class="input-field" id="numberfield">
               <input
@@ -173,12 +182,30 @@
                 placeholder="phone number"
                 name="phonenumber"
               />
+              <div
+                class="text-danger"
+                style="font-size: small; margin-left: 20px"
+                id="phonenumberError"
+              ></div>
             </div>
             <div class="input-field">
               <input type="password" placeholder="password" name="password" />
+              <div
+                class="text-danger"
+                style="font-size: small; margin-left: 20px"
+                id="passwordError"
+              ></div>
+            </div>
+            <div class="input-field" id="confirmPass">
+              <input
+                type="password"
+                placeholder="confirm password "
+                name="confirmpassword"
+                id="confirmPasswordField"
+              />
             </div>
 
-            <p id="forget" style="display: none">
+            <p id="forget" style="display: none; font-size: 16px" class="pl-3">
               <a href="">Forgot password?</a>
             </p>
           </div>
@@ -187,8 +214,8 @@
             <button type="submit" id="submitbtn">Submit</button>
           </div>
 
-          <hr />
-
+          <!-- <hr /> -->
+          <!-- 
           <div class="google-text">
             <a href="">
               <svg
@@ -218,13 +245,13 @@
                 ></path>
               </svg>
               <span class="g">Signup with Google</span>
-              <!-- <span class="o">o</span>
+           <span class="o">o</span>
               <span class="o2">o</span>
               <span class="g2">g</span>
               <span class="l">l</span>
               <span class="e">e</span> -->
-            </a>
-          </div>
+          <!-- </a> -->
+          <!-- </div> -->
         </div>
       </form>
     </div>
@@ -233,6 +260,10 @@
       let loginbtn = document.getElementById("loginbtn");
       let namefield = document.getElementById("namefield");
       let numberfield = document.getElementById("numberfield");
+      let confirmPasswordField = document.getElementById(
+        "confirmPasswordField"
+      );
+      let confirmBox=document.getElementById("confirmPass")
       let title = document.getElementById("title");
 
       loginbtn.onclick = function () {
@@ -240,6 +271,7 @@
 
         namefield.style.maxHeight = "0";
         numberfield.style.maxHeight = "0";
+        confirmBox.style.display = "none";
         title.innerHTML = "Login";
         signupbtn.classList.add("disabled-btn");
         loginbtn.classList.remove("disabled-btn");
@@ -250,13 +282,94 @@
         document.getElementById("forget").style.display = "none";
         namefield.style.maxHeight = "60px";
         numberfield.style.maxHeight = "60px";
+        confirmPasswordField.style.maxHeight = "60px";
+        confirmBox.style.display = "block";
         title.innerHTML = "Sign up";
         signupbtn.classList.remove("disabled-btn");
         loginbtn.classList.add("disabled-btn");
         loginForm.action = "/signup";
         loginForm.method = "post";
       };
+      // loginForm.addEventListener("submit", function (event) {
+      //   event.preventDefault();
+      //   const formData = new FormData(loginForm);
+      // });
     </script>
+    <!-- <script>
+      function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+/;
+        return emailRegex.test(email);
+      }
+
+      function isEmpty(value) {
+        const trimmedValue = value.trim();
+        return trimmedValue === "";
+      }
+      function validatePassword(password) {
+        // Define the strong password pattern
+        const strongPasswordPattern =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%^&*])[A-Za-z\d!@#\$%^&*]{8,}$/;
+
+        // Test the password against the pattern
+        return strongPasswordPattern.test(password);
+      }
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          const nameInput = document.querySelector("#name");
+          const nameValue = nameInput.value;
+          const nameError = document.querySelector("#nameError");
+
+          const emailInput = document.querySelector("#email");
+          const emailValue = emailInput.value;
+          const emailError = document.querySelector("#emailError");
+
+          const phonenumberinput = document.querySelector("#phone");
+          const phonenumberErrorvalue = createpasswordInput.value;
+          const phonenumberError = document.querySelector("#phonenumberError");
+
+          const passwordInput = document.querySelector("#password");
+          const passwordValue = passwordInput.value;
+          const passwordError = document.querySelector("#passwordError");
+
+          nameError.textContent = "";
+          emailError.textContent = "";
+          phonenumberError.textContent = "";
+          passwordError.textContent = "";
+
+          if (isEmpty(nameValue)) {
+            nameError.textContent = "Username cant be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(emailValue)) {
+            emailError.textContent = "Email cant be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(phonenumberErrorvalue)) {
+            createpasswordError.textContent = "Create Password cant be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(passwordValue)) {
+            passwordError.textContent = "Confirm Password cant be empty";
+            event.preventDefault();
+          }
+
+          //validating email
+          if (!validateEmail(emailValue)) {
+            emailError.textContent = "Email is not valid";
+            event.preventDefault();
+          }
+          //validate password
+          if (!validatePassword(phonenumberErrorvalue)) {
+            phonenumberErrorvalue.textContent = "Password is too weak";
+            event.preventDefault();
+          }
+          // if (passwordValue !== createpasswordValue) {
+          //   passwordError.textContent = "Password did't match";
+          //   event.preventDefault();
+          // }
+        });
+    </script> -->
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
