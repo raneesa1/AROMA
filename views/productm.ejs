@@ -107,16 +107,20 @@
 
     <div class="d-flex">
       <div class="menu-section text-decoration-none">
-        <a href=""><div class="menu-item">DASHBOARD</div></a>
+        <a href="/admin/"><div class="menu-item">DASHBOARD</div></a>
         <a href="/admin/product"><div class="menu-item">PRODUCTS</div></a>
         <a href="/admin/category"><div class="menu-item">CATEGORY</div></a>
-        <a href=""><div class="menu-item">ORDERS</div></a>
+        <a href="/admin/order"><div class="menu-item">ORDERS</div></a>
         <a href=""><div class="menu-item">COUPON</div></a>
         <a href=""><div class="menu-item">BANNER</div></a>
         <a href=""> <div class="menu-item">TRANSACTION</div></a>
         <a href="/admin/user"> <div class="menu-item">MANAGE USER</div></a>
         <a href=""> <div class="menu-item">MANAGE ADMIN</div></a>
-        <a href=""><div class="menu-item">LOGOUT</div></a>
+        <a
+          href="/logout"
+          onclick="return confirm('are you sure you want to logout?')"
+          ><div class="menu-item">LOGOUT</div></a
+        >
       </div>
       <div style="margin: 22px">
         <div class="table-edit">
@@ -141,6 +145,7 @@
                 <th>Product image</th>
                 <th>Product Name</th>
                 <th>Product desciption</th>
+                <!-- <th>Additonal Information</th> -->
                 <th>Category</th>
                 <th>Stock</th>
                 <th>Price</th>
@@ -154,19 +159,18 @@
               <tr>
                 <td>
                   <ul>
-                    <% data.image.forEach((img) => { %>
                     <li>
                       <img
-                        src="<%=img%>"
+                        src="<%=data.image[0]%>"
                         alt="<%= data.name %>"
                         style="max-width: 50px"
                       />
                     </li>
-                    <% }) %>
                   </ul>
                 </td>
                 <td><%-data.name%></td>
                 <td><%-data.description%></td>
+                <!-- <td><%-data.specification%></td> -->
                 <td><%-data.category%></td>
                 <td><%-data.stock%></td>
                 <td><%-data.price%></td>
@@ -175,7 +179,6 @@
                   <%-date1.getDate()%>-<%-date1.getMonth()+1%>-<%-date1.getFullYear()%>
                 </td>
                 <td>
-                  
                   <a href="/admin/edit/<%=data._id%>"
                     ><i
                       ><svg

@@ -6,7 +6,7 @@ const { ObjectId } = require('mongodb')
 
 
 const getusermanagement = (async (req, res) => {
-  // console.log("userss");
+
   const userdata = await user.find().sort({ date: -1 })
   // console.log(userdata)
   res.render('userm', { userdata })
@@ -16,7 +16,7 @@ const getusermanagement = (async (req, res) => {
 //delete user
 const getdeleteuser = async (req, res) => {
   let id = req.params.id
-  console.log("reached");
+
   let users = await user.findOneAndDelete({ _id: id })
   res.redirect('/admin/user')
 
@@ -49,30 +49,81 @@ const unblockUser = async (req, res) => {
 
 
 const getproductmanagement = async (req, res) => {
+
+
   const productdata = await product.find({ status: false }).sort({ date: -1 });
+  const getproductmanagement = async (req, res) => {
+    try {
+      const productdata = await product.aggregate([
+        {
+          $match: { status: false }
+        },
+        {
+          $lookup: {
+            from: 'category',
+            localField: 'category',
+            foreignField: '_id',
+            as: 'categoryDetails'
+          }
+        },
+        {
+          $unwind: {
+            path: '$categoryDetails',
+            preserveNullAndEmptyArrays: true
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            description: 1,
+            category: '$categoryDetails.name', // Assuming 'name' is the field in the 'category' collection you want to display
+            stock: 1,
+            price: 1,
+            specification: 1,
+            date: 1
+          }
+        }
+      ]);
+
+
+      res.render('productm', { productdata });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
 
   res.render('productm', { productdata });
 };
 
 const postaddproduct = async (req, res) => {
   console.log(JSON.stringify(req.files))
+  console.log(req.body)
   const products = {
     name: req.body.name,
     description: req.body.description,
-    category: req.body.category,
+    category: new ObjectId(req.body.category),
     stock: req.body.stock,
+    specification: req.body.specification,
     price: req.body.price,
+    size: req.body.size,
     image: req.files.map((file) => '/photos/' + file.filename),
     date: Date.now()
 
   }
+  console.log(products)
   await new product(products).save()
   res.redirect('/admin/product')
 
 }
 //add
-const getaddproduct = (req, res) => {
-  res.render('addproduct')
+const getaddproduct = async (req, res) => {
+  const categorydata = await category.find()
+  console.log(categorydata, 'ghjkghj')
+
+
+  res.render('addproduct', { categorydata })
 
 }
 
@@ -103,7 +154,6 @@ const postaddcategory = async (req, res) => {
     name: req.body.name,
     description: req.body.description,
     stock: req.body.stock,
-    image: `/category/${req.files[0].filename}`,
     // image: req.files.map((file) => '/photos/'+file.filename),
     date: Date.now()
 
@@ -126,29 +176,35 @@ const geteditproduct = async (req, res) => {
   let id = req.params.id;
   console.log(id, ' id')
   let products = await product.findOne({ _id: id });
+  let categorydata = await category.find()
+  console.log(categorydata,' data of');
   console.log(products);
   if (products == null) {
     res.redirect('/admin/product');
   } else {
     res.render('editproduct', {
       title: "Edit product",
-      products: products,
+      products: products, categorydata
     });
   }
 };
 
 const postupdateproduct = async (req, res) => {
   try {
+    
     let id = req.params.id;
+    console.log(req.body)
 
     // Check if files are present in the request
     if (req.files && req.files.length > 0) {
       const productsdetails = {
         name: req.body.name,
         description: req.body.description,
-        category: req.body.category,
+        category: new ObjectId(req.body.category),
         stock: req.body.stock,
+        size: req.body.size,
         price: req.body.price,
+        specification: req.body.specification,
         // Assuming images is an array of files
         image: req.files.map((file) => '/photos/' + file.filename)
 
@@ -159,12 +215,15 @@ const postupdateproduct = async (req, res) => {
       await product.findOneAndUpdate({ _id: id }, { $set: productsdetails });
     } else {
       // No files were uploaded, update only non-file fields
+
       const productsdetails = {
         name: req.body.name,
         description: req.body.description,
-        category: req.body.category,
+        category: new ObjectId(req.body.category),
         stock: req.body.stock,
         price: req.body.price,
+        size: req.body.size,
+        specification: req.body.specification,
 
       };
 
@@ -181,7 +240,6 @@ const postupdateproduct = async (req, res) => {
 
 const getdash = (req, res) => {
   if (req.session.isAdmin) {
-    console.log("admin is there");
     res.render('dashboard')
   }
 
@@ -197,9 +255,8 @@ const getlogout = (req, res) => {
 
 const geteditcategory = async (req, res) => {
   let id = req.params.id;
-  console.log(id, ' id')
   let categories = await category.findOne({ _id: id });
-  // console.log(products);
+
   if (category == null) {
     res.redirect('/admin/editcategory');
   } else {
@@ -222,7 +279,6 @@ const postupdatecategory = async (req, res) => {
         description: req.body.description,
         stock: req.body.stock,
         // Assuming images is an array of files
-        image: req.files.map((file) => '/photos/' + file.filename)
 
 
       };
@@ -231,7 +287,7 @@ const postupdatecategory = async (req, res) => {
       await category.findOneAndUpdate({ _id: id }, { $set: categorydetails });
     } else {
 
-      console.log('first updating')
+
       // No files were uploaded, update only non-file fields
       const categorydetails = {
         name: req.body.name,
@@ -249,6 +305,9 @@ const postupdatecategory = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+const getorder=async(req,res)=>{
+  res.render('orderm')
+}
 
 
-module.exports = { postupdatecategory, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };
+module.exports = { postupdatecategory, getorder, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };

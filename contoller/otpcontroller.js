@@ -19,30 +19,67 @@ let transporter = nodemailer.createTransport({
 
 
 const verifyOtp = async function (req, res) {
-    const email = req.session.data.email;
-    let enteredOtp = req.body.otp;
-    const data = req.session.data;
-    let { otp1, otp2, otp3, otp4, otp5, otp6 } = req.body;
-    enteredOtp = `${otp1}${otp2}${otp3}${otp4}${otp5}${otp6}`
-    console.log(enteredOtp, 'combined otp')
-    try {
-        const storedOtp = await OTP.findOne({ email: email });
+    if (req.session.forgotOtp) {
+        const email = req.session.data.email;
+        let enteredOtp = req.body.otp;
+        const data = req.session.data;
+        let { otp1, otp2, otp3, otp4, otp5, otp6 } = req.body;
+        enteredOtp = `${otp1}${otp2}${otp3}${otp4}${otp5}${otp6}`
+        console.log(enteredOtp, 'combined otp')
+        try {
+            const storedOtp = await OTP.findOne({ email: email });
 
-        if (storedOtp && storedOtp.otp === enteredOtp) {
-            // OTP is correct, you can proceed with signup
-            await new user(data).save();
-            req.session.isauth = true;
+            if (storedOtp && storedOtp.otp === enteredOtp) {
 
-            res.redirect('/home');
-        } else {
-            // Incorrect OTP, render the OTP page with an error message
-            res.render('otp', { msg: 'OTP is incorrect' });
+                // OTP is correct, you can proceed with signup
+                // const userExists = await user.findOne({ email: email });
+                // req.session.email = userExists.email
+
+
+                res.redirect('/resetpassword');
+
+            } else {
+                // Incorrect OTP, render the OTP page with an error message
+                res.render('otp', { err: 'OTP is incorrect' });
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).send('Server Error');
+
+        };
+    } else {
+
+
+        const email = req.session.data.email;
+        let enteredOtp = req.body.otp;
+        const data = req.session.data;
+        let { otp1, otp2, otp3, otp4, otp5, otp6 } = req.body;
+        enteredOtp = `${otp1}${otp2}${otp3}${otp4}${otp5}${otp6}`
+        console.log(enteredOtp, 'combined otp')
+        try {
+            const storedOtp = await OTP.findOne({ email: email });
+
+            if (storedOtp && storedOtp.otp === enteredOtp) {
+
+                // OTP is correct, you can proceed with signup
+                await new user(data).save();
+                req.session.isauth = true;
+                const userExists = await user.findOne({ email: email });
+                req.session.email = userExists.email
+
+
+                res.redirect('/home');
+            } else {
+                // Incorrect OTP, render the OTP page with an error message
+                res.render('otp', { err: 'OTP is incorrect' });
+
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).send('Server Error');
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).send('Server Error');
-    }
-};
+    };
+}
 // Function to resend OTP
 const resendOtp = function (req, res) {
     const email = req.session.data.email
@@ -62,7 +99,7 @@ const resendOtp = function (req, res) {
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
         // Render the OTP page with a success message
-        res.render('otp', { msg: "OTP has been sent" });
+        res.render('otp', { err: "OTP has been sent" });
     });
 };
 
@@ -120,12 +157,41 @@ const sendOtp = async function (req, res) {
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
             // Redirect to OTP page
-            res.render('otp');
+            res.render('otp', { err: null });
         });
     } catch (err) {
         console.log(err);
     }
 };
+
+// const verifyforgotOtp = async function (req, res) {
+//     const email = req.session.data.email;
+//     let enteredOtp = req.body.otp;
+//     const data = req.session.data;
+//     let { otp1, otp2, otp3, otp4, otp5, otp6 } = req.body;
+//     enteredOtp = `${otp1}${otp2}${otp3}${otp4}${otp5}${otp6}`
+//     console.log(enteredOtp, 'combined otp')
+//     try {
+//         const storedOtp = await OTP.findOne({ email: email });
+
+//         if (storedOtp && storedOtp.otp === enteredOtp) {
+
+//             // OTP is correct, you can proceed with signup
+//             // const userExists = await user.findOne({ email: email });
+//             // req.session.email = userExists.email
+
+
+//             res.redirect('/resetpassword');
+//         } else {
+//             // Incorrect OTP, render the OTP page with an error message
+//             res.render('otp', { err: 'OTP is incorrect' });
+//         }
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).send('Server Error');
+//     }
+// };
+
 
 
 module.exports = { verifyOtp, sendOtp, resendOtp }

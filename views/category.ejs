@@ -107,16 +107,20 @@
 
     <div class="d-flex">
       <div class="menu-section text-decoration-none">
-        <a href=""><div class="menu-item">DASHBOARD</div></a>
+        <a href="/admin/"><div class="menu-item">DASHBOARD</div></a>
         <a href="/admin/product"><div class="menu-item">PRODUCTS</div></a>
         <a href="/admin/category"><div class="menu-item">CATEGORY</div></a>
-        <a href=""><div class="menu-item">ORDERS</div></a>
+        <a href="/admin/order"><div class="menu-item">ORDERS</div></a>
         <a href=""><div class="menu-item">COUPON</div></a>
         <a href=""><div class="menu-item">BANNER</div></a>
         <a href=""> <div class="menu-item">TRANSACTION</div></a>
         <a href="/admin/user"> <div class="menu-item">MANAGE USER</div></a>
         <a href=""> <div class="menu-item">MANAGE ADMIN</div></a>
-        <a href=""><div class="menu-item">LOGOUT</div></a>
+       <a
+          href="/logout"
+          onclick="return confirm('are you sure you want to logout?')"
+          ><div class="menu-item">LOGOUT</div></a
+        >
       </div>
       <div style="margin: 22px">
         <div class="table-edit">
@@ -138,10 +142,8 @@
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th>Image</th>
                 <th>Category name</th>
                 <th>category desciption</th>
-                <th>Stock</th>
                 <th>Added Date</th>
                 <th>Edit Action</th>
               </tr>
@@ -150,20 +152,8 @@
               <!-- Add your table rows here -->
               <%categorydata.forEach((data,index)=>{%>
               <tr>
-                <td>
-                  <ul>
-                    <li>
-                      <img
-                        src="<%=data.image%>"
-                        alt="<%= data.name %>"
-                        style="max-width: 50px"
-                      />
-                    </li>
-                  </ul>
-                </td>
                 <td><%-data.name%></td>
                 <td><%-data.description%></td>
-                <td><%-data.stock%></td>
                 <td>
                   <%let date1=new Date(data.date)%>
                   <%-date1.getDate()%>-<%-date1.getMonth()+1%>-<%-date1.getFullYear()%>

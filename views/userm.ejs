@@ -106,21 +106,30 @@
     </div>
 
     <div class="d-flex">
-     <div class="menu-section text-decoration-none">
-        <a href=""><div class="menu-item">DASHBOARD</div></a>
+      <div class="menu-section text-decoration-none">
+        <a href="/admin/"><div class="menu-item">DASHBOARD</div></a>
         <a href="/admin/product"><div class="menu-item">PRODUCTS</div></a>
         <a href="/admin/category"><div class="menu-item">CATEGORY</div></a>
-        <a href=""><div class="menu-item">ORDERS</div></a>
+        <a href="/admin/order"><div class="menu-item">ORDERS</div></a>
         <a href=""><div class="menu-item">COUPON</div></a>
         <a href=""><div class="menu-item">BANNER</div></a>
         <a href=""> <div class="menu-item">TRANSACTION</div></a>
         <a href="/admin/user"> <div class="menu-item">MANAGE USER</div></a>
         <a href=""> <div class="menu-item">MANAGE ADMIN</div></a>
-        <a href=""><div class="menu-item">LOGOUT</div></a>
+        <a
+          href="/logout"
+          onclick="return confirm('are you sure you want to logout?')"
+          ><div class="menu-item">LOGOUT</div></a
+        >
       </div>
 
       <div class="table-edit">
-        <h1 class="text-center mb-5" style="font-family: arial;font-weight: bold;">USER MANAGEMENT</h1>
+        <h1
+          class="text-center mb-5"
+          style="font-family: arial; font-weight: bold"
+        >
+          USER MANAGEMENT
+        </h1>
         <table class="table table-bordered text-center">
           <thead>
             <tr>

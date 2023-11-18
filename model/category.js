@@ -9,9 +9,8 @@ const categorySchema = new mongoose.Schema({
  
 name: { type: String },
 description: { type: String },
-image: {type:String},
+
 date:{type:Date},
-stock: { type: Number }
 
 });
 

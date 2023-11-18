@@ -6,27 +6,28 @@
 }
 .product-box {
   border: 1px solid #ddd;
- margin: 29px; 
+  margin: 12px;
   align-items: center;
   padding-bottom: 12px;
   margin: 10px 0;
   text-align: center;
   width: 300px;
   border: none;
-
+}
+.d-flex.m-5 {
+  margin: -5px; /* Adjusted the negative margin */
 }
 
 .product-title {
-  font-size: 15px;
-  margin: 4px 0;
+  font-size: 18px; /* Increased the font size */
+  margin: 10px 0; /* Adjusted the margin */
 }
-
 .product-description {
-  font-size: 12px;
+  font-size: 14px; /* Adjusted the font size */
 }
 
 .product-price {
-  font-size: 14px;
+  font-size: 16px; /* Adjusted the font size */
   color: #030202;
   font-weight: 500;
   margin: 5px 0;
@@ -35,7 +36,7 @@
 .add-to-cart {
   /* background-color: #000000; */
   color: #fff;
-  font-size: 10px;
+  font-size: 14px;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
@@ -153,9 +154,11 @@ select.noStyle {
   color: rgb(0, 0, 0);
   border: 200px;
   width: 340px;
+  margin-bottom: 20px;
   font-size: 12px;
   justify-content: center;
   gap: 12px;
+  margin: 10px;
   /* align-items: center; */
   position: absolute;
   left: 35%;

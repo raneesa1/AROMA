@@ -139,17 +139,32 @@
                   <textarea
                     name="description"
                     class="form-control form-control-lg"
-                    
-                  ><%=products.description%></textarea>
+                  >
+<%=products.description%>
+</textarea
+                  >
                 </div>
                 <div class="mb-3">
-                  <label for="category">Category</label>
-                  <input
+                  <label for="category">Additional Information</label>
+                  <textarea
                     type="text"
-                    name="category"
+                    name="specification"
                     class="form-control form-control-lg"
-                    value="<%=products.category%>"
-                  />
+                    
+                  >
+<%=products.specification%></textarea
+                  >
+                </div>
+
+                <div class="mb-3">
+                  <label for="category">Category</label>
+                  <select name="category" class="form-control form-control-lg">
+                    <% categorydata.forEach((category)=>{ %>
+                    <option value="<%-category._id%>">
+                      <%-category.name%>
+                    </option>
+                    <%})%>
+                  </select>
                 </div>
                 <div class="mb-3">
                   <label for="stock">Stock</label>

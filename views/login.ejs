@@ -130,7 +130,10 @@
         <div>
           <%if(err){%>
           <div class="d-flex justify-content-center">
-            <p style="padding-bottom: 0px" class="m-2 text-danger">
+            <p
+              style="padding-bottom: 0px; font-family: arial"
+              class="m-2 text-danger text-center"
+            >
               <%=err%><a href="">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +156,7 @@
           </div>
           <%}%>
           <div class="input-field" id="namefield">
-            <input type="name" placeholder="name" name="name" id="#name" />
+            <input type="name" placeholder="name" name="name" id="name" />
             <div
               class="text-danger"
               style="font-size: small; margin-left: 20px"
@@ -169,11 +172,6 @@
                 name="email"
                 id="#email"
               />
-              <div
-                class="text-danger"
-                style="font-size: small; margin-left: 20px"
-                id="emailError"
-              ></div>
             </div>
 
             <div class="input-field" id="numberfield">
@@ -181,20 +179,41 @@
                 type="text"
                 placeholder="phone number"
                 name="phonenumber"
+                id="phonenumber"
               />
-              <div
-                class="text-danger"
-                style="font-size: small; margin-left: 20px"
-                id="phonenumberError"
-              ></div>
             </div>
             <div class="input-field">
-              <input type="password" placeholder="password" name="password" />
+              <input
+                type="password"
+                placeholder="password"
+                name="password"
+                id="password"
+              />
               <div
-                class="text-danger"
-                style="font-size: small; margin-left: 20px"
-                id="passwordError"
-              ></div>
+                class="eye-icon"
+                onclick="togglePassword('password', 'eye-icon')"
+                style="margin-left: -3px"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-eye-slash"
+                  viewBox="0 0 16 16"
+                  id="eye-icon"
+                >
+                  <path
+                    d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"
+                  />
+                  <path
+                    d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"
+                  />
+                  <path
+                    d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"
+                  />
+                </svg>
+              </div>
             </div>
             <div class="input-field" id="confirmPass">
               <input
@@ -206,12 +225,12 @@
             </div>
 
             <p id="forget" style="display: none; font-size: 16px" class="pl-3">
-              <a href="">Forgot password?</a>
+              <a href="forgotpassword">Forgot password?</a>
             </p>
           </div>
           <p id="loginError" class="error-message"></p>
           <div class="submitbtn">
-            <button type="submit" id="submitbtn">Submit</button>
+            <button type="submit" value="submit" id="submitbtn">Submit</button>
           </div>
 
           <!-- <hr /> -->
@@ -263,8 +282,9 @@
       let confirmPasswordField = document.getElementById(
         "confirmPasswordField"
       );
-      let confirmBox=document.getElementById("confirmPass")
+      let confirmBox = document.getElementById("confirmPass");
       let title = document.getElementById("title");
+      let formbox = document.querySelector(".form-box");
 
       loginbtn.onclick = function () {
         document.getElementById("forget").style.display = "block";
@@ -277,6 +297,7 @@
         loginbtn.classList.remove("disabled-btn");
         loginForm.action = "/login";
         loginForm.method = "post";
+        formbox.style.top = "-190px";
       };
       signupbtn.onclick = function () {
         document.getElementById("forget").style.display = "none";
@@ -289,88 +310,21 @@
         loginbtn.classList.add("disabled-btn");
         loginForm.action = "/signup";
         loginForm.method = "post";
+        formbox.style.top = "-290px";
       };
-      // loginForm.addEventListener("submit", function (event) {
-      //   event.preventDefault();
-      //   const formData = new FormData(loginForm);
-      // });
-    </script>
-    <!-- <script>
-      function validateEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+/;
-        return emailRegex.test(email);
-      }
-
-      function isEmpty(value) {
-        const trimmedValue = value.trim();
-        return trimmedValue === "";
-      }
-      function validatePassword(password) {
-        // Define the strong password pattern
-        const strongPasswordPattern =
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%^&*])[A-Za-z\d!@#\$%^&*]{8,}$/;
-
-        // Test the password against the pattern
-        return strongPasswordPattern.test(password);
-      }
-      document
-        .querySelector("form")
-        .addEventListener("submit", function (event) {
-          const nameInput = document.querySelector("#name");
-          const nameValue = nameInput.value;
-          const nameError = document.querySelector("#nameError");
-
-          const emailInput = document.querySelector("#email");
-          const emailValue = emailInput.value;
-          const emailError = document.querySelector("#emailError");
-
-          const phonenumberinput = document.querySelector("#phone");
-          const phonenumberErrorvalue = createpasswordInput.value;
-          const phonenumberError = document.querySelector("#phonenumberError");
-
-          const passwordInput = document.querySelector("#password");
-          const passwordValue = passwordInput.value;
-          const passwordError = document.querySelector("#passwordError");
-
-          nameError.textContent = "";
-          emailError.textContent = "";
-          phonenumberError.textContent = "";
-          passwordError.textContent = "";
-
-          if (isEmpty(nameValue)) {
-            nameError.textContent = "Username cant be empty";
-            event.preventDefault();
-          }
-          if (isEmpty(emailValue)) {
-            emailError.textContent = "Email cant be empty";
-            event.preventDefault();
-          }
-          if (isEmpty(phonenumberErrorvalue)) {
-            createpasswordError.textContent = "Create Password cant be empty";
-            event.preventDefault();
-          }
-          if (isEmpty(passwordValue)) {
-            passwordError.textContent = "Confirm Password cant be empty";
-            event.preventDefault();
-          }
-
-          //validating email
-          if (!validateEmail(emailValue)) {
-            emailError.textContent = "Email is not valid";
-            event.preventDefault();
-          }
-          //validate password
-          if (!validatePassword(phonenumberErrorvalue)) {
-            phonenumberErrorvalue.textContent = "Password is too weak";
-            event.preventDefault();
-          }
-          // if (passwordValue !== createpasswordValue) {
-          //   passwordError.textContent = "Password did't match";
-          //   event.preventDefault();
-          // }
+      function hideErrors() {
+        let errorMessages = document.querySelectorAll(".text-danger");
+        errorMessages.forEach(function (errorMessage) {
+          errorMessage.style.display = "none";
         });
-    </script> -->
+      }
 
+      // Check if there are error messages and set a timeout to hide them
+      let errorMessages = document.querySelectorAll(".text-danger");
+      if (errorMessages.length > 0) {
+        setTimeout(hideErrors, 6000); // 10000 milliseconds = 10 seconds
+      }
+    </script>
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

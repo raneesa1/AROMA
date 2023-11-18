@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const mongoose=require('mongoose')
 require('../config/dbconfig')
 require('dotenv').config()
@@ -9,12 +10,13 @@ const ProductSchema = new mongoose.Schema({
  
   name: { type: String },
  description: { type: String },
-  category: {type:String},
+  category: {type:ObjectId},
   image: {type:Array},
-   date:{type:Date},
+  date:{type:Date},
   stock: { type: Number },
+  size:{type:Number},
   price: { type: Number },
-  specification:{type:Array},
+  specification:{type:String},
   status:{type:Boolean , default: false }
 });
 

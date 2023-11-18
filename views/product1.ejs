@@ -119,6 +119,8 @@
       </div>
     </div>
     <div class="product-containe d-flex">
+      <!-- ... (your existing HTML code) ... -->
+
       <div class="product-image col-lg-6 col-md-6 col-sm-12 pt-5">
         <div
           id="productImageCarousel"
@@ -129,28 +131,19 @@
           <div class="carousel-inner">
             <% if (Array.isArray(products.image) && products.image.length > 0) {
             %> <% products.image.forEach((image, index) => { %>
-
             <div class="carousel-item <%= index === 0 ? ' active' : '' %>">
               <img
-                src="<%= products.image[index]%>"
+                src="<%= image %>"
                 class="d-block w-100"
-                alt="<%=products.name%>"
+                alt="<%= products.name %>"
                 data-toggle="modal"
                 data-target="#imageZoomModal<%= index + 1 %>"
               />
             </div>
-
             <% }); %> <% } %>
-            <!-- <div class="carousel-item">
-              <img
-                src="/photos/bleudechanel-2.webp"
-                class="d-block w-10"
-                alt="Image 2"
-                data-toggle="modal"
-                data-target="#imageZoomModal2"
-              />
-            </div> -->
           </div>
+          <% if (Array.isArray(products.image) && products.image.length > 1) {
+          %>
           <a
             class="carousel-control-prev"
             href="#productImageCarousel"
@@ -166,25 +159,15 @@
             role="button"
             data-slide="next"
           >
-            <span class="carousel-control-next-icon" aria-hidden="true"
-              ><svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-left-short"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
-                />
-              </svg>
-            </span>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
           </a>
+          <% } %>
         </div>
       </div>
+
+      <!-- ... (your existing HTML code) ... -->
+
       <div class="product-details col-lg-6 col-md-6 col-sm-12">
         <h1 class="product-title" style="font-size: 30px">
           <%= products.name %>
@@ -260,7 +243,7 @@
       <P style="color: rgb(149, 149, 149)"> <%= products.description %> </P>
       <hr />
       <H6>ADDITIONAL INFORMATION</H6>
-      <P style="color: rgb(149, 149, 149)"> <%= products.description %> </P>
+      <P style="color: rgb(149, 149, 149)"> <%= products.specification %> </P>
       <hr />
     </div>
     <h1 class="text-center pt-5">PERFECT MATCH</h1>

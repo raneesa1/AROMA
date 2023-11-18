@@ -155,3 +155,10 @@ textarea[name="description"] {
   font-size: 14px; /* Adjust the font size as needed */
 }
 
+textarea[name="specification"] {
+  font-size: 14px; /* Adjust the font size as needed */
+}
+
+select[name="category"] {
+  font-size: 14px; /* Adjust the font size as needed */
+}
