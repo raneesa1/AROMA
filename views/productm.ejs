@@ -147,7 +147,8 @@
                 <th>Product desciption</th>
                 <!-- <th>Additonal Information</th> -->
                 <th>Category</th>
-                <th>Stock</th>
+                <th>quantity/stock</th>
+
                 <th>Price</th>
                 <th>Added Date</th>
                 <th>Edit Action</th>
@@ -171,8 +172,18 @@
                 <td><%-data.name%></td>
                 <td><%-data.description%></td>
                 <!-- <td><%-data.specification%></td> -->
-                <td><%-data.category%></td>
-                <td><%-data.stock%></td>
+                <td><%= data.categoryDetails[0].name %></td>
+                <td>
+                  <!-- Variant column -->
+                  <% data.size.forEach((variant) => { %>
+                  <div>
+                    <span><%- variant.quantity %>ml</span> -
+                    <span><%- variant.stock %></span>
+                  </div>
+                  <!-- <span>price:<%- variant.price %></span> -->
+                  <% }); %>
+                </td>
+
                 <td><%-data.price%></td>
                 <td>
                   <%let date1=new Date(data.date)%>

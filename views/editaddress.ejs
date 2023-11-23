@@ -85,15 +85,14 @@
                   ><i
                     ><svg
                       xmlns="http://www.w3.org/2000/svg"
-                      wxqidth="17"
-                      height="17"
-                      style="color: black"
+                      width="16"
+                      height="16"
                       fill="currentColor"
-                      class="bi bi-heart"
+                      class="bi bi-cart3"
                       viewBox="0 0 16 16"
                     >
                       <path
-                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
                       /></svg></i
                 ></a>
               </div>
@@ -110,6 +109,7 @@
             padding-top: 0;
           "
         >
+          <p class="p-3 mt-3"><a href="home">HOME</a></p>
           <p class="p-3 mt-3">WOMEN</p>
           <p class="p-3 mt-3">MEN</p>
           <p class="p-3 mt-3">SHOP</p>
@@ -127,6 +127,12 @@
                   <li class="list-group-item d-flex align-items-center p-4">
                     <i class="fas fa-globe fa-lg text-warning"></i>
                     <p class="mb-0">
+                      <a href="profile">My Account</a>
+                    </p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fas fa-globe fa-lg text-warning"></i>
+                    <p class="mb-0">
                       <a href="accountdetails">Account Details</a>
                     </p>
                   </li>
@@ -134,7 +140,7 @@
                     <i class="fab fa-github fa-lg" style="color: #333333"></i>
                     <p class="mb-0"><a href="myorder">My Order</a></p>
                   </li>
-                  <li class="list-group-item d-flex align-items-center p-3">
+                  <li class="list-group-item d-flex align-items-center p-4">
                     <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
                     <p class="mb-0"><a href="cart">Shopping Cart</a></p>
                   </li>
@@ -150,7 +156,7 @@
                       class="fab fa-facebook-f fa-lg"
                       style="color: #000000"
                     ></i>
-                    <p class="mb-0">Address</p>
+                    <p class="mb-0"><a href="address">Address</a></p>
                   </li>
                   <li class="list-group-item d-flex align-items-center p-4">
                     <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
@@ -178,65 +184,60 @@
           <div class="col-lg-8">
             <div class="card mb-4">
               <div class="card-body">
-                <form>
+                <form action="/updateaddress/<%=address._id%>" method="post">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Address name </label>
                     <input
                       type="addressname"
+                      name="Addressname"
                       class="form-control"
-                      placeholder="home,office"
+                      value="<%=address.Addressname%>"
                     />
                   </div>
                   <!-- <hr /> -->
 
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Name </label>
+                    <label for="exampleInputEmail1">First Name </label>
                     <input
-                      type="name"
+                      type="text"
+                      name="Firstname"
                       class="form-control"
-                      placeholder="raneesa"
+                      value="<%=address.Firstname%>"
                     />
                   </div>
                   <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="exampleInputEmail1">Second Name </label>
                     <input
-                      type="email"
+                      type="text"
+                      name="Secondname"
                       class="form-control"
-                      placeholder="raneesa12@gmail.com"
+                      value="<%=address.Secondname%>"
                     />
-                    <!-- <small id="emailHelp" class="form-text text-muted"
-                      >We'll never share your email with anyone else.</small
-                    > -->
                   </div>
+
+                  <div class="form-group">
+                    <label for="Address">Address </label>
+                    <textarea class="form-control" rows="3" name="Address">
+<%=address.Address%></textarea
+                    >
+                  </div>
+
                   <div class="form-group">
                     <label for="phonenumber">Phone number</label>
                     <input
-                      type="number"
+                      type="text"
+                      name="PhoneNumber"
                       class="form-control"
-                      placeholder="234224323423"
+                      value="<%=address.PhoneNumber%>"
                     />
                   </div>
                   <div class="form-group">
-                    <label for="Gender">Gender</label>
+                    <label for="City">State</label>
                     <input
                       type="text"
+                      name="State"
                       class="form-control"
-                      placeholder="women"
-                    />
-                    <!-- <small id="emailHelp" class="form-text text-muted"
-                      >We'll never share your email with anyone else.</small
-                    > -->
-                  </div>
-                  <div class="form-group">
-                    <label for="Address">Address </label>
-                    <textarea class="form-control" rows="3"></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label for="Postcode">Post Code</label>
-                    <input
-                      type="number"
-                      class="form-control"
-                      placeholder="23422"
+                      value="<%=address.State%>"
                     />
                     <!-- <small id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
@@ -246,8 +247,21 @@
                     <label for="City">City</label>
                     <input
                       type="text"
+                      name="City"
                       class="form-control"
-                      placeholder="palakkad"
+                      value="<%=address.City%>"
+                    />
+                    <!-- <small id="emailHelp" class="form-text text-muted"
+                      >We'll never share your email with anyone else.</small
+                    > -->
+                  </div>
+                  <div class="form-group">
+                    <label for="City">Landmark</label>
+                    <input
+                      type="text"
+                      name="Landmark"
+                      class="form-control"
+                      value="<%=address.Landmark%>"
                     />
                     <!-- <small id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
@@ -256,28 +270,48 @@
 
                   <div class="form-group">
                     <label for="exampleSelect1">Country</label>
-                    <select class="form-control" id="exampleSelect1">
+                    <select
+                      class="form-control"
+                      name="Country"
+                      id="exampleSelect1"
+                      aria-valuenow="<%=address.Country%>"
+                    >
                       <option>India</option>
                       <option>Africa</option>
                       <option>America</option>
                       <option>Pakistan</option>
                     </select>
                   </div>
+                  <div class="form-group">
+                    <label for="Postcode">Post Code</label>
+                    <input
+                      type="text"
+                      name="Postcode"
+                      class="form-control"
+                      value="<%=address.Postcode%>"
+                    />
+                    <!-- <small id="emailHelp" class="form-text text-muted"
+                      >We'll never share your email with anyone else.</small
+                    > -->
+                  </div>
+                  <button
+                    type="submit"
+                    class="btn text-light btn-lg"
+                    style="background-color: #000000; border-radius: 0%"
+                    type="submit"
+                    name="submit"
+                    title="Edit Address"
+                  >
+                    SAVE
+                  </button>
+                  <button
+                    class="btn btn-lg btn-light border-dark"
+                    style="border-radius: 0%"
+                  >
+                    CANCEL
+                  </button>
                 </form>
               </div>
-              <button
-                type="submit"
-                class="btn text-light btn-lg"
-                style="background-color: #000000; border-radius: 0%"
-              >
-                SAVE
-              </button>
-              <button
-                class="btn btn-lg btn-light border-dark"
-                style="border-radius: 0%"
-              >
-                CANCEL
-              </button>
             </div>
           </div>
         </div>

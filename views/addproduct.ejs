@@ -104,118 +104,213 @@
         </div>
       </div>
     </div>
-    <div class="box">
-      <div class="row">
-        <div class="col-lg-6 mx-auto m-4">
-          <div class="card">
-            <div
-              class="card-header text-center"
-              style="background-color: rgb(0, 0, 0); color: aliceblue"
-            >
-              <h5>ADD NEW PRODUCT</h5>
-            </div>
-            <div class="card-body">
-              <form
-                action="/admin/addproduct"
-                method="post"
-                id="add-form"
-                enctype="multipart/form-data"
-              >
-                <div class="mb-3">
-                  <label for="name">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    class="form-control form-control-lg"
-                    placeholder="Enter product name"
-                    required
-                  />
+    <section>
+      <!-- <div class="d-flex"> -->
+      <div>
+        <div class="box-container">
+          <div class="box">
+            <div class="row">
+              <div class="col-lg-6 mx-auto m-4">
+                <div class="card">
+                  <div
+                    class="card-header text-center"
+                    style="background-color: rgb(0, 0, 0); color: aliceblue"
+                  >
+                    <h5>ADD NEW PRODUCT</h5>
+                  </div>
+                  <div class="card-body">
+                    <form
+                      action="/admin/addproduct"
+                      method="post"
+                      id="add-form"
+                      enctype="multipart/form-data"
+                    >
+                      <div class="mb-3">
+                        <label for="name">Name</label>
+                        <input
+                          type="text"
+                          name="name"
+                          class="form-control form-control-lg"
+                          placeholder="Enter product name"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <div id="selectedImages" class="mb-3">
+                          <img
+                            src=""
+                            id="displayimages0"
+                            alt=""
+                            style="max-width: 100px; max-height: 100px"
+                            class="img-thumbnail"
+                          />
+                          <img
+                            id="displayimages1"
+                            src=""
+                            alt=""
+                            style="max-width: 100px; max-height: 100px"
+                            class="img-thumbnail"
+                          />
+                          <img
+                            id="displayimages2"
+                            src=""
+                            alt=""
+                            style="max-width: 100px; max-height: 100px"
+                            class="img-thumbnail"
+                          />
+                          <img
+                            id="displayimages3"
+                            src=""
+                            alt=""
+                            style="max-width: 100px; max-height: 100px"
+                            class="img-thumbnail"
+                          />
+                          <img
+                            id="displayimages4"
+                            src=""
+                            alt=""
+                            style="max-width: 100px; max-height: 100px"
+                            class="img-thumbnail"
+                          />
+                        </div>
+                        <label for="images">Images</label>
+
+                        <input
+                          id="displayinput"
+                         onchange="displayImages('displayinput','selectedImages')"
+                          type="file"
+                          name="images"
+                          class="form-control-file"
+                          multiple
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="description">Description</label>
+                        <textarea
+                          name="description"
+                          class="form-control form-control-lg"
+                          placeholder="Enter product description"
+                          required
+                        ></textarea>
+                      </div>
+                      <div class="mb-3">
+                        <label for="description">Additional Information</label>
+                        <textarea
+                          name="specification"
+                          class="form-control form-control-lg"
+                          placeholder="Enter Additional Information"
+                          required
+                        ></textarea>
+                      </div>
+                      <div class="mb-3">
+                        <label for="category">Category</label>
+                        <select
+                          name="category"
+                          class="form-control form-control-lg"
+                        >
+                          <% categorydata.forEach((category)=>{ %>
+                          <option value="<%-category._id%>">
+                            <%-category.name%>
+                          </option>
+                          <%})%>
+                        </select>
+                      </div>
+
+                      <div class="mb-5">
+                        <label for="price">Price</label>
+                        <input
+                          type="number"
+                          name="price"
+                          class="form-control form-control-lg"
+                          placeholder="Enter product price"
+                          required
+                        />
+                      </div>
+                      <hr />
+                      <div class="">
+                        <div class="" style="color: rgb(0, 0, 0)">
+                          <h4>ADD VARIANT</h4>
+                        </div>
+                        <div class="card-body" id="variantsContainer">
+                          <!-- This is where the variants will be added -->
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="variantSize">Size/ML</label>
+                          <select
+                            name="variantSize[]"
+                            class="form-control form-control-lg"
+                          >
+                            <option value="100" style="font-size: 10px">
+                              100 ML
+                            </option>
+                            <option value="125">125 ML</option>
+                            <option value="200">200 ML</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="variantStock">Stock</label>
+                          <input
+                            type="number"
+                            name="variantStock[]"
+                            class="form-control form-control-lg"
+                            placeholder="Enter stock for selected size/ml"
+                            required
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onclick="addVariant()"
+                          class="mb-5 btn"
+                          style="background-color: black; color: #ffffff"
+                        >
+                          Add Variant
+                        </button>
+                      </div>
+                      <input
+                        style="
+                          background-color: rgb(0, 0, 0);
+                          border-color: rgb(0, 0, 0);
+                          font-size: 12px;
+                        "
+                        type="submit"
+                        name="submit"
+                        value="Add Product"
+                        class="btn btn-primary btn-lg mt-5 btn-block"
+                      />
+                    </form>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <label for="images">Images</label>
-                  <input
-                    type="file"
-                    name="images"
-                    class="form-control-file"
-                    multiple
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="description">Description</label>
-                  <textarea
-                    name="description"
-                    class="form-control form-control-lg"
-                    placeholder="Enter product description"
-                    required
-                  ></textarea>
-                </div>
-                <div class="mb-3">
-                  <label for="description">Additional Information</label>
-                  <textarea
-                    name="specification"
-                    class="form-control form-control-lg"
-                    placeholder="Enter Additional Information"
-                    required
-                  ></textarea>
-                </div>
-                <div class="mb-3">
-                  <label for="category">Category</label>
-                  <select name="category" class="form-control form-control-lg">
-                    <% categorydata.forEach((category)=>{ %>
-                    <option value="<%-category._id%>">
-                      <%-category.name%>
-                    </option>
-                    <%})%>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="stock">Stock</label>
-                  <input
-                    type="number"
-                    name="stock"
-                    class="form-control form-control-lg"
-                    placeholder="Enter product stock"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="price">Price</label>
-                  <input
-                    type="number"
-                    name="price"
-                    class="form-control form-control-lg"
-                    placeholder="Enter product price"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="addedDate">Date</label>
-                  <input
-                    type="date"
-                    name="addedDate"
-                    class="form-control form-control-lg"
-                  />
-                </div>
-                <input
-                  style="
-                    background-color: rgb(0, 0, 0);
-                    border-color: rgb(0, 0, 0);
-                    font-size: 12px;
-                  "
-                  type="submit"
-                  name="submit"
-                  value="Add Product"
-                  class="btn btn-primary"
-                />
-              </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+    <!-- </div> -->
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script>
+      function displayImages(inputId, outputId) {
+        var input = document.getElementById(inputId);
+        var output = document.getElementById(outputId);
+        output.innerHTML = ""; // Clear previous images
+
+        if (input.files) {
+          for (var i = 0; i < input.files.length; i++) {
+            var img = document.createElement("img");
+            img.src = URL.createObjectURL(input.files[i]);
+            img.alt = "";
+            img.style.maxWidth = "100px";
+            img.style.maxHeight = "100px";
+            img.classList.add("img-thumbnail");
+            output.appendChild(img);
+          }
+        }
+      }
+    </script>
 
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -232,5 +327,34 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <!-- Add this script at the end of your HTML body -->
+
+    <script>
+      function addVariant() {
+        const variantsContainer = document.getElementById("variantsContainer");
+        const newVariant = document.createElement("div");
+        newVariant.innerHTML = `
+      <div class="mb-3">
+        <label for="variantSize">Size/ML</label>
+        <select name="variantSize[]" class="form-control form-control-lg">
+          <option value="100">100 ML</option>
+          <option value="200">200 ML</option>
+          <!-- Add more size/ml options as needed -->
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="variantStock">Stock</label>
+        <input
+          type="number"
+          name="variantStock[]"
+          class="form-control form-control-lg"
+          placeholder="Enter stock for selected size/ml"
+          required
+        />
+      </div>
+    `;
+        variantsContainer.appendChild(newVariant);
+      }
+    </script>
   </body>
 </html>

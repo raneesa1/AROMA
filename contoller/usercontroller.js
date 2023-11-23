@@ -1,11 +1,14 @@
-const user = require('../model/users')
+
 const product = require('../model/product')
+const Address = require('../model/address')
 const { default: mongoose } = require('mongoose')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const OTP = require('../model/otp')
 
 const category = require('../model/category')
+const address = require('../model/address')
+const user = require('../model/users')
 require("dotenv").config()
 
 
@@ -126,7 +129,9 @@ const signuppost = async (req, res) => {
                 email: req.body.email,
                 phonenumber: req.body.phonenumber,
                 status: req.body.status,
-                date: Date.now()
+                date: Date.now(),
+                profileImage: "/photos/default-profile.jpeg"
+
             }
             req.session.data = data
             console.log(data);
@@ -162,21 +167,30 @@ const productget = (req, res) => {
 
 const getprofile = async (req, res) => {
 
-    const userId = req.session.email
+    try {
+        const userId = req.session.email;
 
+        // Assuming you fetch user data here
+        const userdata = await user.findOne({ email: userId });
 
-    const userdata = await user.findOne({ email: userId });
-    res.render('profile', { userdata })
+        // If user data is not found, throw an error
+        if (!userdata) {
+            throw new Error('User not found');
+        }
+
+        // Render the profile view with user data
+        res.render('profile', { userdata, err: null });
+    } catch (error) {
+        console.error(error.message);
+        // Render the profile view with an error message
+        res.status(500).render('profile', { userdata: null, err: error.message });
+    }
 }
 
 
 const getlogout = (req, res) => {
     req.session.isauth = false
     res.redirect('/')
-}
-
-const getcart = (req, res) => {
-    res.render('cart')
 }
 
 const getcheckout = (req, res) => {
@@ -252,18 +266,18 @@ const postchangepassword = async (req, res) => {
         const { currentPassword, newPassword, confirmPassword } = req.body;
         const users = await user.findOne({ email: userId });
 
-        // Check if the current password is correct
+
         const isPasswordValid = await bcrypt.compare(currentPassword, users.password);
         if (!isPasswordValid) {
             return res.render('changepassword', { err: 'Current password is incorrect' });
         }
 
-        // Check if new password and confirm password match
+
         if (newPassword !== confirmPassword) {
             return res.render('changepassword', { err: 'New password and confirm password do not match' });
         }
 
-        // Check if the password is strong (you can implement your own criteria)
+
         if (newPassword.length <= 8) {
             return res.render('changepassword', { err: 'Password must be strong' });
         }
@@ -273,17 +287,17 @@ const postchangepassword = async (req, res) => {
         }
 
 
-        // Retrieve the user from the database
 
 
-        // Hash the new password before updating the database
+
+
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-        // Update the user's password in the database
+
         const updatedUser = await user.updateOne({ email: userId }, { $set: { password: hashedPassword } });
 
         if (updatedUser) {
-            res.redirect('/profile'); // Redirect to the profile page or any other page after successful password change
+            res.redirect('/profile');
         } else {
             res.render('changepassword', { err: 'Failed to update password' });
         }
@@ -306,21 +320,218 @@ const getmyorder = (req, res) => {
     res.render('myorder')
 }
 
-const getaddress = (req, res) => {
-    res.render('address')
+const getaddress = async (req, res) => {
+    const Address = await address.find()
+    res.render('address', { Address })
 }
 
-const geteditaddress = (req, res) => {
-    res.render('editaddress')
-}
 
-const getaddaddress = (req, res) => {
+
+const getaddaddress = async (req, res) => {
+
     res.render('addaddress')
 }
+
+
+
+const postaddaddress = async (req, res) => {
+    try {
+        let email = req.session.email
+        // Create a new address document
+        const newAddress = new Address({
+            Addressname: req.body.Addressname,
+            Firstname: req.body.Firstname,
+            Secondname: req.body.Secondname,
+            Address: req.body.Address,
+            PhoneNumber: req.body.PhoneNumber,
+            State: req.body.State,
+            Landmark: req.body.Landmark,
+            City: req.body.City,
+            Pincode: req.body.Pincode,
+            Country: req.body.Country
+        });
+
+        const users = await user.findOne({ email: email })
+        // Save the new address to the database
+        await new Address(newAddress).save();
+        address.push(newAddress)
+        
+
+
+
+        // Redirect to the address list page or any other page you want
+        res.redirect('/address');
+    } catch (error) {
+        // Handle errors
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+const geteditaddress = async (req, res) => {
+    try {
+        let id = req.params.id;
+        let address = await Address.findOne({ _id: id });
+
+        if (!address) {
+            res.redirect('/address'); // Redirect to address list if the address is not found
+        } else {
+            res.render('editaddress', { title: 'Edit Address', address });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+
+
+
+
+// const getcart = async (req, res) => {
+
+//     try{
+//         let id = req.params.id;
+
+//         // const useremail=await user.find({email:req.session.email})
+//         const userid = await user.findOne({ _id: id })
+
+//         console.log(userid)
+//         const userId = await user.findOne({ id: req.session.id })
+//         console.log(userId)
+
+//         const users = await cart.findOne({ userId: userId }).populate("products.productId", {
+
+//             name: 1,
+//             image: 1,
+//             Price: 1
+
+//         });
+
+//         // res.json(user);
+//         if (users) {
+
+//             res.render('/cart', { products: users.Items, length: users.Items.length });
+//         } else {
+//             res.redirect('/home')
+//             console.log('redirected to home in getcart function')
+//         }
+
+//     }catch(error){
+//         console.log(error)
+
+//     }
+   
+
+
+// }
+
+
+
+
+
+
+
+
+
+const postupdateaddress = async (req, res) => {
+
+    try {
+        let id = req.params.id;
+        console.log(id)
+        const updatedAddress = {
+            Addressname: req.body.Addressname,
+            Firstname: req.body.Firstname,
+            Secondname: req.body.Secondname,
+            Address: req.body.Address,
+            PhoneNumber: req.body.PhoneNumber,
+            State: req.body.State,
+            Landmark: req.body.Landmark,
+            City: req.body.City,
+            Pincode: req.body.Pincode,
+            Country: req.body.Country
+        };
+
+        // console.log('req.body:', req.body);
+        // console.log('updatedAddress:', updatedAddress);
+
+        await Address.updateOne({ _id: id }, { $set: updatedAddress });
+        res.redirect('/address'); // Redirect to address list after updating
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+
+
+
+//delete address
+const getdeleteaddress = async (req, res) => {
+    let id = req.params.id
+
+    let Address = await address.findOneAndDelete({ _id: id })
+    res.redirect('/address')
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 const getorderdetials = (req, res) => {
     res.render('orderdetials')
 }
 
-module.exports = { postchangepassword, postresetpassword, getresetpassword, getorderdetials, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getcart, getwishlist, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails, getmyorder, getaddress, geteditaddress, getaddaddress }
+const geteditprofile = async (req, res) => {
+
+    const userId = req.session.email
+
+
+    const userdata = await user.findOne({ email: userId });
+    res.render('editprofile', { userdata })
+}
+// Example route for handling edit profile form submission
+const posteditprofile = async (req, res) => {
+    try {
+        const userId = req.session.email;
+        const { editName, editPhoneNumber } = req.body;
+
+
+        if (req.file) {
+            // Update the user's profile photo path in the database
+            const profileImagePath = '/photos/' + req.file.filename;
+            await user.updateOne({ email: userId }, { $set: { profileImage: profileImagePath } });
+        }
+
+
+
+        const updatedUser = await user.updateOne(
+            { email: userId },
+            { $set: { name: editName, phonenumber: editPhoneNumber } }
+        );
+
+
+        res.redirect('/profile');
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+
+
+
+module.exports = { getdeleteaddress, postupdateaddress, postaddaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, getorderdetials, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getwishlist, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails, getmyorder, getaddress, geteditaddress, getaddaddress }
 

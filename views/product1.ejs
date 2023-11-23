@@ -80,20 +80,20 @@
                       /></svg></i
                 ></a>
               </div>
+
               <div class="icon-box">
-                <a href=""
+                <a href="cart"
                   ><i
                     ><svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="17"
-                      height="17"
-                      style="color: black"
+                      width="16"
+                      height="16"
                       fill="currentColor"
-                      class="bi bi-heart"
+                      class="bi bi-cart3"
                       viewBox="0 0 16 16"
                     >
                       <path
-                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
                       /></svg></i
                 ></a>
               </div>
@@ -110,6 +110,7 @@
             padding-top: 0;
           "
         >
+          <p class="p-3 mt-3"><a href="home">HOME</a></p>
           <% categorydata.forEach(category => { %>
           <p class="p-3 mt-3"><%=category.name%></p>
           <% })%>
@@ -188,7 +189,9 @@
           </p></a
         >
         <div class="d-flex">
-          <p class="product-price">&#8377;<%= products.price %></p>
+          <p class="product-price" id="productPrice">
+            &#8377;<%= products.price %>
+          </p>
           <button class="fav-btn btn" style="padding-left: 290px">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -207,7 +210,9 @@
 
         <hr />
 
-        <p style="font-size: 14px; font-weight: 600">2 SIZE AVAILABLE</p>
+        <p style="font-size: 14px; font-weight: 600">
+          <%=products.size.length%> SIZE AVAILABLE
+        </p>
         <div class="btn-block">
           <button
             type="button"
@@ -222,16 +227,26 @@
             data-toggle="dropdown"
             aria-expanded="false"
             id="dropdownButton"
+            onchange="updatePrice()"
           >
-            select
+            <%= products.size[0].quantity%>ml
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">125ml</a></li>
-            <li><a class="dropdown-item" href="#">50ml</a></li>
+            <% products.size.forEach((variant) => { %>
+            <li>
+              <a
+                class="dropdown-item"
+                href="#"
+                data-variant-id="<%= variant.quantity %>"
+                ><%= variant.quantity %>ml</a
+              >
+            </li>
+
+            <% }); %>
           </ul>
         </div>
         <button class="add-to-cart-btn">
-          <a class="add-to-cart-btn" href="">ADD TO CART</a>
+          <a class="add-to-cart-btn" id="addToCartButton">ADD TO CART</a>
         </button>
       </div>
     </div>
@@ -346,6 +361,7 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+
     <div>
       <% if (Array.isArray(products.image) && products.image.length > 0) { %> <%
       products.image.forEach((image, index) => { %>
@@ -375,28 +391,56 @@
       </div>
       <% }); %> <% } %>
     </div>
-    <!-- <div
-      class="modal fade"
-      id="imageZoomModal2"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="imageZoomModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-body">
-            <img
-              src="/photos/bleudechanel-2.webp"
-              alt="Zoomed Image"
-              width="100%"
-              height="100%"
-              class="zoomed-image"
-              id="zoomedImage"
-            />
-          </div>
-        </div>
-      </div>
-    </div> -->
+    <script>
+      document
+        .getElementById("addToCartButton")
+        .addEventListener("click", function (event) {
+          event.preventDefault(); // Prevent the default form submission behavior
+          alert("cart button clicked");
+          console.log("function started for add to cart");
+          // Fetch product ID and other necessary data
+          var productId = "<%-products._id %>"; // Update with the correct way to get product ID
+
+          console.log(productId, "productid");
+          // Create an object to send in the request
+          var requestData = {
+            key: productId,
+          };
+          // console.log("this function is working");
+
+          // Send a POST request to the server using AJAX
+          // console.log("Before fetch");
+          // alert(JSON.stringify(requestData));
+
+          // fetch("/cart1", {
+          //   method: "POST",
+          //   body: JSON.stringify({
+          //     key: productId,
+          //   }),
+          // })
+          //   .then(function (response) {
+          //     if (response.ok) {
+          //       return response.json();
+          //     } else {
+          //       alert(JSON.stringify(response));
+          //       throw new Error(
+          //         "Failed to add item to the cart",
+          //         response.status
+          //       );
+          //     }
+          //   })
+          //   .then(function (data) {
+          //     // Handle the success response
+          //     alert(data); // You can replace this with a more user-friendly notification
+          //   })
+          //   .catch(function (error) {
+          //     console.log(error);
+          //     alert(`Erro = >  ${error}`);
+          //   });
+          fetch(`/add-to-cart?productId=${requestData.key}`).then(response=>response.json()).then(res=>{
+            // alert('fetch came')
+          })
+        });
+    </script>
   </body>
 </html>

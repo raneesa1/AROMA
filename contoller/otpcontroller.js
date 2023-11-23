@@ -35,6 +35,7 @@ const verifyOtp = async function (req, res) {
                 // const userExists = await user.findOne({ email: email });
                 // req.session.email = userExists.email
 
+                // const userdata=await user.findOne()
 
                 res.redirect('/resetpassword');
 

@@ -39,7 +39,7 @@ router.get('/product', verifyadmin, admincontroller.getproductmanagement)
 router.get('/edit/:id', verifyadmin, admincontroller.geteditproduct)
 router.get('/editcategory/:id', verifyadmin, admincontroller.geteditcategory)
 router.post('/updatecategory/:id', admincontroller.postupdatecategory)
-router.post('/update/:id', upload.array('images', 2), admincontroller.postupdateproduct)
+router.post('/update/:id', upload.array('images', 5), admincontroller.postupdateproduct)
 
 router.get('/', verifyadmin, admincontroller.getdash)
 

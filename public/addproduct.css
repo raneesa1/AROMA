@@ -162,3 +162,19 @@ textarea[name="specification"] {
 select[name="category"] {
   font-size: 14px; /* Adjust the font size as needed */
 }
+#drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+#drop-area.highlight {
+  border-color: #007bff;
+  background-color: #f0f8ff;
+}
+
+#file-input {
+  display: none;
+}

@@ -85,15 +85,14 @@
                   ><i
                     ><svg
                       xmlns="http://www.w3.org/2000/svg"
-                      wxqidth="17"
-                      height="17"
-                      style="color: black"
+                      width="16"
+                      height="16"
                       fill="currentColor"
-                      class="bi bi-heart"
+                      class="bi bi-cart3"
                       viewBox="0 0 16 16"
                     >
                       <path
-                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
                       /></svg></i
                 ></a>
               </div>
@@ -110,6 +109,7 @@
             padding-top: 0;
           "
         >
+          <p class="p-3 mt-3"><a href="home">HOME</a></p>
           <p class="p-3 mt-3">WOMEN</p>
           <p class="p-3 mt-3">MEN</p>
           <p class="p-3 mt-3">SHOP</p>
@@ -140,6 +140,12 @@
                   <li class="list-group-item d-flex align-items-center p-4">
                     <i class="fas fa-globe fa-lg text-warning"></i>
                     <p class="mb-0">
+                      <a href="profile">My Account</a>
+                    </p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fas fa-globe fa-lg text-warning"></i>
+                    <p class="mb-0">
                       <a href="accountdetails">Account Details</a>
                     </p>
                   </li>
@@ -147,7 +153,7 @@
                     <i class="fab fa-github fa-lg" style="color: #333333"></i>
                     <p class="mb-0"><a href="myorder">My Order</a></p>
                   </li>
-                  <li class="list-group-item d-flex align-items-center p-3">
+                  <li class="list-group-item d-flex align-items-center p-4">
                     <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
                     <p class="mb-0"><a href="cart">Shopping Cart</a></p>
                   </li>
@@ -163,7 +169,7 @@
                       class="fab fa-facebook-f fa-lg"
                       style="color: #000000"
                     ></i>
-                    <p class="mb-0">Address</p>
+                    <p class="mb-0"><a href="address">Address</a></p>
                   </li>
                   <li class="list-group-item d-flex align-items-center p-4">
                     <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
@@ -194,11 +200,12 @@
                 <div class="card mb-4">
                   <div class="card-body text-center">
                     <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                      src="<%=userdata.profileImage%>"
                       alt="avatar"
                       class="rounded-circle img-fluid"
                       style="width: 150px"
                     />
+
                     <h5 class="my-3">
                       <%= userdata ? userdata.name : 'N/A' %>
                     </h5>
@@ -206,9 +213,23 @@
                     <!-- <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> -->
                   </div>
                 </div>
-                <div class="row">
+                <div>
+                  <p class="edit-button">
+                    <button
+                      type="button"
+                      class="btn"
+                      style="padding: 0%"
+                      data-toggle="modal"
+                      data-target="#editProfileModal"
+                    >
+                      Edit
+                    </button>
+                    <!-- <img src=/photos/defaultprofile.jpeg" alt=""> -->
+                  </p>
+                </div>
+                <div class="row mt-0">
                   <div class="col-sm-3">
-                    <p class="mb-1">Full Name</p>
+                    <p class="mb-1 mt-0">Full Name</p>
                   </div>
                   <div class="col-sm-9">
                     <p class="text-muted mb-1">
@@ -244,8 +265,8 @@
                   </div>
                   <div class="col-sm-9">
                     <p class="text-muted mb-1"></p> -->
-                  <!-- </div> -->
-                <!-- </div> --> 
+                <!-- </div> -->
+                <!-- </div> -->
               </div>
             </div>
           </div>
@@ -268,6 +289,16 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const editIcon = document.querySelector(".edit-icon");
+        const profileImageInput = document.getElementById("profileImageInput");
+
+        editIcon.addEventListener("click", function () {
+          profileImageInput.click();
+        });
+      });
+    </script>
     <div
       class="modal fade"
       id="logoutModal"
@@ -299,6 +330,100 @@
               Cancel
             </button>
             <a href="/logout" class="btn btn-danger">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- At the end of the body, before the closing </body> tag -->
+    <div
+      class="modal fade"
+      id="editProfileModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="editProfileModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Your edit profile form goes here -->
+            <form
+              action="/editprofile"
+              method="POST"
+              enctype="multipart/form-data"
+            >
+              <div class="form-group">
+                <label for="editProfilePhoto">Profile Photo</label>
+                <input
+                  type="file"
+                  class="form-control-file"
+                  id="editProfilePhoto"
+                  name="editProfilePhoto"
+                  accept="image/*"
+                />
+              </div>
+
+              <!-- Name -->
+
+              <div class="form-group">
+                <label for="editName">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editName"
+                  name="editName"
+                  value="<%= userdata ? userdata.name : '' %>"
+                  required
+                />
+              </div>
+
+              <!-- Email -->
+              <div class="form-group">
+                <label for="editEmail">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="editEmail"
+                  name="editEmail"
+                  inputmode="email"
+                  value="<%= userdata ? userdata.email : '' %>"
+                  readonly
+                />
+              </div>
+
+              <!-- Phone Number -->
+              <div class="form-group">
+                <label for="editPhoneNumber">Phone Number</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="editPhoneNumber"
+                  name="editPhoneNumber"
+                  inputmode="tel"
+                  value="<%= userdata ? userdata.phonenumber : '' %>"
+                  readonly
+                />
+              </div>
+
+              <button
+                type="submit"
+                class="btn"
+                style="background-color: #000000; color: white"
+              >
+                Save Changes
+              </button>
+            </form>
           </div>
         </div>
       </div>

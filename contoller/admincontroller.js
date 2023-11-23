@@ -46,68 +46,52 @@ const unblockUser = async (req, res) => {
   }
 };
 
-
-
 const getproductmanagement = async (req, res) => {
-
-
-  const productdata = await product.find({ status: false }).sort({ date: -1 });
-  const getproductmanagement = async (req, res) => {
-    try {
-      const productdata = await product.aggregate([
-        {
-          $match: { status: false }
-        },
-        {
-          $lookup: {
-            from: 'category',
-            localField: 'category',
-            foreignField: '_id',
-            as: 'categoryDetails'
-          }
-        },
-        {
-          $unwind: {
-            path: '$categoryDetails',
-            preserveNullAndEmptyArrays: true
-          }
-        },
-        {
-          $project: {
-            _id: 1,
-            name: 1,
-            description: 1,
-            category: '$categoryDetails.name', // Assuming 'name' is the field in the 'category' collection you want to display
-            stock: 1,
-            price: 1,
-            specification: 1,
-            date: 1
-          }
+  try {
+    // Fetch product data with category details using aggregation
+    const productdata = await product.aggregate([
+      {
+        $match: { status: false }
+      },
+      {
+        $lookup: {
+          from: 'categories', // Assuming your categories collection is named 'categories'
+          localField: 'category',
+          foreignField: '_id',
+          as: 'categoryDetails'
         }
-      ]);
+      },
+      {
+        $sort: { date: -1 }
+      }
+    ]);
 
-
-      res.render('productm', { productdata });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  };
-
-  res.render('productm', { productdata });
+    res.render('productm', { productdata });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
 const postaddproduct = async (req, res) => {
   console.log(JSON.stringify(req.files))
   console.log(req.body)
+  let variants = []
+  for (let i = 0; i < req.body.variantSize.length; i++) {
+    variants.push({
+      quantity: req.body.variantSize[i],
+      stock: req.body.variantStock[i]
+    })
+  }
+  console.log(variants)
+
   const products = {
     name: req.body.name,
     description: req.body.description,
     category: new ObjectId(req.body.category),
-    stock: req.body.stock,
     specification: req.body.specification,
     price: req.body.price,
-    size: req.body.size,
+    size: variants,
     image: req.files.map((file) => '/photos/' + file.filename),
     date: Date.now()
 
@@ -177,7 +161,7 @@ const geteditproduct = async (req, res) => {
   console.log(id, ' id')
   let products = await product.findOne({ _id: id });
   let categorydata = await category.find()
-  console.log(categorydata,' data of');
+  console.log(categorydata, ' data of');
   console.log(products);
   if (products == null) {
     res.redirect('/admin/product');
@@ -190,23 +174,33 @@ const geteditproduct = async (req, res) => {
 };
 
 const postupdateproduct = async (req, res) => {
-  try {
-    
-    let id = req.params.id;
-    console.log(req.body)
 
+  try {
+    console.log(req.body, 'body of update')
+
+    let id = req.params.id;
+    let variants = []
+    for (let i = 0; i < req.body.variantSize.length; i++) {
+      variants.push({
+        quantity: req.body.variantSize[i],
+        stock: req.body.existingVariantStock[i]
+
+      })
+    }
+
+    // console.log(req.file);
     // Check if files are present in the request
     if (req.files && req.files.length > 0) {
       const productsdetails = {
         name: req.body.name,
         description: req.body.description,
         category: new ObjectId(req.body.category),
-        stock: req.body.stock,
-        size: req.body.size,
+        size: variants,
         price: req.body.price,
         specification: req.body.specification,
         // Assuming images is an array of files
         image: req.files.map((file) => '/photos/' + file.filename)
+
 
 
       };
@@ -220,10 +214,10 @@ const postupdateproduct = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         category: new ObjectId(req.body.category),
-        stock: req.body.stock,
         price: req.body.price,
-        size: req.body.size,
+        size: variants,
         specification: req.body.specification,
+
 
       };
 
@@ -305,7 +299,7 @@ const postupdatecategory = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
-const getorder=async(req,res)=>{
+const getorder = async (req, res) => {
   res.render('orderm')
 }
 

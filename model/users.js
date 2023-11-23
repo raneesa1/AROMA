@@ -3,6 +3,10 @@ require('../config/dbconfig')
 require('dotenv').config()
 
 const userSchema=new mongoose.Schema({
+    profileImage: {
+        type: String, // Store the path to the uploaded image
+    },
+
     name:{
         type:String,
     },

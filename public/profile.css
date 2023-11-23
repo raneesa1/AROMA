@@ -204,3 +204,9 @@ a:hover {
   /* width: 25%; You can adjust the percentage as needed */
   padding: 0;
 }
+.edit-button{
+  margin-left: 620px; 
+  margin-bottom: 0;
+  /* position: relative; */
+  padding-bottom: 0%;
+}

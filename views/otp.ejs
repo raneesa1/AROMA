@@ -147,15 +147,15 @@
     startTimer();
   });
   function hideErrors() {
-        let errorMessages = document.querySelectorAll(".text-danger");
-        errorMessages.forEach(function (errorMessage) {
-          errorMessage.style.display = "none";
-        });
-      }
+    let errorMessages = document.querySelectorAll(".text-danger");
+    errorMessages.forEach(function (errorMessage) {
+      errorMessage.style.display = "none";
+    });
+  }
 
-      // Check if there are error messages and set a timeout to hide them
-      let errorMessages = document.querySelectorAll(".text-danger");
-      if (errorMessages.length > 0) {
-        setTimeout(hideErrors, 3000); // 10000 milliseconds = 10 seconds
-      }
+  // Check if there are error messages and set a timeout to hide them
+  let errorMessages = document.querySelectorAll(".text-danger");
+  if (errorMessages.length > 0) {
+    setTimeout(hideErrors, 3000); // 10000 milliseconds = 10 seconds
+  }
 </script>

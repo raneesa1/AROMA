@@ -15,9 +15,9 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/accountdetails.css" />
+    <link rel="stylesheet" href="/address.css" />
 
-    <title>acccount details</title>
+    <title>address</title>
   </head>
   <body style="background-color: #eee">
     <div style="background-color: black; height: 4px" class="w-100"></div>
@@ -85,15 +85,14 @@
                   ><i
                     ><svg
                       xmlns="http://www.w3.org/2000/svg"
-                      wxqidth="17"
-                      height="17"
-                      style="color: black"
+                      width="16"
+                      height="16"
                       fill="currentColor"
-                      class="bi bi-heart"
+                      class="bi bi-cart3"
                       viewBox="0 0 16 16"
                     >
                       <path
-                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
                       /></svg></i
                 ></a>
               </div>
@@ -110,6 +109,7 @@
             padding-top: 0;
           "
         >
+          <p class="p-3 mt-3"><a href="home">HOME</a></p>
           <p class="p-3 mt-3">WOMEN</p>
           <p class="p-3 mt-3">MEN</p>
           <p class="p-3 mt-3">SHOP</p>
@@ -140,6 +140,12 @@
                   <li class="list-group-item d-flex align-items-center p-4">
                     <i class="fas fa-globe fa-lg text-warning"></i>
                     <p class="mb-0">
+                      <a href="profile">My Account</a>
+                    </p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fas fa-globe fa-lg text-warning"></i>
+                    <p class="mb-0">
                       <a href="accountdetails">Account Details</a>
                     </p>
                   </li>
@@ -147,7 +153,7 @@
                     <i class="fab fa-github fa-lg" style="color: #333333"></i>
                     <p class="mb-0"><a href="myorder">My Order</a></p>
                   </li>
-                  <li class="list-group-item d-flex align-items-center p-3">
+                  <li class="list-group-item d-flex align-items-center p-4">
                     <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
                     <p class="mb-0"><a href="cart">Shopping Cart</a></p>
                   </li>
@@ -187,168 +193,61 @@
               </div>
             </div>
           </div>
-
           <div class="col-lg-8">
             <div class="card mb-4">
               <div class="card-body">
-                <!-- <div class="card mb-4"> -->
-                <!-- <div class="card-body text-center">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                      alt="avatar"
-                      class="rounded-circle img-fluid"
-                      style="width: 150px"
-                    />
-                    <h5 class="my-3"></h5>
-                <p class="text-muted mb-1">Full Stack Developer</p> -->
-                <!-- <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> -->
-                <!-- </div> -->
-                <!-- </div> -->
                 <div class="d-flex justify-content-between align-items-center">
                   <h3 class="fw-bold mb-0 text-black">ADDRESS</h3>
                   <h6 class="mb-0 text-muted">
-                    <a href="editaddress">EDIT</a>
                     <a class="pl-3" href="addaddress">ADD</a>
                   </h6>
                 </div>
-
                 <hr />
                 <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">Full Name</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1">raneesa</p>
-                  </div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">Email</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1">raneesa@gmail.com</p>
-                  </div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">Phone number</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1">6578901232</p>
-                  </div>
-                </div>
-                <!-- <div class="row"></div> -->
-
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">Gender</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1"></p>
-                  </div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">Address</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1 m-5"></p>
-                  </div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">Postcode</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1"></p>
-                  </div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">City</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1"></p>
-                  </div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">Country</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1"></p>
+                  <div>
+                    <p
+                      class="text-muted mb-1 pt-5 ml-4"
+                      style="padding-bottom: 45px"
+                    >
+                      <a class="pl-3"
+                        >You can add and edit your address here
+                      </a>
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-lg-8" style="margin-left: 379px">
+
+            <% Address.forEach(address => { %>
+            <!-- <div class="col-lg-8"> -->
             <div class="card mb-4">
               <div class="card-body">
-                <!-- <div class="card mb-4"> -->
-                <!-- <div class="card-body text-center">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                      alt="avatar"
-                      class="rounded-circle img-fluid"
-                      style="width: 150px"
-                    />
-                    <h5 class="my-3"></h5>
-                <p class="text-muted mb-1">Full Stack Developer</p> -->
-                <!-- <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> -->
-                <!-- </div> -->
-                <!-- </div> -->
                 <div class="d-flex justify-content-between align-items-center">
-                  <h3 class="fw-bold mb-0 text-black">HOME ADDRESS</h3>
+                  <h3 class="fw-bold mb-0 text-black">
+                    <%= address.Addressname %>
+                  </h3>
                   <h6 class="mb-0 text-muted">
-                    <a href="editaddress">EDIT</a>
-                    <a class="pl-3" href="addaddress">ADD</a>
+                    <a href="editaddress/<%=address._id%>">EDIT</a>
+                    <!-- <a class="pl-3" href="addaddress">ADD</a> -->
                   </h6>
                 </div>
 
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
-                    <p class="mb-1">Full Name</p>
+                    <p class="mb-1">first Name</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-1">raneesa</p>
+                    <p class="text-muted mb-1"><%= address.Firstname %></p>
                   </div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
-                    <p class="mb-1">Email</p>
+                    <p class="mb-1">second Name</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-1">raneesa@gmail.com</p>
-                  </div>
-                </div>
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">Phone number</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1">6578901232</p>
-                  </div>
-                </div>
-                <!-- <div class="row"></div> -->
-
-                <hr />
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-1">Gender</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1"></p>
+                    <p class="text-muted mb-1"><%= address.Secondname %></p>
                   </div>
                 </div>
                 <hr />
@@ -357,16 +256,25 @@
                     <p class="mb-1">Address</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-1 m-5"></p>
+                    <p class="text-muted mb-1 m-5"><%= address.Address %></p>
                   </div>
                 </div>
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
-                    <p class="mb-1">Postcode</p>
+                    <p class="mb-1">Phone number</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-1"></p>
+                    <p class="text-muted mb-1"><%= address.PhoneNumber %></p>
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-1">State</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-1"><%= address.State %></p>
                   </div>
                 </div>
                 <hr />
@@ -375,7 +283,16 @@
                     <p class="mb-1">City</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-1"></p>
+                    <p class="text-muted mb-1"><%= address.City %></p>
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-1">Landmark</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-1"><%= address.Landmark %></p>
                   </div>
                 </div>
                 <hr />
@@ -384,15 +301,51 @@
                     <p class="mb-1">Country</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-1"></p>
+                    <p class="text-muted mb-1"><%= address.Country%></p>
                   </div>
                 </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-1">Pincode</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-1"><%= address.Pincode %></p>
+                  </div>
+                </div>
+                <div style="margin-left: 660px">
+                  <a
+                    href="/deleteaddress/<%=address._id%>"
+                    onclick="confirmDelete('<%=address._id%>'); return false;"
+                    ><i
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        style="color: black"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-trash"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"
+                        />
+                        <path
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"
+                        /></svg></i
+                  ></a>
+                </div>
+
+                <!-- </div> -->
               </div>
             </div>
+            <% }); %>
           </div>
         </div>
       </div>
     </section>
+    <!-- SweetAlert CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -409,6 +362,23 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+    <script>
+      function confirmDelete(addressId) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#000",
+          confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // If confirmed, redirect to the delete URL
+            window.location.href = "/deleteaddress/" + addressId;
+          }
+        });
+      }
+    </script>
     <div
       class="modal fade"
       id="logoutModal"

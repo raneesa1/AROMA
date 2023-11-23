@@ -115,7 +115,11 @@
               <h3>EDIT PRODUCT</h3>
             </div>
             <div class="card-body p-4">
-              <form action="/admin/update/<%=products._id%>" method="post">
+              <form
+                action="/admin/update/<%=products._id%>"
+                method="post"
+                enctype="multipart/form-data"
+              >
                 <div class="mb-3">
                   <label for="name">Name</label>
                   <input
@@ -125,8 +129,26 @@
                     value="<%=products.name%>"
                   />
                 </div>
+
                 <div class="mb-3">
                   <label for="images">Images</label>
+                  <div class="existing-images d-flex mb-3">
+                    <% products.image.forEach((image, index) => { %>
+                    <div class="existing-image">
+                      <img
+                        src="<%= image %>"
+                        alt="Existing Image <%= index + 1 %>"
+                        class="img-thumbnail"
+                        style="max-width: 100px; max-height: 100px"
+                      />
+                      <input
+                        type="hidden"
+                        name="existingImages[]"
+                        value="<%= image %>"
+                      />
+                    </div>
+                    <% }) %>
+                  </div>
                   <input
                     type="file"
                     name="images"
@@ -150,7 +172,6 @@
                     type="text"
                     name="specification"
                     class="form-control form-control-lg"
-                    
                   >
 <%=products.specification%></textarea
                   >
@@ -167,15 +188,6 @@
                   </select>
                 </div>
                 <div class="mb-3">
-                  <label for="stock">Stock</label>
-                  <input
-                    type="number"
-                    name="stock"
-                    class="form-control form-control-lg"
-                    value="<%=products.stock%>"
-                  />
-                </div>
-                <div class="mb-3">
                   <label for="price">Price</label>
                   <input
                     type="number"
@@ -184,16 +196,91 @@
                     value="<%=products.price%>"
                   />
                 </div>
+                <div class="mb-3">
+                  <label for="variants">Existing Variants</label>
+                  <div class="existing-variants mb-3">
+                    <% products.size.forEach((variant, index) => { %>
+                    <div class="existing-variant">
+                      <div class="mb-3">
+                        <label for="variantSize">Size/ML</label>
+                         <select name="variantSize[]" class="form-control form-control-lg">
+        <option value="100" <%=variant.size === 100 ? 'selected' : '' %>>100 ML</option>
+        <option value="125" <%=variant.size === 125 ? 'selected' : '' %>>125 ML</option>
+        <option value="200" <%=variant.size === 200 ? 'selected' : '' %>>200 ML</option>
+        <!-- Add more size/ml options as needed -->
+    </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="variantStock">Stock</label>
+                        <input
+                          type="number"
+                          name="existingVariantStock[]"
+                          class="form-control form-control-lg"
+                          placeholder="Enter stock for selected size/ml"
+                          value="<%= variant.stock %>"
+                          required
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        class="remove-variant-btn btn btn-danger"
+                        onclick="removeVariant(this)"
+                      >
+                        Remove Variant
+                      </button>
+                    </div>
+                    <% }) %>
+                  </div>
+                </div>
+
+                <hr>
+                 <button
+                  type="button"
+                  onclick="addVariant()"
+                  class="mb-3 btn "
+                  style="margin-left: 500px ; background-color: black; color: aliceblue;"
+                >
+                  Add More Variant
+                </button>
+
+               <div id="newVariantsContainer"></div>
+                <!-- <div class="mb-3">
+                  
+                  <label for="variantSize">Size/ML</label>
+                  <select
+                    name="variantSize[]"
+                    class="form-control form-control-lg"
+                  >
+                  <option value="100">100 ML</option>
+                    <option value="125">125 ML</option>
+                    <option value="200">200 ML</option> -->
+                    <!-- Add more size/ml options as needed -->
+                  <!-- </select> -->
+                   
+                <!-- </div> -->
+                <!-- <div class="mb-3">
+                  <label for="variantStock">Stock</label>
+                  <input
+                    type="number"
+                    name="variantStock[]"
+                    class="form-control form-control-lg "
+                    placeholder="Enter stock for selected size/ml"
+                    required
+                  />
+                </div> -->
+                
+
                 <input
                   style="
                     background-color: rgb(0, 0, 0);
                     border-color: rgb(0, 0, 0);
-                    font-size: 12px;
+                    font-size: 20px;margin-top: 5px;
+                   
                   "
                   type="submit"
                   name="submit"
                   value="Edit Product"
-                  class="btn btn-primary"
+                  class="btn btn-primary btn-block"
                 />
               </form>
             </div>
@@ -216,5 +303,55 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+   <script>
+  function addVariant() {
+    const newVariantsContainer = document.getElementById("newVariantsContainer");
+    const newVariant = document.createElement("div");
+    newVariant.innerHTML = `
+      <div class="mb-3">
+        <label for="variantSize">Size/ML</label>
+        <select name="variantSize[]" class="form-control form-control-lg">
+          <option value="100">100 ML</option>
+          <option value="200">200 ML</option>
+          <!-- Add more size/ml options as needed -->
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="variantStock">Stock</label>
+        <input
+          type="number"
+          name="existingVariantStock[]"
+          class="form-control form-control-lg"
+          placeholder="Enter stock for selected size/ml"
+          required
+        />
+      </div>
+      <button
+        type="button"
+        class="remove-variant-btn btn btn-danger"
+        onclick="removeVariant(this)"
+      >
+        Remove Variant
+      </button>
+    `;
+    newVariantsContainer.appendChild(newVariant);
+  }
+
+  function removeVariant(button) {
+    const container = button.parentElement;
+    container.style.display = "none"; // hide the variant
+
+    // If it's an existing variant, add a hidden input to mark it for removal
+    const isExistingVariant = container.classList.contains("existing-variant");
+    if (isExistingVariant) {
+      const hiddenInput = document.createElement("input");
+      hiddenInput.type = "hidden";
+      hiddenInput.name = "variantsToRemove[]";
+      hiddenInput.value = container.dataset.variantId; // use a data attribute to store the variant ID
+      container.appendChild(hiddenInput);
+    }
+  }
+</script>
+
   </body>
 </html>
