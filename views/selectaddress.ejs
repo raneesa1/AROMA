@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/selectaddress.css" />
+
+    <title>checkout</title>
+  </head>
+  <body>
+    <div style="background-color: black; height: 4px" class="w-100"></div>
+    <div id="menuHolder">
+      <div
+        role="navigation"
+        class="sticky-top border-bottom border-top"
+        id="mainNavigation"
+      >
+        <div class="">
+          <div class=""></div>
+          <div class="m-3" id="siteBrand" style="font-size: 52px">AROMA</div>
+
+          <div class="flex2 text-end d-block d-md-none">
+            <button class="whiteLink siteLink">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <!-- 
+          <div class="flex2 text-end d-none d-md-block align-content-lg-end">
+            <div class="d-flex justify-content-end align-items-center pr-5">
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      style="color: black"
+                      fill="currentColor"
+                      class="bi bi-search"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                      /></svg></i
+                ></a>
+              </div>
+              <div class="icon-box">
+                <a href="profile"
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-person-circle"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                      <path
+                        fill-rule="evenodd"
+                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                      /></svg></i
+                ></a>
+              </div>
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-cart3"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                      /></svg></i
+                ></a>
+              </div>
+            </div>
+          </div> -->
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          style="
+            /* align-items: center; */
+            text-align: center;
+            font-size: medium;
+            font-size: 15px;
+            padding-top: 0;
+          "
+        >
+          <!-- <p class="p-3 mt-3"><a href="home">HOME</a></p>
+          <p class="p-3 mt-3">WOMEN</p>
+          <p class="p-3 mt-3">MEN</p>
+          <p class="p-3 mt-3">SHOP</p>
+          <p class="p-3 mt-3">HELP</p> -->
+        </div>
+      </div>
+    </div>
+    <div class="d-flex" style="margin-left: 70px">
+      <div class="mt-5">
+        <h1>Choose Address</h1>
+        Detailed address will help our delivery partner reach your doorstep
+        quickly
+      </div>
+      <div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="318"
+          height="122"
+          fill="none"
+          viewBox="0 0 318 122"
+        >
+          <path
+            fill="#FFE1F1"
+            d="M.299 0 124.22 108.361c19.281 16.91 50.576 16.91 69.857 0L318 0H.299Z"
+          />
+          <mask
+            id="mask0_2308_28567"
+            width="318"
+            height="122"
+            x="0"
+            y="0"
+            maskUnits="userSpaceOnUse"
+            style="mask-type: alpha"
+          >
+            <path
+              fill="#FFE1F1"
+              d="M.299 0 124.22 108.361c19.281 16.91 50.576 16.91 69.857 0L318 0H.299Z"
+            />
+          </mask>
+          <g mask="url(#mask0_2308_28567)">
+            <path
+              fill="#000"
+              d="M179.738 39.458h-46.701c-2.907 0-5.523 1.457-7.267 3.79L102.904 75.61h108.807l-24.416-32.265c-1.744-2.527-4.554-3.887-7.557-3.887Z"
+            />
+            <path
+              fill="#FFAF86"
+              d="M153.578 75.61 137.01 51.51c-1.066-1.555-3.197-1.555-4.263 0l-16.665 24.199v58.311h84.488V75.708h-46.992v-.097Z"
+            />
+            <path
+              fill="#FF8047"
+              d="M207.351 39.263c8.883 0 16.084-7.223 16.084-16.133s-7.201-16.133-16.084-16.133-16.083 7.223-16.083 16.133 7.2 16.133 16.083 16.133Z"
+            />
+            <path
+              fill="#fff"
+              d="M-17.432 39.069c1.066-1.361 49.414-31.974 97.374-5.443 0 0 18.603-8.358 29.261 5.637l-126.635-.194Z"
+            />
+            <path
+              fill="#F8A2CE"
+              d="M249.112 34.598a3.59 3.59 0 0 0 3.585-3.596 3.59 3.59 0 0 0-3.585-3.596 3.59 3.59 0 0 0-3.585 3.596 3.59 3.59 0 0 0 3.585 3.596Z"
+            />
+            <path
+              fill="#fff"
+              d="M124.124 19.826a3.59 3.59 0 0 0 3.585-3.596 3.59 3.59 0 0 0-3.585-3.596 3.59 3.59 0 0 0-3.585 3.596 3.59 3.59 0 0 0 3.585 3.596Z"
+            />
+            <path
+              fill="#FFE4D8"
+              d="M321.682 45.385c0-3.693 1.551-7.386 4.457-10.107 2.713-2.624 7.073-3.887 10.561-4.082-3.488-.194-7.848-1.652-10.464-4.276-2.907-2.818-4.457-6.414-4.457-10.107 0-.389 0-.486 0 0 0 3.693-1.453 7.386-4.36 10.107-2.713 2.624-6.879 4.18-10.464 4.276 3.488.195 7.654 1.458 10.367 3.985 2.907 2.818 4.36 6.511 4.36 10.204 0 .292 0 .292 0 0Z"
+            />
+            <path
+              fill="#FAC1DE"
+              d="M249.112 34.598a3.59 3.59 0 0 0 3.585-3.596 3.59 3.59 0 0 0-3.585-3.596 3.59 3.59 0 0 0-3.585 3.596 3.59 3.59 0 0 0 3.585 3.596Z"
+            />
+            <path
+              fill="#fff"
+              d="M145.343 127.701h-22.091V88.147c0-6.123 4.941-11.08 11.045-11.08s11.046 4.957 11.046 11.08V127.7Z"
+            />
+          </g>
+          <path
+            fill="#FAC1DE"
+            d="M218.592 54.52c.775-.971 36.43-23.615 71.698-4.081 0 0 13.662-6.123 21.606 4.179l-93.304-.097ZM64.44 101.267c0-3.693 1.55-7.386 4.457-10.108 2.713-2.624 7.073-3.887 10.561-4.081-3.488-.195-7.848-1.652-10.464-4.276-2.907-2.819-4.457-6.415-4.457-10.108 0-.388 0-.486 0 0 0 3.693-1.453 7.386-4.36 10.108-2.713 2.624-6.88 4.179-10.464 4.276 3.488.194 7.654 1.457 10.367 3.984 2.907 2.819 4.36 6.512 4.36 10.205 0 .388 0 .388 0 0Z"
+          />
+          <path
+            fill="#FFE5E1"
+            d="M240.197 92.423c2.997 0 5.426-2.437 5.426-5.442 0-3.006-2.429-5.443-5.426-5.443-2.996 0-5.426 2.437-5.426 5.443 0 3.005 2.43 5.442 5.426 5.442Z"
+          />
+          <path
+            fill="#FFE4D8"
+            d="M20.937 52.188c3.585 0 6.491-2.915 6.491-6.511s-2.906-6.512-6.491-6.512c-3.585 0-6.492 2.916-6.492 6.512 0 3.596 2.907 6.511 6.492 6.511ZM240.197 92.423c2.997 0 5.426-2.437 5.426-5.442 0-3.006-2.429-5.443-5.426-5.443-2.996 0-5.426 2.437-5.426 5.443 0 3.005 2.43 5.442 5.426 5.442Z"
+          />
+        </svg>
+      </div>
+    </div>
+    <div class="d-flex ml-5">
+      <div class="address">
+        <div
+          class="address-card addaddress"
+          data-toggle="modal"
+          data-target="#exampleModalCenter"
+        >
+          <span class="font3 text-center w-100"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="58"
+              height="58"
+              fill="currentColor"
+              class="bi bi-plus-lg"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
+              />
+            </svg>
+          </span>
+        </div>
+        <% if (defaultaddress && defaultaddress.Address) { %> <%
+        defaultaddress.Address.forEach((address, index)=> { %>
+        <div
+          id="address"
+          value="<%address._id%>"
+          class="address-card addaddress pl-5"
+          style="font-size: 17px"
+          data-toggle="modal"
+          data-target="#exampleModalCenter"
+        >
+          <!-- <img src="/user/images/add.png" alt="" /> -->
+
+          <span class="font3 w-50">
+            <h3 class="text-lowercase"><%= address.Addressname %></h3>
+            <span class="text-muted">
+              <%= address.Firstname %> <%= address.Secondname %> <%=
+              address.Address %> <%= address.PhoneNumber %> <%= address.State %>
+              <%= address.City %> <%= address.Landmark %> <%= address.Country%>
+              <%= address.Pincode %></span
+            ></span
+          >
+          <a>
+            <div class="ml-1 mt-4">
+              <input
+                class="form-check-input"
+                value="<%= address._id %>"
+                id="address1"
+                type="radio"
+                name="Address"
+                id="flexRadioDefault<%= address._id %>"
+                checked
+              />
+              <span>Deliver here</span>
+            </div>
+
+            <!-- </button> -->
+          </a>
+        </div>
+        <% }); %> <% } else { %>
+        <!-- <p>No address found for the user.</p> -->
+        <% } %>
+      </div>
+      <div>
+        <div
+          class="col-xl-12 col-lg-4 d-flex justify-content-center justify-content-lg-end mt-5"
+          style="margin-left: 22px"
+        >
+          <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px">
+            <h4 class="mb-3">Summary</h4>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Total price:</p>
+              <p class="mb-2 text-success">&#8377;<%= subtotal %></p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Tax:</p>
+              <p class="mb-2">&#8377;<%= gstAmount %></p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Shipping cost:</p>
+              <p class="mb-2 text-danger">&#8377;0</p>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between">
+              <p class="mb-2" style="font-weight: bold" ;>Total price:</p>
+              <p class="mb-2 fw-bold text-success" style="font-weight: bold">
+                &#8377;<%= total %>
+              </p>
+            </div>
+
+            <hr />
+            <h6 class="text-dark my-4">Items in cart</h6>
+
+            <% product.forEach((item,index) => { %>
+            <div class="d-flex align-items-center mb-4">
+              <div class="me-3 position-relative">
+                <span
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
+                  style="background-color: rgb(226, 224, 224)"
+                  ><%= item.quantity %>
+                </span>
+                <% if (item.productId && item.productId.image &&
+                Array.isArray(item.productId.image) &&
+                item.productId.image.length > 0) { %>
+                <img
+                  src="<%= item.productId.image[0]%>"
+                  style="height: 96px; width: 96x"
+                  class="img-sm rounded border"
+                  alt="<%= item.productId.name %>"
+                />
+                <% } %>
+              </div>
+              <div class="">
+                <a href="#" class="nav-link">
+                  <%= item.productId.name %> <br />
+                  <span class="text-muted" style="font-size: 12px">
+                    <%= item.productId.description %></span
+                  >
+                </a>
+                <div class="price text-muted ml-3">
+                  Total: &#8377;<%= item.productId.price %>
+                </div>
+              </div>
+            </div>
+            <% }); %>
+            <button
+              type="button"
+              class="btn btn-dark btn-block btn-lg mb-5"
+              style="width: 274px; font-size: 16px"
+              data-mdb-ripple-color="dark"
+            >
+              <a href="checkout" style="color: azure">
+                PROCEED  <svg
+                class="mb-1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-arrow-right"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                  />
+                </svg>
+              </a>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function selectaddress(id) {
+        // const Id = document.getElementById().value;
+        console.log(id);
+        alert(id);
+        fetch("/selectaddress", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: Id,
+          }),
+        })
+          .then((response) => response.json)
+          .then((response) => response);
+      }
+      document
+        .getElementById("form-checkout")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const selectedAddress = document.querySelector(
+            'input[name="Address"]:checked'
+          );
+          const selectedAddressValue = selectedAddress
+            ? selectedAddress.value
+            : null;
+
+          if (!selectedAddress) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Please add an address before confirming the order.",
+            });
+            return;
+          }
+        });
+    </script>
+  </body>
+</html>

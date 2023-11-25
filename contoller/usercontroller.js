@@ -1,14 +1,15 @@
 
 const product = require('../model/product')
 const Address = require('../model/address')
+const address = require('../model/address')
 const { default: mongoose } = require('mongoose')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const OTP = require('../model/otp')
 
 const category = require('../model/category')
-const address = require('../model/address')
 const user = require('../model/users')
+const cart = require('../model/cart')
 require("dotenv").config()
 
 
@@ -193,8 +194,73 @@ const getlogout = (req, res) => {
     res.redirect('/')
 }
 
-const getcheckout = (req, res) => {
-    res.render('checkout')
+const getcheckout = async (req, res) => {
+
+    const users = await user.findOne({ email: req.session.email });
+    const userid = users._id
+    const defaultaddress = await address.findOne({ userId: userid })
+    const email = req.session.email;
+    // const username = req.session.email;
+    const User = await user.findOne({ email: email })
+
+    // console.log(req.params.id, "session")
+    // console.log(serId, "user id")
+
+
+    const userId = User._id;
+
+    const newcart = await cart.findOne({ userId: userId }).populate("products.productId")
+
+    if (!newcart || newcart.products.length === 0) {
+        return res.render('cart', {
+            title: "cart",
+            username: email,
+            product: [],
+            subtotal: 0,
+            total: 0,
+            coupon: 0,
+            gstAmount: 0,
+            totalQuantity: 0,
+            User,
+
+        });
+    }
+
+    const products = newcart.products;
+    let subtotal = 0;
+    let totalQuantity = 0;
+
+
+    newcart.products.forEach(item => {
+        if (item.productId && item.productId.price !== undefined) {
+            subtotal += item.quantity * item.productId.price;
+            totalQuantity += item.quantity;
+        } else {
+            console.log("Skipping item due to missing or undefined DiscountAmount:", item.productId);
+        }
+    })
+    const gstRate = 0.18;
+    const gstAmount = subtotal * gstRate;
+    const total = subtotal + gstAmount;
+
+
+    req.session.totalPrice = total;
+
+
+    res.render('checkout', {
+        defaultaddress,
+        title: "cart",
+        username: email,
+        product: products,
+        newcart,
+        subtotal: subtotal,
+        gstAmount: gstAmount.toFixed(2),
+        totalQuantity: totalQuantity,
+        total: total,
+        User,
+
+    })
+
 }
 const getwishlist = (req, res) => {
     res.render('wishlist')
@@ -316,178 +382,6 @@ const geteditdetails = (req, res) => {
     res.render('editdetails')
 }
 
-const getmyorder = (req, res) => {
-    res.render('myorder')
-}
-
-const getaddress = async (req, res) => {
-    const Address = await address.find()
-    res.render('address', { Address })
-}
-
-
-
-const getaddaddress = async (req, res) => {
-
-    res.render('addaddress')
-}
-
-
-
-const postaddaddress = async (req, res) => {
-    try {
-        let email = req.session.email
-        // Create a new address document
-        const newAddress = new Address({
-            Addressname: req.body.Addressname,
-            Firstname: req.body.Firstname,
-            Secondname: req.body.Secondname,
-            Address: req.body.Address,
-            PhoneNumber: req.body.PhoneNumber,
-            State: req.body.State,
-            Landmark: req.body.Landmark,
-            City: req.body.City,
-            Pincode: req.body.Pincode,
-            Country: req.body.Country
-        });
-
-        const users = await user.findOne({ email: email })
-        // Save the new address to the database
-        await new Address(newAddress).save();
-        address.push(newAddress)
-        
-
-
-
-        // Redirect to the address list page or any other page you want
-        res.redirect('/address');
-    } catch (error) {
-        // Handle errors
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-}
-
-
-const geteditaddress = async (req, res) => {
-    try {
-        let id = req.params.id;
-        let address = await Address.findOne({ _id: id });
-
-        if (!address) {
-            res.redirect('/address'); // Redirect to address list if the address is not found
-        } else {
-            res.render('editaddress', { title: 'Edit Address', address });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-}
-
-
-
-
-
-
-// const getcart = async (req, res) => {
-
-//     try{
-//         let id = req.params.id;
-
-//         // const useremail=await user.find({email:req.session.email})
-//         const userid = await user.findOne({ _id: id })
-
-//         console.log(userid)
-//         const userId = await user.findOne({ id: req.session.id })
-//         console.log(userId)
-
-//         const users = await cart.findOne({ userId: userId }).populate("products.productId", {
-
-//             name: 1,
-//             image: 1,
-//             Price: 1
-
-//         });
-
-//         // res.json(user);
-//         if (users) {
-
-//             res.render('/cart', { products: users.Items, length: users.Items.length });
-//         } else {
-//             res.redirect('/home')
-//             console.log('redirected to home in getcart function')
-//         }
-
-//     }catch(error){
-//         console.log(error)
-
-//     }
-   
-
-
-// }
-
-
-
-
-
-
-
-
-
-const postupdateaddress = async (req, res) => {
-
-    try {
-        let id = req.params.id;
-        console.log(id)
-        const updatedAddress = {
-            Addressname: req.body.Addressname,
-            Firstname: req.body.Firstname,
-            Secondname: req.body.Secondname,
-            Address: req.body.Address,
-            PhoneNumber: req.body.PhoneNumber,
-            State: req.body.State,
-            Landmark: req.body.Landmark,
-            City: req.body.City,
-            Pincode: req.body.Pincode,
-            Country: req.body.Country
-        };
-
-        // console.log('req.body:', req.body);
-        // console.log('updatedAddress:', updatedAddress);
-
-        await Address.updateOne({ _id: id }, { $set: updatedAddress });
-        res.redirect('/address'); // Redirect to address list after updating
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-}
-
-
-
-
-
-//delete address
-const getdeleteaddress = async (req, res) => {
-    let id = req.params.id
-
-    let Address = await address.findOneAndDelete({ _id: id })
-    res.redirect('/address')
-
-}
-
-
-
-
-
-
-
-
-
-
-
 
 const getorderdetials = (req, res) => {
     res.render('orderdetials')
@@ -501,7 +395,7 @@ const geteditprofile = async (req, res) => {
     const userdata = await user.findOne({ email: userId });
     res.render('editprofile', { userdata })
 }
-// Example route for handling edit profile form submission
+
 const posteditprofile = async (req, res) => {
     try {
         const userId = req.session.email;
@@ -509,7 +403,7 @@ const posteditprofile = async (req, res) => {
 
 
         if (req.file) {
-            // Update the user's profile photo path in the database
+
             const profileImagePath = '/photos/' + req.file.filename;
             await user.updateOne({ email: userId }, { $set: { profileImage: profileImagePath } });
         }
@@ -530,8 +424,83 @@ const posteditprofile = async (req, res) => {
 }
 
 
+const getselectaddress = async (req, res) => {
+    const users = await user.findOne({ email: req.session.email });
+    const userid = users._id
+    const defaultaddress = await address.findOne({ userId: userid })
+    // console.log(defaultaddress._id);
+    const email = req.session.email;
+    // const username = req.session.email;
+    const User = await user.findOne({ email: email })
+
+    // console.log(req.params.id, "session")
+    // console.log(serId, "user id")
+
+
+    const userId = User._id;
+
+    const newcart = await cart.findOne({ userId: userId }).populate("products.productId")
+
+    if (!newcart || newcart.products.length === 0) {
+        return res.render('cart', {
+            title: "cart",
+            username: email,
+            product: [],
+            subtotal: 0,
+            total: 0,
+            coupon: 0,
+            gstAmount: 0,
+            totalQuantity: 0,
+            User,
+
+        });
+    }
+
+    const products = newcart.products;
+    let subtotal = 0;
+    let totalQuantity = 0;
+
+
+    newcart.products.forEach(item => {
+        if (item.productId && item.productId.price !== undefined) {
+            subtotal += item.quantity * item.productId.price;
+            totalQuantity += item.quantity;
+        } else {
+            console.log("Skipping item due to missing or undefined DiscountAmount:", item.productId);
+        }
+    })
+    const gstRate = 0.18;
+    const gstAmount = subtotal * gstRate;
+    const total = subtotal + gstAmount;
+
+
+    req.session.totalPrice = total;
+
+
+    res.render('selectaddress', {
+        defaultaddress,
+        title: "cart",
+        username: email,
+        product: products,
+        newcart,
+        subtotal: subtotal,
+        gstAmount: gstAmount.toFixed(2),
+        totalQuantity: totalQuantity,
+        total: total,
+        User,
+
+    })
+}
+
+
+const getordermessage = async (req, res) => {
+    const users = await user.findOne({ email: req.session.email })
+
+    res.render('ordermessage', { users })
+}
 
 
 
-module.exports = { getdeleteaddress, postupdateaddress, postaddaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, getorderdetials, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getwishlist, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails, getmyorder, getaddress, geteditaddress, getaddaddress }
+
+module.exports = { getordermessage, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, getorderdetials, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getwishlist, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
 

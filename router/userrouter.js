@@ -10,6 +10,8 @@ const otpcontroller = require('../contoller/otpcontroller')
 const router = express.Router()
 const usercontroller = require('../contoller/usercontroller')
 const cartcontroller = require('../contoller/cartcontroller')
+const addresscontroller = require('../contoller/addresscontroller')
+const ordercontoller = require('../contoller/ordercontroller')
 const { userExist, verifyuser } = require('../middleware/userauth')
 const { route } = require('./adminrouter');
 
@@ -57,20 +59,20 @@ router.get('/accountdetails', verifyuser, usercontroller.getaccountdetials)
 
 
 router.get('/editdetails', usercontroller.geteditdetails)
-router.get('/myorder', verifyuser, usercontroller.getmyorder)
-router.get('/address', verifyuser, usercontroller.getaddress)
-router.get('/editaddress/:id', verifyuser, usercontroller.geteditaddress)
-router.get('/addaddress', verifyuser, usercontroller.getaddaddress)
-router.post('/addaddress', verifyuser, usercontroller.postaddaddress)
+router.get('/myorder', verifyuser, ordercontoller.getmyorder)
+router.get('/address', verifyuser, addresscontroller.getaddress)
+router.get('/editaddress/:id', verifyuser, addresscontroller.geteditaddress)
+router.get('/addaddress', verifyuser, addresscontroller.getaddaddress)
+router.post('/addaddress', verifyuser, addresscontroller.postaddaddress)
 
 
 
 router.get('/orderdetials', verifyuser, usercontroller.getorderdetials)
 router.post('/resetpassword', userExist, usercontroller.postresetpassword)
 
-router.post('/updateaddress/:id', verifyuser, usercontroller.postupdateaddress)
+router.post('/updateaddress/:id', verifyuser, addresscontroller.postupdateaddress)
 
-router.get('/deleteaddress/:id', verifyuser, usercontroller.getdeleteaddress)
+router.get('/deleteaddress/:id', verifyuser, addresscontroller.getdeleteaddress)
 
 router.get('/resetpassword', userExist, usercontroller.getresetpassword)
 
@@ -84,7 +86,7 @@ const storage = multer.diskStorage({
         // Define the filename for your uploaded files
         cb(null, Date.now() + '-' + file.originalname);
     },
-});
+})
 
 const uploadprofile = multer({ storage: storage });
 
@@ -100,4 +102,13 @@ router.post('/editprofile', uploadprofile.single('editProfilePhoto'), verifyuser
 
 router.get('/cart', verifyuser, cartcontroller.getcart);
 router.get('/add-to-cart', verifyuser, cartcontroller.addTocart)
+router.post('/removeFromCart/:id', verifyuser, cartcontroller.removeCart)
+
+router.get('/selectaddress', verifyuser, usercontroller.getselectaddress)
+router.get('/ordermessage', verifyuser, usercontroller.getordermessage)
+
+
+router.post('/updatequantity', verifyuser, cartcontroller.updateQuantity)
+
+
 module.exports = router

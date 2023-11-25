@@ -217,8 +217,8 @@
                 </div>
               </div>
             </div>
-
-            <% Address.forEach(address => { %>
+            <% if (addressofuser && addressofuser.Address) { %> <%
+            addressofuser.Address.forEach(address => { %>
             <!-- <div class="col-lg-8"> -->
             <div class="card mb-4">
               <div class="card-body">
@@ -232,6 +232,7 @@
                   </h6>
                 </div>
 
+                
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
@@ -296,6 +297,7 @@
                   </div>
                 </div>
                 <hr />
+               
                 <div class="row">
                   <div class="col-sm-3">
                     <p class="mb-1">Country</p>
@@ -339,7 +341,9 @@
                 <!-- </div> -->
               </div>
             </div>
-            <% }); %>
+            <% }); %> <% } else { %>
+            <!-- <p>No address found for the user.</p> -->
+            <% } %>
           </div>
         </div>
       </div>

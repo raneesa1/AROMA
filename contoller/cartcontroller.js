@@ -4,6 +4,7 @@ const user = require("../model/users");
 const cart = require("../model/cart");
 const { json } = require("express");
 const mongoose = require('mongoose');
+const { productget } = require("./usercontroller");
 const { ObjectId } = mongoose.Types;
 
 
@@ -11,7 +12,7 @@ const { ObjectId } = mongoose.Types;
 
 
 
-
+///get method of cart page
 const getcart = async (req, res) => {
 
     try {
@@ -32,7 +33,6 @@ const getcart = async (req, res) => {
         const newcart = await cart.findOne({ userId: userId }).populate("products.productId")
 
         if (!newcart || newcart.products.length === 0) {
-            console.log("this .........inside of if");
             return res.render('cart', {
                 title: "cart",
                 username: email,
@@ -53,13 +53,13 @@ const getcart = async (req, res) => {
 
 
         newcart.products.forEach(item => {
-        if (item.productId && item.productId.price !== undefined) {
-            subtotal += item.quantity * item.productId.price;
-            totalQuantity += item.quantity;
-        } else {
-            console.log("Skipping item due to missing or undefined DiscountAmount:", item.productId);
-        }
-    })
+            if (item.productId && item.productId.price !== undefined) {
+                subtotal += item.quantity * item.productId.price;
+                totalQuantity += item.quantity;
+            } else {
+                console.log("Skipping item due to missing or undefined DiscountAmount:", item.productId);
+            }
+        })
         const gstRate = 0.18;
         const gstAmount = subtotal * gstRate;
         const total = subtotal + gstAmount;
@@ -78,38 +78,16 @@ const getcart = async (req, res) => {
             User,
         });
 
-
-
-        //     console.log(users)
-        //     if (users) {
-
-        //         res.render('cart', { products: users.products });
-        //     } else {
-        //         res.redirect('/home')
-        //         console.log('redirected to home in getcart function')
-        //     }
-
     } catch (error) {
         console.log(error, "error from view cart")
 
     }
-
-
-    // length: users.products.length
 }
 
 
 
 
-
-
-
-
-
-
-
-
-// const cart = require("../model/cart");
+//adding product to cart
 const addTocart = async function (req, res) {
     try {
 
@@ -158,18 +136,112 @@ const addTocart = async function (req, res) {
         res.render('user/404Page');
     }
 
-
-
-
-
-
     // await new cart(cartitems).save()
     // console.log(cartitems)
     // res.json({ status: true })
 
+}
+
+
+
+const removeCart = async (req, res) => {
+
+
+    try {
+        let email = req.session.email
+        const userId = await user.findOne({ email: email })
+        const userid = userId._id
+        console.log(userid, "printing the user iddddd")
+
+
+
+
+
+
+        const { productId } = req.body
+        // console.log('removing product from cart-req.body:', productId)
+
+        const usercart = await cart.findOne({ userId: userid })
+        // const cartlength=usercart.length(
+        // console.log(cartlength,"cartlength")
+
+        // const productlength = usercart.products
+
+        // console.log(productlength)
+        // console.log('cart of user:', usercart)
+        usercart.products = usercart.products.filter((item) => !item.productId.equals(productId))
+        await cart(usercart).save()
+
+        // console.log('cart of user after removing the data', usercart)
+
+
+    } catch (error) {
+        console.log(error, "error from removing item from cart")
+
+    }
+}
+
+
+const updateQuantity = async (req, res) => {
+
+    // console.log(req.session)
+    // console.log(req.body)
+    const { productId, quantity, cartId } = req.body
+    // console.log(productId, cartId, quantity, "req.session of updatequantityy")
+
+    try {
+        const newcart = await cart.findOne({ _id: cartId }).populate("products.productId")
+        if (!newcart) {
+            console.log('cant not found')
+            return res.status(404).json({ success: false, error: "Cart not found" });
+
+        }
+        const productInCart = newcart.products.find(item => item.productId.equals(productId))
+
+
+        console.log(productInCart)
+        if (!productInCart) {
+            return res.status(404).json({ success: false, error: "Product not found in the cart" });
+        }
+
+        productInCart.quantity = quantity;
+        // console.log(productInCart.quantity);
+
+        await newcart.save();
+
+        let subtotal = 0;
+        let totalQuantity = 0;
+
+        newcart.products.forEach(item => {
+            const { quantity, productId } = item;
+            const { price } = productId;
+            subtotal += quantity * price;
+            totalQuantity += quantity;
+
+            console.log(price)
+            console.log(subtotal, "totallllquantityvmfmeefef")
+            console.log('wefnowlf woefnwoineowf fnownefownefoinfoiE')
+            // console.log(req.body)
+
+        })
+
+
+        return res.status(200).json({
+            success: true,
+            message: "Cart updated successfully",
+            subtotal,
+            totalQuantity,
+        });
+
+    } catch (error) {
+        console.log(error, "error from updatequantity")
+    }
 
 
 
 }
 
-module.exports = { getcart, addTocart };
+
+
+
+module.exports = { getcart, addTocart, removeCart, updateQuantity };

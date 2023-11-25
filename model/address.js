@@ -1,7 +1,9 @@
+const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose')
 require('dotenv').config()
 
 const addresschema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user', },
     Address: [{
         Addressname: { type: String },
         Firstname: { type: String },

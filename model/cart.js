@@ -11,16 +11,10 @@ const CartSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user',
         },
-        products: [
-            {
-                productId: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'product'
-                },
-                quantity: {type:Number},
-
-            }
-        ],
+        products: [{
+            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
+            quantity: { type: Number },
+        }],
         active: {
             type: Boolean,
             default: true
