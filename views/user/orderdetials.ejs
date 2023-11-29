@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/myorder.css" />
+
+    <title>Order detials</title>
+  </head>
+  <body style="background-color: #eee">
+    <div style="background-color: black; height: 4px" class="w-100"></div>
+    <div id="menuHolder">
+      <div
+        role="navigation"
+        class="sticky-top border-bottom border-top"
+        id="mainNavigation"
+      >
+        <div class="flexMain">
+          <div class="flex2"></div>
+          <div
+            class="flex3 text-center m-4"
+            id="siteBrand"
+            style="font-size: 52px; margin-left: 200px; padding-top: 22px"
+          >
+            AROMA
+          </div>
+
+          <div class="flex2 text-end d-block d-md-none">
+            <button class="whiteLink siteLink">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+
+          <div class="flex2 text-end d-none d-md-block align-content-lg-end">
+            <div class="d-flex justify-content-end align-items-center pr-5">
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      style="color: black"
+                      fill="currentColor"
+                      class="bi bi-search"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                      /></svg></i
+                ></a>
+              </div>
+              <div class="icon-box">
+                <a href="profile"
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-person-circle"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                      <path
+                        fill-rule="evenodd"
+                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                      /></svg></i
+                ></a>
+              </div>
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-cart3"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                      /></svg></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          style="
+            /* align-items: center; */
+            text-align: center;
+            font-size: medium;
+            font-size: 15px;
+            padding-top: 0;
+          "
+        >
+          <p class="p-3 mt-3"><a href="home">HOME</a></p>
+          <p class="p-3 mt-3">WOMEN</p>
+          <p class="p-3 mt-3">MEN</p>
+          <p class="p-3 mt-3">SHOP</p>
+          <p class="p-3 mt-3">HELP</p>
+        </div>
+      </div>
+    </div>
+    <section>
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-lg-4">
+            <!-- <div class="card mb-4">
+              <div class="card-body text-center">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                  alt="avatar"
+                  class="rounded-circle img-fluid"
+                  style="width: 150px"
+                />
+                <h5 class="my-3">John Smith</h5>
+       <p class="text-muted mb-1">Full Stack Developer</p> -->
+            <!-- <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> -->
+            <!-- </div> -->
+            <!-- </div> -->
+            <div class="card mb-4 mb-lg-0">
+              <div class="card-body p-0">
+                <ul class="list-group list-group-flush rounded-3">
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fas fa-globe fa-lg text-warning"></i>
+                    <p class="mb-0">
+                      <a href="profile">My Account</a>
+                    </p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fas fa-globe fa-lg text-warning"></i>
+                    <p class="mb-0">
+                      <a href="accountdetails">Account Details</a>
+                    </p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fab fa-github fa-lg" style="color: #333333"></i>
+                    <p class="mb-0"><a href="myorder">My Order</a></p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
+                    <p class="mb-0"><a href="cart">Shopping Cart</a></p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i
+                      class="fab fa-instagram fa-lg"
+                      style="color: #000000"
+                    ></i>
+                    <p class="mb-0"><a href="wishlist">Wishlist</a></p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i
+                      class="fab fa-facebook-f fa-lg"
+                      style="color: #000000"
+                    ></i>
+                    <p class="mb-0"><a href="address">Address</a></p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
+                    <p class="mb-0">Wallet</p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-3">
+                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
+                    <p class="mb-0">
+                      <button
+                        type="button"
+                        class="btn"
+                        style="color: #000000"
+                        data-toggle="modal"
+                        data-target="#logoutModal"
+                      >
+                        Logout
+                      </button>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8">
+            <div class="card mb-4">
+              <div class="card-body">
+                <% if (orderData.length > 0) { %> <% orderData.forEach(order =>
+                { %>
+                <div class="card mb-4">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <h3 class="ml-4 mt-3" style="color: #000000">
+                      Order Details
+                    </h3>
+                  </div>
+                  <section class="h-100 gradient-custom">
+                    <div class="card-body p-4">
+                      <div class="card shadow-0 border mb-4">
+                        <div class="card-body">
+                          <div class="d-flex">
+                            <div>
+                              <p class="text-uppercase" style="font-size: 11px">
+                                order number
+                              </p>
+                              <p class="text-muted">
+                                ARO-<%- order._id.toString().substring(0,
+                                11) %>
+                              </p>
+                            </div>
+                            <div style="margin-left: 253px">
+                              <p>Total: &#8377; <%=order.TotalPrice %></p>
+                            </div>
+                          </div>
+                          <div class="d-flex">
+                            <div>
+                              <p class="pt-5" style="font-size: 16px">
+                                Shipping Address
+                              </p>
+                              <p class="text-muted pb-5 w-50">
+                                <%= order.Address.Firstname %> <%=
+                                order.Address.Secondname %> <%=
+                                order.Address.Address %> <%=
+                                order.Address.PhoneNumber %> <%=
+                                order.Address.State %> <%= order.Address.City %>
+                                <%= order.Address.Landmark %> <%=
+                                order.Address.Country%> <%=
+                                order.Address.Pincode %>
+                                <!-- Suite 999 61604 Rutherford Glen, West
+                                Babettebury, ME 15241 80056 Cletus View, Lake
+                                Gregport, OH 43551 Suite 884 59904 VonRueden
+                                Way, Edwardfort, MD 68962-2870 -->
+                              </p>
+                            </div>
+                          </div>
+                          <hr />
+                          <p class="pt-4">
+                            <%= order.Items.length %> item(s) <%=order.Status%>
+                          </p>
+                          <p class="text-muted">
+                            Order Placed On <%let date1=new
+                            Date(order.OrderDate)%>
+                            <%-date1.getDate()%>-<%-date1.getMonth()+1%>-<%-date1.getFullYear()%>
+                          </p>
+                          <div class="row mt-3">
+                            <% order.Items.forEach(item => { %>
+                            <div>
+                              <img
+                                src="<%= item.productId.image[0] %>"
+                                class="img-fluid"
+                                width="90px"
+                                height="90px"
+                                alt="Phone"
+                              />
+                            </div>
+
+                            <div class="d-flex float-right">
+                              <div>
+                                <p
+                                  class="text-muted pb-0 mb-0 mt-4"
+                                  style="font-size: 13px"
+                                >
+                                  <%= item.productId.name%>
+                                </p>
+                                <p class="text-muted pt-0">
+                                  Qty: <%=item.quantity%>
+                                </p>
+                              </div>
+                              <div
+                                style="margin-left: 300px; margin-top: 34px"
+                                class="text-muted"
+                              >
+                                &#8377;<%=item.productId.price%>
+                              </div>
+                            </div>
+                            <% }); %>
+                          </div>
+                          <!-- <div class="row">
+                            <div>
+                              <img
+                                src="/photos/1699507814717-paris-edimourg.webp"
+                                class="img-fluid"
+                                width="90px"
+                                height="90px"
+                                alt="Phone"
+                              />
+                            </div>
+                            <div class="d-flex float-right">
+                              <div>
+                                <p class="text-muted pb-0 mb-0 mt-4">
+                                  product descption
+                                </p>
+                                <p class="text-muted pt-0">Qty: 1</p>
+                              </div>
+                              <div
+                                style="margin-left: 290px; margin-top: 34px"
+                                class="text-muted"
+                              >
+                                &#8377;24000
+                              </div>
+                            </div>
+                          </div> -->
+                          <hr />
+
+                          <div>
+                            <p class="pt-5" style="font-size: 16px">
+                              Payment Details
+                            </p>
+                            <div
+                              class="d-flex justify-content-between mb-2"
+                              style="font-size: 16px"
+                            >
+                              <p class="text-muted">Payment method</p>
+                              <p class="text-muted text-uppercase">
+                                <%=order.paymentMethod%>
+                              </p>
+                            </div>
+                            <!-- <div
+                              class="d-flex justify-content-between mb-2"
+                              style="font-size: 13px"
+                            >
+                              <p class="text-muted">Sub total(Including tax)</p>
+                              <p class="text-muted">&#8377;12000</p>
+                            </div> -->
+                            <!-- <div
+                              class="d-flex justify-content-between mb-2"
+                              style="font-size: 13px"
+                            >
+                              <p class="text-muted">Discount</p>
+                              <p class="text-danger">&#8377;4</p>
+                            </div> -->
+                            <!-- <div
+                              class="d-flex justify-content-between mb-2"
+                              style="font-size: 13px"
+                            >
+                              <p class="text-muted">Shipping charge</p>
+                              <p class="text-muted">&#8377;0</p>
+                            </div> -->
+                            <div
+                              class="d-flex justify-content-between mb-2 ml-1"
+                              style="font-size: 13px"
+                            >
+                              <h5 class="text-muted">Total</h5>
+                              <h6 class="text-muted">
+                                &#8377;<%=order.TotalPrice%>
+                              </h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <button
+                            class="btn btn-lg w-100 mt-5"
+                            style="
+                              font-size: 12px;
+                              border-color: rgb(210, 210, 210);
+                            "
+                          >
+                            CANCEL ORDER
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <% }); %> <% } else { %>
+                <div class="alert alert-info mt-4" role="alert">
+                  You haven't placed any orders yet.
+                </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <div
+      class="modal fade"
+      id="logoutModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="logoutModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">Are you sure you want to logout?</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <a href="/logout" class="btn btn-danger">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

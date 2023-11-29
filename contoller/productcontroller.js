@@ -11,7 +11,7 @@ const getproduct = async (req, res) => {
     const categorydata = await category.find()
     // console.log(products, 'produt')
 
-    res.render('product1', { products, related, categorydata })
+    res.render('user/product1', { products, related, categorydata })
 }
 
 

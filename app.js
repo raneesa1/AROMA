@@ -7,7 +7,9 @@ const session = require('express-session')
 const bcrypt = require('bcrypt')
 const multer = require('multer')
 const nodemailer = require('nodemailer');
+const path = require('path');
 const port = 3000
+
 
 
 require('dotenv').config()
@@ -26,6 +28,7 @@ app.use(require('cors')())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.static('public'))
 app.use('/', userrouter)
 app.use('/admin', adminrouter)

@@ -41,7 +41,7 @@ const verifyOtp = async function (req, res) {
 
             } else {
                 // Incorrect OTP, render the OTP page with an error message
-                res.render('otp', { err: 'OTP is incorrect' });
+                res.render('user/otp', { err: 'OTP is incorrect' });
             }
         } catch (err) {
             console.log(err);
@@ -72,7 +72,7 @@ const verifyOtp = async function (req, res) {
                 res.redirect('/home');
             } else {
                 // Incorrect OTP, render the OTP page with an error message
-                res.render('otp', { err: 'OTP is incorrect' });
+                res.render('user/otp', { err: 'OTP is incorrect' });
 
             }
         } catch (err) {
@@ -100,7 +100,7 @@ const resendOtp = function (req, res) {
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
         // Render the OTP page with a success message
-        res.render('otp', { err: "OTP has been sent" });
+        res.render('user/otp', { err: "OTP has been sent" });
     });
 };
 
@@ -158,7 +158,7 @@ const sendOtp = async function (req, res) {
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
             // Redirect to OTP page
-            res.render('otp', { err: null });
+            res.render('user/otp', { err: null });
         });
     } catch (err) {
         console.log(err);

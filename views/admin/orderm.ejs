@@ -139,68 +139,63 @@
             </a>
           </div> -->
 
-          <table class="table table-bordered">
+          <table class="table ">
             <thead>
               <tr>
-                <th>Product ID</th>
-                <th>Product</th>
-                <th>Customer</th>
-                <th>Price</th>
-                <th>Payment Date</th>
-                <th>order placement</th>
-                <th>Status</th>
-                <th>Edit Action</th>
+                <th scope="col">No</th>
+                <th scope="col">Order Id</th>
+                <th scope="col">User Id</th>
+                <th scope="col">Date </th>
+                <th scope="col">Time </th>
+                <th scope="col">PaymentM</th>
+                <th scope="col">Total Price</th>
+                <th scope="col">Status</th>
+                <th scope="col">View</th>
               </tr>
             </thead>
             <tbody>
-              <!-- Add your table rows here -->
-              <tr class="text-center">
-                <td>877769</td>
-                <td class="text-uppercase">tomfort</td>
-                <td>Ninu</td>
-                <td>2300</td>
-                <td>12-3-2012</td>
-                <td>12-7-2032</td>
-                <td>Shipped</td>
-                <td>
-                  <a href="/admin/edit/"
-                    ><i
-                      ><svg
-                        style="color: rgb(47, 186, 112)"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        class="bi bi-pen"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"
-                        /></svg></i
-                  ></a>
-                  <!-- <a
-                    href="/admin/deleteproduct/"
-                    onclick="return confirm('are you sure you want to delete this product?')"
-                    ><i
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        style="color: black"
-                        height="16"
-                        fill="currentColor"
-                        class="bi bi-trash"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"
-                        />
-                        <path
-                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"
-                        /></svg></i
-                  ></a> -->
-                </td>
-                <!-- Add more rows for additional products -->
-              </tr>
+         <% if (orderData.length > 0) { %>
+      <% orderData.forEach((x, index) => { %>
+        <tr>
+          <th scope="row"><%= index + 1 %></th>
+          <td><%= x._id %></td>
+          <td><%= x.UserID %></td>
+           <td>
+            <% const orderDate = new Date(x.OrderDate); %>
+            <%= orderDate.toLocaleString('default', { month: 'short' }) %>
+            <%= orderDate.getDate() %>,
+            <%= orderDate.getFullYear() %>
+         
+          </td>
+          <td><%= orderDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %></td>
+          <td><%=x.paymentMethod%></td>
+          <td>&#8377;<%= x.TotalPrice %></td>
+          <td>
+
+              <% if (x.Status !== 'Cancelled') { %>
+                <% const currentStatus = x.Status || 'Order Placed'; %>
+                <select id="statusSelect<%= x %>" onchange="updateOrderStatus('<%= x._id %>', this.value)">
+                  <option value="Order Placed" <%= currentStatus === 'Order Placed' ? 'selected' : '' %>>Order Placed</option>
+                  <option value="Shipped" <%= currentStatus === 'Shipped' ? 'selected' : '' %>>Shipped </option>
+                  <option value="Delivered" <%= currentStatus === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                  <option value="Rejected" <%= currentStatus === 'Rejected' ? 'selected' : '' %>>Rejected</option>
+                </select>
+              <% } else { %>
+                Cancelled
+              <% } %>
+              
+
+          </td>
+          <td><a href="/admin/moredetials/<%-x._id%>"><button type="button" class="btn btn-light" style="border-color: rgb(139, 138, 138);">View</button></a></td>
+        </tr>
+      <% }) %>
+    <% } else { %>
+      <tr>
+        <td colspan="8">
+          <h4>No Data Available</h4>
+        </td>
+      </tr>
+    <% } %>
             </tbody>
           </table>
         </div>
@@ -222,5 +217,33 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+    <script>
+  function updateOrderStatus(orderId, newStatus) {
+    fetch(`/admin/updateStatus/${orderId}`, {
+      method: 'POST', // Use POST instead of PUT
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: newStatus }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .then((data) => {
+        if (data.success) {
+          alert('Order status updated successfully!');
+        } else {
+          alert('Failed to update order status.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+</script>
   </body>
 </html>

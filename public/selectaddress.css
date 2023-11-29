@@ -168,8 +168,10 @@ select.noStyle {
 * {
   margin: 0;
   padding: 0%;
+  /* margin-right:-34px ; */
   box-sizing: border-box;
 }
+
 .icon-box {
   display: flex;
   justify-content: flex-end;
@@ -238,8 +240,8 @@ a:hover {
   text-decoration: none; /* Remove the underline on hover */
 }
 .address {
-  width: 60%;
-  margin-top: 34px;
+  width: 80%;
+  margin-top: 14px;
   /* background-color: rgb(245, 245, 247); */
   display: flex;
   flex-wrap: wrap;
@@ -268,4 +270,8 @@ a:hover {
   flex-direction: column !important;
   justify-content: center !important;
   /* align-items: center !important; */
+}
+
+form {
+  max-width: 900px;
 }

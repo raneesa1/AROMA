@@ -1,6 +1,7 @@
 const category = require('../model/category');
 const product = require('../model/product');
 const user = require('../model/users');
+const order = require('../model/order')
 const { ObjectId } = require('mongodb')
 
 
@@ -9,7 +10,7 @@ const getusermanagement = (async (req, res) => {
 
   const userdata = await user.find().sort({ date: -1 })
   // console.log(userdata)
-  res.render('userm', { userdata })
+  res.render('admin/userm', { userdata })
 })
 
 
@@ -55,7 +56,7 @@ const getproductmanagement = async (req, res) => {
       },
       {
         $lookup: {
-          from: 'categories', // Assuming your categories collection is named 'categories'
+          from: 'categories', // categories collection is named 'categories'
           localField: 'category',
           foreignField: '_id',
           as: 'categoryDetails'
@@ -66,7 +67,7 @@ const getproductmanagement = async (req, res) => {
       }
     ]);
 
-    res.render('productm', { productdata });
+    res.render('admin/productm', { productdata });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
@@ -107,7 +108,7 @@ const getaddproduct = async (req, res) => {
   console.log(categorydata, 'ghjkghj')
 
 
-  res.render('addproduct', { categorydata })
+  res.render('admin/addproduct', { categorydata })
 
 }
 
@@ -124,12 +125,12 @@ const getdeleteproduct = async (req, res) => {
 
 const getcategory = async (req, res) => {
   const categorydata = await category.find().sort({ date: -1 })
-  res.render('category', { categorydata })
+  res.render('admin/category', { categorydata })
 }
 
 //add category
 const getaddcategory = (req, res) => {
-  res.render('addcategory')
+  res.render('admin/addcategory')
 
 }
 const postaddcategory = async (req, res) => {
@@ -166,7 +167,7 @@ const geteditproduct = async (req, res) => {
   if (products == null) {
     res.redirect('/admin/product');
   } else {
-    res.render('editproduct', {
+    res.render('admin/editproduct', {
       title: "Edit product",
       products: products, categorydata
     });
@@ -234,7 +235,7 @@ const postupdateproduct = async (req, res) => {
 
 const getdash = (req, res) => {
   if (req.session.isAdmin) {
-    res.render('dashboard')
+    res.render('admin/dashboard')
   }
 
 }
@@ -255,7 +256,7 @@ const geteditcategory = async (req, res) => {
     res.redirect('/admin/editcategory');
   } else {
     console.log('editing category')
-    res.render('editcategory', {
+    res.render('admin/editcategory', {
       title: "Edit category",
       categories: categories
     });
@@ -273,10 +274,7 @@ const postupdatecategory = async (req, res) => {
         description: req.body.description,
         stock: req.body.stock,
         // Assuming images is an array of files
-
-
       };
-
       // Update the product using findOneAndUpdate
       await category.findOneAndUpdate({ _id: id }, { $set: categorydetails });
     } else {
@@ -300,8 +298,59 @@ const postupdatecategory = async (req, res) => {
   }
 };
 const getorder = async (req, res) => {
-  res.render('orderm')
+  const orderData = await order.find({}).sort({ OrderDate :-1})
+  console.log(orderData,' order data')
+  res.render('admin/orderm', { orderData })
+}
+
+// const getmoredetails=async(req,res)=>{
+//   try {
+//     const orders = await order
+//       .findOne({ _id: req.query.orderid })
+//       .populate('Items.productId')
+
+//     res.render('admin/orderdetails', { orderid: order._id });
+//   } catch (error) {
+//     console.error(error);
+
+//     res.status(500).send('Internal Server Error');
+//   }
+
+// }
+const getmoredetails = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    console.log(orderId);
+    const orderData = await order.findOne({ _id: orderId }).populate('Items.productId');
+    console.log(">>>>>>>>>>>>>", orderData);
+
+    res.render('admin/moredetials', { orderData });
+
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 
-module.exports = { postupdatecategory, getorder, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };
+
+const getorderStatus=async(req,res)=>{
+  try {
+    const orderId = req.params.orderId;
+      console.log('mmmmmmmmm',orderId);
+    const newStatus = req.body.status;
+    //   console.log('>>>>>>>>>>>>>',newStatus);  
+    const order = await order.findByIdAndUpdate(orderId, { Status: newStatus });
+
+    console.log('...............56566556656565',order);
+    if (order) {
+      res.json({ success: true });
+    } else {
+      res.json({ success: false });
+    }
+  } catch (error) {
+    console.log("Updating status error");
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+}
+
+module.exports = { getorderStatus, getmoredetails, postupdatecategory, getorder, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };

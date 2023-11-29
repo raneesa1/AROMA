@@ -67,7 +67,6 @@ router.post('/addaddress', verifyuser, addresscontroller.postaddaddress)
 
 
 
-router.get('/orderdetials', verifyuser, usercontroller.getorderdetials)
 router.post('/resetpassword', userExist, usercontroller.postresetpassword)
 
 router.post('/updateaddress/:id', verifyuser, addresscontroller.postupdateaddress)
@@ -102,13 +101,20 @@ router.post('/editprofile', uploadprofile.single('editProfilePhoto'), verifyuser
 
 router.get('/cart', verifyuser, cartcontroller.getcart);
 router.get('/add-to-cart', verifyuser, cartcontroller.addTocart)
+
+router.post('/updatequantity', verifyuser, cartcontroller.updateQuantity)
 router.post('/removeFromCart/:id', verifyuser, cartcontroller.removeCart)
 
 router.get('/selectaddress', verifyuser, usercontroller.getselectaddress)
-router.get('/ordermessage', verifyuser, usercontroller.getordermessage)
+router.post('/topaymentpage', verifyuser, cartcontroller.placeOrder)
 
 
-router.post('/updatequantity', verifyuser, cartcontroller.updateQuantity)
+
+router.post('/addnewaddress', verifyuser, addresscontroller.postcheckoutaddaddress)
+
+
+router.get('/orderdetails/:id', verifyuser, ordercontoller.getorderdetials)
+router.get('/ordermessage', verifyuser, cartcontroller.getordermessage)
 
 
 module.exports = router

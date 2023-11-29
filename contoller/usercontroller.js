@@ -15,12 +15,13 @@ require("dotenv").config()
 
 
 
+
 const getlanding = async (req, res) => {
     const products = await product.find({ status: false }).limit(3)
-    res.render('landing', { products })
+    res.render('user/landing', { products })
 }
 const login = (req, res) => {
-    res.render('login', { err: '' });
+    res.render('user/login', { err: '' });
 }
 
 const securepassword = async (password) => {
@@ -43,21 +44,21 @@ const loginpost = async (req, res) => {
 
         const userExists = await user.findOne({ email: email });
         // const 
-        console.log(userExists.password)
+        // console.log(userExists.password)
 
         if (!userExists) {
-            return res.render('login', { err: 'User not found, try signing in' });
+            return res.render('user/login', { err: 'User not found, try signing in' });
         }
 
 
         if (userExists.status === true) {
-            return res.render('login', { err: 'Your account has been blocked. Contact support team for assistance.' });
+            return res.render('user/login', { err: 'Your account has been blocked. Contact support team for assistance.' });
         }
 
         const passwordMatch = await bcrypt.compare(password, userExists.password);
 
         if (userExists && passwordMatch) {
-            console.log(userExists)
+            // console.log(userExists)
             // const admin=user.findOne({isAdmin:true})
             if (userExists.isAdmin === true) {
                 req.session.isAdmin = true;
@@ -70,7 +71,7 @@ const loginpost = async (req, res) => {
 
             }
         } else {
-            res.render('login', { err: 'password not match' })
+            res.render('user/login', { err: 'password not match' })
         }
     } catch (error) {
         console.error(error.message);
@@ -78,7 +79,7 @@ const loginpost = async (req, res) => {
 };
 const signupget = (req, res) => {
 
-    res.render('login', { err: '' });
+    res.render('user/login', { err: '' });
 }
 
 const signuppost = async (req, res) => {
@@ -118,7 +119,7 @@ const signuppost = async (req, res) => {
 
 
         if (ifexists) {
-            res.render('login', { err: 'email already exists' })
+            res.render('user/login', { err: 'email already exists' })
 
         } else {
 
@@ -135,14 +136,14 @@ const signuppost = async (req, res) => {
 
             }
             req.session.data = data
-            console.log(data);
+            // console.log(data);
 
-            console.log("redirecting to otp")
+            // console.log("redirecting to otp")
             res.redirect('/otp');
 
         }
     } catch (error) {
-        res.render('login', { err: error.message })
+        res.render('user/login', { err: error.message })
 
 
     }
@@ -154,16 +155,16 @@ const gethome = async (req, res) => {
         const products = await product.find({ status: false })
         const userdata = await user.findOne({ id: userId })
         // const categorydata=await category.find()
-        res.render('home', { products, userdata })
+        res.render('user/home', { products, userdata })
 
     }
-    console.log("reached home");
+    // console.log("reached home");
 
 
 }
 
 const productget = (req, res) => {
-    res.render('product')
+    res.render('user/product')
 }
 
 const getprofile = async (req, res) => {
@@ -180,11 +181,11 @@ const getprofile = async (req, res) => {
         }
 
         // Render the profile view with user data
-        res.render('profile', { userdata, err: null });
+        res.render('user/profile', { userdata, err: null });
     } catch (error) {
         console.error(error.message);
         // Render the profile view with an error message
-        res.status(500).render('profile', { userdata: null, err: error.message });
+        res.status(500).render('user/profile', { userdata: null, err: error.message });
     }
 }
 
@@ -212,7 +213,7 @@ const getcheckout = async (req, res) => {
     const newcart = await cart.findOne({ userId: userId }).populate("products.productId")
 
     if (!newcart || newcart.products.length === 0) {
-        return res.render('cart', {
+        return res.render('user/cart', {
             title: "cart",
             username: email,
             product: [],
@@ -247,7 +248,7 @@ const getcheckout = async (req, res) => {
     req.session.totalPrice = total;
 
 
-    res.render('checkout', {
+    res.render('user/checkout', {
         defaultaddress,
         title: "cart",
         username: email,
@@ -263,10 +264,10 @@ const getcheckout = async (req, res) => {
 
 }
 const getwishlist = (req, res) => {
-    res.render('wishlist')
+    res.render('user/wishlist')
 }
 const getforgotpassword = (req, res) => {
-    res.render('forgotpassword', { err: null })
+    res.render('user/forgotpassword', { err: null })
 }
 
 const postforgotpassword = async (req, res) => {
@@ -274,7 +275,7 @@ const postforgotpassword = async (req, res) => {
         const email = req.body.email;
         const userExist = await user.findOne({ email })
         if (!userExist) {
-            res.render('forgotpassword', { err: 'email not found' })
+            res.render('user/forgotpassword', { err: 'email not found' })
         } else {
             req.session.data = userExist;
             req.session.forgotOtp = true
@@ -288,7 +289,7 @@ const postforgotpassword = async (req, res) => {
     }
 }
 const getresetpassword = (req, res) => {
-    res.render('resetpassword')
+    res.render('user/resetpassword')
 }
 const postresetpassword = async (req, res) => {
     try {
@@ -297,7 +298,7 @@ const postresetpassword = async (req, res) => {
         console.log(newPassword, confirmPassword, "----------");
         if (newPassword !== confirmPassword) {
 
-            return res.render('resetpassword', { err: 'Passwords do not match' });
+            return res.render('user/resetpassword', { err: 'Passwords do not match' });
         }
         const passwordhash = await bcrypt.hash(newPassword, 10)
         const email = req.session.data.email;
@@ -306,7 +307,7 @@ const postresetpassword = async (req, res) => {
         const updated = await user.updateOne({ email: email }, { $set: { password: passwordhash } });
 
         if (updated) {
-            console.log(updated);
+            // console.log(updated);
             req.session.forgotOtp = false;
 
             req.session.isauth = true;
@@ -322,7 +323,7 @@ const postresetpassword = async (req, res) => {
     }
 };
 const getchangepassword = (req, res) => {
-    res.render('changepassword', { err: null })
+    res.render('user/changepassword', { err: null })
 }
 const postchangepassword = async (req, res) => {
     try {
@@ -335,21 +336,21 @@ const postchangepassword = async (req, res) => {
 
         const isPasswordValid = await bcrypt.compare(currentPassword, users.password);
         if (!isPasswordValid) {
-            return res.render('changepassword', { err: 'Current password is incorrect' });
+            return res.render('user/changepassword', { err: 'Current password is incorrect' });
         }
 
 
         if (newPassword !== confirmPassword) {
-            return res.render('changepassword', { err: 'New password and confirm password do not match' });
+            return res.render('user/changepassword', { err: 'New password and confirm password do not match' });
         }
 
 
         if (newPassword.length <= 8) {
-            return res.render('changepassword', { err: 'Password must be strong' });
+            return res.render('user/changepassword', { err: 'Password must be strong' });
         }
         const letterCount = newPassword.replace(/[^a-zA-Z]/g, '').length; // Counting letters in the password
         if (letterCount < 3) {
-            return res.render('changepassword', { err: 'Password must contain at least 3 letters' });
+            return res.render('user/changepassword', { err: 'Password must contain at least 3 letters' });
         }
 
 
@@ -365,7 +366,7 @@ const postchangepassword = async (req, res) => {
         if (updatedUser) {
             res.redirect('/profile');
         } else {
-            res.render('changepassword', { err: 'Failed to update password' });
+            res.render('user/changepassword', { err: 'Failed to update password' });
         }
     } catch (error) {
         console.error(error.message);
@@ -375,16 +376,11 @@ const postchangepassword = async (req, res) => {
 
 
 const getaccountdetials = (req, res) => {
-    res.render('accountdetails')
+    res.render('user/accountdetails')
 }
 
 const geteditdetails = (req, res) => {
-    res.render('editdetails')
-}
-
-
-const getorderdetials = (req, res) => {
-    res.render('orderdetials')
+    res.render('user/editdetails')
 }
 
 const geteditprofile = async (req, res) => {
@@ -393,7 +389,7 @@ const geteditprofile = async (req, res) => {
 
 
     const userdata = await user.findOne({ email: userId });
-    res.render('editprofile', { userdata })
+    res.render('user/editprofile', { userdata })
 }
 
 const posteditprofile = async (req, res) => {
@@ -442,7 +438,7 @@ const getselectaddress = async (req, res) => {
     const newcart = await cart.findOne({ userId: userId }).populate("products.productId")
 
     if (!newcart || newcart.products.length === 0) {
-        return res.render('cart', {
+        return res.render('user/cart', {
             title: "cart",
             username: email,
             product: [],
@@ -477,7 +473,7 @@ const getselectaddress = async (req, res) => {
     req.session.totalPrice = total;
 
 
-    res.render('selectaddress', {
+    res.render('user/selectaddress', {
         defaultaddress,
         title: "cart",
         username: email,
@@ -493,14 +489,7 @@ const getselectaddress = async (req, res) => {
 }
 
 
-const getordermessage = async (req, res) => {
-    const users = await user.findOne({ email: req.session.email })
-
-    res.render('ordermessage', { users })
-}
 
 
-
-
-module.exports = { getordermessage, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, getorderdetials, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getwishlist, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
+module.exports = {  getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getwishlist, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
 

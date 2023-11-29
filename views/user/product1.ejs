@@ -8,6 +8,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -396,8 +397,13 @@
         .getElementById("addToCartButton")
         .addEventListener("click", function (event) {
           event.preventDefault(); // Prevent the default form submission behavior
-          alert("cart button clicked");
-          console.log("function started for add to cart");
+          swal({
+            title: "",
+            text: "product added to cart !",
+            icon: "success",
+          });
+          // alert("product added to cart");
+
           // Fetch product ID and other necessary data
           var productId = "<%-products._id %>"; // Update with the correct way to get product ID
 
@@ -406,40 +412,21 @@
           var requestData = {
             key: productId,
           };
-          // console.log("this function is working");
-
-          // Send a POST request to the server using AJAX
-          // console.log("Before fetch");
-          // alert(JSON.stringify(requestData));
-
-          // fetch("/cart1", {
-          //   method: "POST",
-          //   body: JSON.stringify({
-          //     key: productId,
-          //   }),
-          // })
-          //   .then(function (response) {
-          //     if (response.ok) {
-          //       return response.json();
-          //     } else {
-          //       alert(JSON.stringify(response));
-          //       throw new Error(
-          //         "Failed to add item to the cart",
-          //         response.status
-          //       );
-          //     }
-          //   })
-          //   .then(function (data) {
-          //     // Handle the success response
-          //     alert(data); // You can replace this with a more user-friendly notification
-          //   })
-          //   .catch(function (error) {
-          //     console.log(error);
-          //     alert(`Erro = >  ${error}`);
-          //   });
-          fetch(`/add-to-cart?productId=${requestData.key}`).then(response=>response.json()).then(res=>{
-            // alert('fetch came')
-          })
+          fetch(`/add-to-cart?productId=${requestData.key}`)
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle the success response
+              // You can replace this with a more user-friendly notification like SweetAlert
+            })
+            .catch((error) => {
+              console.error(error);
+              // Handle the error (e.g., show an error message)
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Failed to add the product to the cart.",
+              });
+            });
         });
     </script>
   </body>

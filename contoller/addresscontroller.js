@@ -26,13 +26,13 @@ const getaddress = async (req, res) => {
     const userId = users._id
     const addressofuser = await Address.findOne({ userId: users._id })
     // console.log(users._id)
-    res.render('address', { addressofuser })
+    res.render('user/address', { addressofuser })
 }
 
 
 
 const getaddaddress = async (req, res) => {
-    res.render('addaddress')
+    res.render('user/addaddress')
 }
 
 
@@ -98,7 +98,7 @@ const geteditaddress = async (req, res) => {
     try {
         const users = await user.findOne({ email: req.session.email });
         // const userId = users._id
-        console.log(req.params.id, 'ihfwtgfretgbergrberb')
+        console.log(req.params.id, 'ihfwtgfretgbergrberb', "this is working instead of placeorder function")
         const addressofuser = await Address.findOne({ "Address._id": req.params.id }, { "Address.$": true })
 
 
@@ -106,7 +106,7 @@ const geteditaddress = async (req, res) => {
             res.redirect('/address'); // Redirect to address list if the address is not found
         } else {
             console.log(addressofuser)
-            res.render('editaddress', { title: 'Edit Address', addressofuser });
+            res.render('user/editaddress', { title: 'Edit Address', addressofuser });
         }
     } catch (error) {
         console.error(error);
@@ -176,5 +176,65 @@ const getdeleteaddress = async (req, res) => {
 
 }
 
+// const 
 
-module.exports = { getdeleteaddress, postupdateaddress, postaddaddress, getaddress, geteditaddress, getaddaddress }
+
+
+const postcheckoutaddaddress = async (req, res) => {
+    try {
+
+        const users = await user.findOne({ email: req.session.email });
+        console.log(users, "usersssss-----------")
+        const existingAddress = await Address.findOne({ userId: users._id });
+
+
+        const newAddress = {
+
+            Addressname: req.body.Addressname,
+            Firstname: req.body.Firstname,
+            Secondname: req.body.Secondname,
+            Address: req.body.Address,
+            PhoneNumber: req.body.PhoneNumber,
+            State: req.body.State,
+            Landmark: req.body.Landmark,
+            City: req.body.City,
+            Pincode: req.body.Pincode,
+            Country: req.body.Country
+
+
+        };
+
+        // console.log(req.body.Addressname, "---------------", users._id, "-------------------------", req.body.Firstname, "----------------------------", req.body.Secondname, "-------------------------", req.body.PhoneNumber, "---------------", req.body.State, "-------------------", req.body.Landmark, "---------------", req.body.City, "-----------------", req.body.Pincode, "-------------------------------------------", req.body.Country, "req.body.-------------------------------")
+        // console.log(newAddress)
+
+
+        if (existingAddress) {
+            const savedAddress = await Address.findOneAndUpdate(
+                { userId: users._id },
+                { $push: { Address: newAddress } },
+                { upsert: true, new: true }
+            );
+            // console.log(savedAddress, "savedaddressssssssssszzzzzzcvefvledfdpslfmv,d")
+
+        } else {
+
+            const savedAddress = await Address.create({
+                userId: users._id,
+                Address: [newAddress]
+            });
+            // console.log(savedAddress, "savedaddressssssssssszzzzzzcvefvledfdpslfmv,d")
+        }
+
+
+
+        // console.log(const savedAddress )
+
+        res.redirect('/selectaddress');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+module.exports = { postcheckoutaddaddress, getdeleteaddress, postupdateaddress, postaddaddress, getaddress, geteditaddress, getaddaddress }

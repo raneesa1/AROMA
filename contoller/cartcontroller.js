@@ -1,10 +1,14 @@
 
 const product = require("../model/product"); // Import the product model
 const user = require("../model/users");
+
 const cart = require("../model/cart");
 const { json } = require("express");
+
 const mongoose = require('mongoose');
 const { productget } = require("./usercontroller");
+const address = require("../model/address");
+const order = require("../model/order");
 const { ObjectId } = mongoose.Types;
 
 
@@ -33,7 +37,7 @@ const getcart = async (req, res) => {
         const newcart = await cart.findOne({ userId: userId }).populate("products.productId")
 
         if (!newcart || newcart.products.length === 0) {
-            return res.render('cart', {
+            return res.render('user/cart', {
                 title: "cart",
                 username: email,
                 product: [],
@@ -66,7 +70,7 @@ const getcart = async (req, res) => {
 
 
         req.session.totalPrice = total;
-        res.render("cart", {
+        res.render("user/cart", {
             title: "cart",
             username: email,
             product: products,
@@ -172,7 +176,7 @@ const removeCart = async (req, res) => {
         usercart.products = usercart.products.filter((item) => !item.productId.equals(productId))
         await cart(usercart).save()
 
-        // console.log('cart of user after removing the data', usercart)
+        console.log('cart of user after removing the data', usercart)
 
 
     } catch (error) {
@@ -244,4 +248,91 @@ const updateQuantity = async (req, res) => {
 
 
 
-module.exports = { getcart, addTocart, removeCart, updateQuantity };
+const placeOrder = async (req, res) => {
+    console.log('post method is working')
+
+    const userData = await user.findOne({ email: req.session.email });
+    const userId = userData._id;
+    const addressinfo = await address.findOne({ userId: userData });
+
+    const paymentMethod = req.body.selectedPaymentMethod
+    const amount = req.session.totalPrice
+    const subtotal=req.session.subtotal
+    // console
+    console.log(subtotal,"suuuuubbbbbtoootaaall")
+
+    console.log(amount, "totaaaaallllll amounttnutnutntuntunttuntunt")
+    const selectedAddressId = req.body.selectedAddressId;
+    const selectedAddress = addressinfo.Address.find((address) => address._id == selectedAddressId);
+    if (!selectedAddress) {
+        return res.status(400).json({ success: false, message: 'Selected address not found' });
+    }
+
+    const cartDetails = await cart.findOne({ userId: userId });
+    const newOrder = new order({
+        Status: 'Pending',
+        Items: cartDetails.products,
+        paymentMethod: paymentMethod,
+        UserID: userId,
+        TotalPrice: amount,
+        Address: {
+
+            Addressname: selectedAddress.name,
+            Firstname: selectedAddress.Firstname,
+            Secondname: selectedAddress.Secondname,
+            Address: selectedAddress.Address,
+            PhoneNumber: selectedAddress.PhoneNumber,
+            State: selectedAddress.State,
+            Landmark: selectedAddress.Landmark,
+            City: selectedAddress.City,
+            Pincode: selectedAddress.Pincode,
+            Country: selectedAddress.Country
+
+
+
+        },
+        OrderDate: new Date(),
+    });
+    // console.log("order saved", newOrder);
+    const savedOrder = await newOrder.save();
+    if (savedOrder) {
+        const deletecart = await cart.findOneAndDelete({ userId: userId });
+        console.log(deletecart);
+
+
+
+
+        for (const item of cartDetails.products) {
+            const productId = item.productId;
+            // console.log(productId,"00000000")
+
+            const purchasedQuantity = item.quantity;
+            // console.log(purchasedQuantity,"099090999999999")
+
+            // await product.findOneAndUpdate(
+            // { _id: productId },
+            // { $inc: { stock: -purchasedQuantity } }
+            // );
+        }
+
+    }
+
+    res.redirect('/ordermessage')
+
+
+}
+
+
+
+
+
+const getordermessage = async (req, res) => {
+    const users = await user.findOne({ email: req.session.email })
+
+    res.render('user/ordermessage', { users })
+}
+
+
+
+
+module.exports = { placeOrder, getordermessage, getcart, addTocart, removeCart, updateQuantity };

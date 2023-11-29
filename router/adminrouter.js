@@ -48,4 +48,9 @@ router.get('/order', verifyadmin, admincontroller.getorder)
 
 router.get('/logout', verifyadmin, admincontroller.getlogout);
 
+
+router.get('/moredetials/:id', verifyadmin, admincontroller.getmoredetails)
+
+router.post('/updateStatus/:orderId', verifyadmin, admincontroller.getorderStatus)
+
 module.exports = router;
