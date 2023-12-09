@@ -13,10 +13,7 @@ const ProductSchema = new mongoose.Schema({
   category: { type: ObjectId },
   image: { type: Array },
   date: { type: Date },
-  size: [{
-    quantity: { type: Number },
-    stock: { type: Number }
-  }],
+  stock: { type: Number },
   price: { type: Number },
   specification: { type: String },
   status: { type: Boolean, default: false }

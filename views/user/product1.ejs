@@ -21,105 +21,7 @@
     <title>product</title>
   </head>
   <body>
-    <div style="background-color: black; height: 4px" class="w-100"></div>
-    <div id="menuHolder">
-      <div
-        role="navigation"
-        class="sticky-top border-bottom border-top"
-        id="mainNavigation"
-      >
-        <div class="flexMain">
-          <div class="flex2"></div>
-          <div
-            class="flex3 text-center m-4"
-            id="siteBrand"
-            style="font-size: 52px; margin-left: 200px; padding-top: 22px"
-          >
-            AROMA
-          </div>
-
-          <div class="flex2 text-end d-block d-md-none">
-            <button class="whiteLink siteLink">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-
-          <div class="flex2 text-end d-none d-md-block align-content-lg-end">
-            <div class="d-flex justify-content-end align-items-center pr-5">
-              <div class="icon-box">
-                <a href=""
-                  ><i
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="17"
-                      height="17"
-                      style="color: black"
-                      fill="currentColor"
-                      class="bi bi-search"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-                      /></svg></i
-                ></a>
-              </div>
-              <div class="icon-box">
-                <a href="profile"
-                  ><i
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-person-circle"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                      <path
-                        fill-rule="evenodd"
-                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-                      /></svg></i
-                ></a>
-              </div>
-
-              <div class="icon-box">
-                <a href="cart"
-                  ><i
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-cart3"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
-                      /></svg></i
-                ></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="d-flex justify-content-center"
-          style="
-            /* align-items: center; */
-            text-align: center;
-            font-size: medium;
-            font-size: 15px;
-            padding-top: 0;
-          "
-        >
-          <p class="p-3 mt-3"><a href="home">HOME</a></p>
-          <% categorydata.forEach(category => { %>
-          <p class="p-3 mt-3"><%=category.name%></p>
-          <% })%>
-          <p class="p-3 mt-3">SHOP</p>
-          <p class="p-3 mt-3">HELP</p>
-        </div>
-      </div>
-    </div>
+    <%- include('./partial/header') %>
     <div class="product-containe d-flex">
       <!-- ... (your existing HTML code) ... -->
 
@@ -171,12 +73,12 @@
       <!-- ... (your existing HTML code) ... -->
 
       <div class="product-details col-lg-6 col-md-6 col-sm-12">
-        <h1 class="product-title" style="font-size: 30px">
+        <h1 class="product-title text-uppercase" style="font-size: 30px">
           <%= products.name %>
         </h1>
         <hr class="first-hr" />
         <p
-          class="product-description m-0 p-0"
+          class="product-description m-0 p-0 text-lowercase"
           style="font-size: 23px; font-weight: 300"
         >
           <%= products.description %>
@@ -193,7 +95,7 @@
           <p class="product-price" id="productPrice">
             &#8377;<%= products.price %>
           </p>
-          <button class="fav-btn btn" style="padding-left: 290px">
+          <button class="fav-btn btn" style="margin-left: 279px">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -210,45 +112,20 @@
         </div>
 
         <hr />
-
-        <p style="font-size: 14px; font-weight: 600">
-          <%=products.size.length%> SIZE AVAILABLE
-        </p>
-        <div class="btn-block">
-          <button
-            type="button"
-            style="
-              border-color: rgb(48, 54, 54);
-              margin-top: 12px;
-              width: 380px;
-              font-family: tahoma;
-              font-size: 15px;
-            "
-            class="btn dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-            id="dropdownButton"
-            onchange="updatePrice()"
-          >
-            <%= products.size[0].quantity%>ml
-          </button>
-          <ul class="dropdown-menu">
-            <% products.size.forEach((variant) => { %>
-            <li>
-              <a
-                class="dropdown-item"
-                href="#"
-                data-variant-id="<%= variant.quantity %>"
-                ><%= variant.quantity %>ml</a
-              >
-            </li>
-
-            <% }); %>
-          </ul>
-        </div>
-        <button class="add-to-cart-btn">
-          <a class="add-to-cart-btn" id="addToCartButton">ADD TO CART</a>
+        <% if (products.stock <= 0) { %>
+        <p class="out-of-stock-message text-danger" >Out of Stock</p>
+        <button class="add-to-cart-btn" id="addToCartButton" disabled>
+          <span class="add-to-cart-btn">ADD TO CART</span>
         </button>
+        <% } else { %>
+        <button class="add-to-cart-btn" id="addToCartButton">
+          <span class="add-to-cart-btn">ADD TO CART</span>
+        </button>
+        <% } %>
+        <!-- 
+        <button class="add-to-cart-btn" id="addToCartButton">
+          <a class="add-to-cart-btn">ADD TO CART</a>
+        </button> -->
       </div>
     </div>
 
@@ -268,7 +145,7 @@
     >
       <!-- Added a container for the product grid -->
       <div
-        class="row align-content-center justify-content-center product-details-middle"
+        class="row align-content-center justify-content-center product-details-middle text-uppercase"
       >
         <% related.forEach(product => { %>
         <a href="/products?id=<%=product._id%>">
@@ -411,6 +288,7 @@
           // Create an object to send in the request
           var requestData = {
             key: productId,
+            
           };
           fetch(`/add-to-cart?productId=${requestData.key}`)
             .then((response) => response.json())

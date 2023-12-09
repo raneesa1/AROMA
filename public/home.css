@@ -242,3 +242,11 @@ a:hover {
   /* width: 25%; You can adjust the percentage as needed */
   padding: 0;
 }
+.add-to-cart {
+  /* background-color: #000000; */
+  color: #fff;
+  font-size: 10px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}

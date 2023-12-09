@@ -10,6 +10,7 @@ const OTP = require('../model/otp')
 const category = require('../model/category')
 const user = require('../model/users')
 const cart = require('../model/cart')
+const { render } = require('ejs')
 require("dotenv").config()
 
 
@@ -17,7 +18,7 @@ require("dotenv").config()
 
 
 const getlanding = async (req, res) => {
-    const products = await product.find({ status: false }).limit(3)
+    const products = await product.find({ status: false }).sort({ date: -1 }).limit(3)
     res.render('user/landing', { products })
 }
 const login = (req, res) => {
@@ -105,7 +106,7 @@ const signuppost = async (req, res) => {
         if (password !== confirmpassword) {
             throw Error("password doesn't match")
         }
-        const letterCount = password.replace(/[^a-zA-Z]/g, '').length; // Counting letters in the password
+        const letterCount = password.replace(/[^a-zA-Z]/g, '').length;
         if (letterCount < 3) {
             throw Error('Password must contain at least 3 letters')
         }
@@ -135,6 +136,8 @@ const signuppost = async (req, res) => {
                 profileImage: "/photos/default-profile.jpeg"
 
             }
+
+            
             req.session.data = data
             // console.log(data);
 
@@ -152,7 +155,7 @@ const signuppost = async (req, res) => {
 const gethome = async (req, res) => {
     if (req.session.isauth) {
         const userId = req.query.id
-        const products = await product.find({ status: false })
+        const products = await product.find({ status: false }).sort({ date: -1 }).limit(8)
         const userdata = await user.findOne({ id: userId })
         // const categorydata=await category.find()
         res.render('user/home', { products, userdata })
@@ -164,6 +167,7 @@ const gethome = async (req, res) => {
 }
 
 const productget = (req, res) => {
+    console.log('this is the function for get product')
     res.render('user/product')
 }
 
@@ -444,6 +448,7 @@ const getselectaddress = async (req, res) => {
             product: [],
             subtotal: 0,
             total: 0,
+            grandTotal: undefined,
             coupon: 0,
             gstAmount: 0,
             totalQuantity: 0,
@@ -479,6 +484,8 @@ const getselectaddress = async (req, res) => {
         username: email,
         product: products,
         newcart,
+        grandTotal: undefined,
+        coupon: 0,
         subtotal: subtotal,
         gstAmount: gstAmount.toFixed(2),
         totalQuantity: totalQuantity,
@@ -487,9 +494,32 @@ const getselectaddress = async (req, res) => {
 
     })
 }
+const getproductlist = async (req, res) => {
+    const products = await product.find({ status: false })
+    res.render('user/productlist', { products })
+}
+
+
+
+const search = async (req, res) => {
+    console.log('this function started working')
+    const searchQuery = req.body.query;
+    console.log(searchQuery)
+
+    try {
+        // Perform a search query on your database
+        const products = await product.find({ name: { $regex: "^" + req.body.query, $options: 'i' } });
+        console.log(products)
+
+        res.json({ products });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
 
 
 
 
-module.exports = {  getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getwishlist, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
+module.exports = { search, getproductlist, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getwishlist, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
 

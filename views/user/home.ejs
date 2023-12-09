@@ -20,7 +20,7 @@
     <title>HOME!</title>
   </head>
   <body>
-    <div style="background-color: black; height: 4px" class="w-100"></div>
+    <!-- <div style="background-color: black; height: 4px" class="w-100"></div>
     <div id="menuHolder">
       <div
         role="navigation"
@@ -116,7 +116,8 @@
           <p class="p-3 mt-3">HELP</p>
         </div>
       </div>
-    </div>
+    </div> -->
+    <%- include('./partial/header') %>
     <div>
       <img class="w-100" src="/photos/landing.webp" alt="" />
     </div>
@@ -124,9 +125,9 @@
     <div class="container mt-5">
       <div class="row">
         <% products.forEach(product => { %>
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 text-uppercase">
           <a href="/products?id=<%=product._id%>" class="text-decoration-none">
-            <div class="product-box">
+            <div class="product-box text-center">
               <img
                 src="<%= product.image[0] %>"
                 alt="<%= product.name %>"
@@ -141,6 +142,12 @@
           </a>
         </div>
         <% }) %>
+        <a
+          href="productlist"
+          class="text-right w-100"
+          style="text-decoration: underline"
+          >view all products</a
+        >
       </div>
     </div>
 

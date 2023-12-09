@@ -359,7 +359,7 @@
                 </span>
               </div>
 
-              <% if (defaultaddress && defaultaddress.Address) { %> <%
+              <% if (defaultaddress.Address.length >0) { %> <%
               defaultaddress.Address.forEach((address, index)=> { %>
               <div
                 id="address"
@@ -398,7 +398,10 @@
                   <!-- </button> -->
                 </a>
               </div>
-              <% }); %> <% } else { %>
+                 <% }); %>
+ <% } else { %>
+                <div class=" pl-5 address  w-75" >
+</div>
               <!-- <p>No address found for the user.</p> -->
               <% } %>
             </div>
@@ -421,8 +424,8 @@
             <!-- Default radio -->
             <div class="form-check h-100 border rounded-3">
               <div class="p-3">
-                 <!-- <input class="form-check-input" type="radio" name="paymentMethod" id="online" value="online" />
-                <label class="form-check-label" for="online"> -->
+                 <input class="form-check-input" type="radio" name="paymentMethod" id="online" value="online" />
+                <label class="form-check-label" for="online">
                   Razorpay <br />
                 </label>
               </div>
@@ -459,6 +462,20 @@
               <p class="mb-2">Sub Total :</p>
               <p class="mb-2 text-success">&#8377;<%= subtotal %></p>
             </div>
+               <% if(coupon){%>
+                      <div class="d-flex justify-content-between mb-4">
+                        <p class="mb-2">Discount(coupon):</p>
+                        <p  class=""style="color: green" id="discount"></p>
+                      </div>
+                      <% }else{%>
+
+                      <div class="d-flex justify-content-between mb-4">
+                        <p class="">Discount(coupon):</p>
+                        <p class="" style="color: green" id="discount">
+                          - &#8377;<%=coupon %>
+                        </p>
+                      </div>
+                      <% }%>
             <div class="d-flex justify-content-between">
               <p class="mb-2">Tax:</p>
               <p class="mb-2">&#8377;<%= gstAmount %></p>
@@ -470,9 +487,15 @@
             <hr />
             <div class="d-flex justify-content-between">
               <p class="mb-2" style="font-weight: bold" ;>Total price:</p>
-              <p class="mb-2 fw-bold text-success" style="font-weight: bold">
-                &#8377;<%= total %>
-              </p>
+               <% if(grandTotal===undefined){%>
+                        <p id="grandTotal" class="mb-2 fw-bold">
+                          &#8377;<%= total %>
+                        </p>
+                        <% } else { %>
+                        <p id="grandTotal" class="mb-2 fw-bold">
+                          &#8377;<%= grandTotal %>
+                        </p>
+                        <% } %>
             </div>
 
             <hr />
@@ -504,8 +527,8 @@
                     <%= item.productId.description %></span
                   >
                 </a>
-                <div class="price text-muted ml-3">
-                  Total: &#8377;<%= item.productId.price %>
+                <div class="price text-muted ml-3"  id="productPrice">
+                   &#8377;<%= item.productId.price %>
                 </div>
               </div>
             </div>
@@ -516,8 +539,10 @@
               class="btn btn-dark btn-block btn-lg mb-5 mt-5"
               style="width: 294px; font-size: 20px"
               data-mdb-ripple-color="dark"
+
             >
               PLACE ORDER
+              
               <!-- <svg
                 class="mb-1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -532,60 +557,63 @@
                   d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
                 />
               </svg> -->
+            
             </button>
+              </form>
+            <hr >
+               <h6 class="mt-4">Enter coupon code</h6>
+                      <div class="input-group mt-3 mb-2">
+                        <input
+                          type="text"
+                          class="form-control border"
+                          name=""
+                          placeholder="Coupon code"
+                          id="couponCode"
+                        />
+                        <button
+                          class="btn btn-light text-dark border " 
+                          onclick="applyCoupon()"
+                        >
+                          Apply
+                        </button>
+                      
+                     
+                      </div>
+                        <p class="ml-5 pl-5 mt-0 pt-0 coupon-text"><a href="">view coupons and save extra!</a></p>
+                      <hr>
           </div>
         </div>
       </div>
   </div>
-</form>
+
 </div>
 </div>
     <section class="py-5"></section>
 
     <script>
-      // document.addEventListener("DOMContentLoaded", function () {
-      //   const form = document.getElementById("form-checkout");
-      //   form.addEventListener("submit", async function (event) {
-      //     event.preventDefault();
+     
+      function showErrorMessage(message) {
+        // Set the error message in the modal
+        document.getElementById("errorModalMessage").textContent = message;
 
-      //     alert('submitting is working')
-      //     // Find the selected address checkbox
-      //     const selectedAddressCheckbox = document.querySelector(
-      //       'input[name="Address"]:checked'
-      //     );
-      //     alert("this is working now");
+        // Show the modal
+        var errorModal = new bootstrap.Modal(
+          document.getElementById("errorModal")
+        );
+        errorModal.show();
+      }
 
-      //     alert(selectedAddressCheckbox);
-      //     // Check if a checkbox is selected
-      //     if (selectedAddressCheckbox) {
-      //       const selectedAddressId = selectedAddressCheckbox.value;
+      document
+        .getElementById("closeErrorModal")
+        .addEventListener("click", function () {
+          var errorModal = new bootstrap.Modal(
+            document.getElementById("errorModal")
+          );
+          errorModal.hide();
+        });
 
-      //       // Make a fetch request to send the selected address to the server
-      //       try {
-      //         const response = await fetch("/placeOrder", {
-      //           method: "POST",
-      //           headers: {
-      //             "Content-Type": "application/json",
-      //           },
-      //           body: JSON.stringify({ selectedAddressId }),
-      //         });
 
-      //         if (response.ok) {
-      //           // Handle the success case if needed
-      //           console.log("Selected address sent successfully!");
-      //         } else {
-      //           // Handle the error case if needed
-      //           console.error("Failed to send selected address");
-      //         }
-      //       } catch (error) {
-      //         console.error("Error during fetch:", error);
-      //       }
-      //     } else {
-      //       // Handle the case where no address is selected
-      //       console.error("No address selected");
-      //     }
-      //   });
-      // });
+
       async function selectAddress(event) {
         event.preventDefault();
 
@@ -595,6 +623,20 @@
           'input[name="Address"]:checked'
         );
         const selectedPaymentMethod = $("input[name='paymentMethod']:checked").val();
+
+       
+        // const TotalPrice=document.getElementById('TotalPrice').innerText
+        // alert(TotalPrice)
+
+        // const productPriceElement = document.getElementById("productPrice");
+        // const productPriceText = productPriceElement.innerText;
+
+// Assuming the price is prefixed with the currency symbol (like ₹ or &#8377;)
+        // const productPrice = parseFloat(productPriceText.replace(/[^\d.]/g, ''));
+
+
+        // alert(productPrice,"product price")
+
         // alert("this is working now");
 
         // alert(selectedAddressCheckbox);
@@ -629,10 +671,98 @@
           console.error("No address selected");
         }
       }
+         function applyCoupon() {
+        const couponCode = document.getElementById("couponCode").value;
+
+        fetch("/apply-coupon", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            couponCode: couponCode,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              showErrorMessage("Coupon applied successfully");
+              console.log("Coupon applied successfully");
+              $("#grandTotal").text(data.grandTotal);
+              $("#discount").text("- ₹" + data.coupon);
+            } else {
+              showErrorMessage(` ${data.message}`);
+              console.error("Coupon application failed:", data.message);
+            }
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+            showErrorMessage("An error occurred while applying the coupon");
+          });
+      }
     </script>
+    <script>
+
+  document.getElementById('viewCouponsLink').addEventListener('click', function () {
+    $('#couponModal').modal('show');
+  });
+</script>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+      <div class="modal fade" id="errorModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Attention</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="errorModalMessage" class="text-danger"></p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="closeErrorModal"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Coupon Modal -->
+<div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="couponModalLabel">Available Coupons</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Example Coupon 1: SAVE10 - 10% off</p>
+        <p>Example Coupon 2: FREEDEL - Free delivery</p>
+        <!-- Add more coupons as needed -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   </body>
 </html>

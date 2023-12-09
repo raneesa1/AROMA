@@ -44,6 +44,7 @@ const getcart = async (req, res) => {
                 subtotal: 0,
                 total: 0,
                 coupon: 0,
+                grandTotal: undefined,
                 gstAmount: 0,
                 totalQuantity: 0,
                 User,
@@ -58,16 +59,17 @@ const getcart = async (req, res) => {
 
         newcart.products.forEach(item => {
             if (item.productId && item.productId.price !== undefined) {
-                subtotal += item.quantity * item.productId.price;
+                subtotal += Math.floor(item.quantity * item.productId.price);
                 totalQuantity += item.quantity;
             } else {
                 console.log("Skipping item due to missing or undefined DiscountAmount:", item.productId);
             }
         })
         const gstRate = 0.18;
-        const gstAmount = subtotal * gstRate;
-        const total = subtotal + gstAmount;
+        const gstAmount = Math.floor(subtotal * gstRate);
+        const total = Math.floor(subtotal + gstAmount);
 
+        // console.log(total,"totaaaaall priceeee")
 
         req.session.totalPrice = total;
         res.render("user/cart", {
@@ -75,6 +77,8 @@ const getcart = async (req, res) => {
             username: email,
             product: products,
             newcart,
+            grandTotal: undefined,
+            coupon: 0,
             subtotal: subtotal,
             gstAmount: gstAmount.toFixed(2),
             totalQuantity: totalQuantity,
@@ -95,13 +99,16 @@ const getcart = async (req, res) => {
 const addTocart = async function (req, res) {
     try {
 
-        console.log('add to cart api called');
+
+        // console.log('add to cart api called');
         const useremail = req.session.email
         const userId = await user.findOne({ email: useremail })
-        console.log(userId)
-        console.log(JSON.stringify(req.query))
+        // console.log(userId)
+        // console.log(JSON.stringify(req.query) ,"querrrrrrrrryyyyyyyyyyyyyyyyyy from cart ")
 
         const productId = req.query.productId;
+        const price = productId.price
+        // console.log(price,"price of each productttttttt from cart funcitonnnnnnnnnnnnnnnn")
         // const productDetails = await product.findOne({ _id: productId });
 
 
@@ -118,6 +125,7 @@ const addTocart = async function (req, res) {
             }
             await cart(cartData).save();
             req.session.userCart = cartData._id;
+
             // console.log(req.session.userCart, "session of usercarrrrttttttttttrtrtrrtrtr")
         } else {
             console.log('going to else case')
@@ -137,7 +145,7 @@ const addTocart = async function (req, res) {
 
     } catch (error) {
         console.log("Error while adding to cart: ", error);
-        res.render('user/404Page');
+
     }
 
     // await new cart(cartitems).save()
@@ -247,77 +255,163 @@ const updateQuantity = async (req, res) => {
 
 
 
+const generateRandomString = (length) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters.charAt(randomIndex);
+    }
+    return result;
+};
 
 const placeOrder = async (req, res) => {
-    console.log('post method is working')
+    try {
 
-    const userData = await user.findOne({ email: req.session.email });
-    const userId = userData._id;
-    const addressinfo = await address.findOne({ userId: userData });
 
-    const paymentMethod = req.body.selectedPaymentMethod
-    const amount = req.session.totalPrice
-    const subtotal=req.session.subtotal
-    // console
-    console.log(subtotal,"suuuuubbbbbtoootaaall")
+        // console.log('post method is working')
 
-    console.log(amount, "totaaaaallllll amounttnutnutntuntunttuntunt")
-    const selectedAddressId = req.body.selectedAddressId;
-    const selectedAddress = addressinfo.Address.find((address) => address._id == selectedAddressId);
-    if (!selectedAddress) {
-        return res.status(400).json({ success: false, message: 'Selected address not found' });
-    }
+        // console.log(req.session, "session offfffffffffffffffff place order")
 
-    const cartDetails = await cart.findOne({ userId: userId });
-    const newOrder = new order({
-        Status: 'Pending',
-        Items: cartDetails.products,
-        paymentMethod: paymentMethod,
-        UserID: userId,
-        TotalPrice: amount,
-        Address: {
+        console.log('///////////////////////////////////////////////////////////////////////////////////////////')
 
-            Addressname: selectedAddress.name,
-            Firstname: selectedAddress.Firstname,
-            Secondname: selectedAddress.Secondname,
-            Address: selectedAddress.Address,
-            PhoneNumber: selectedAddress.PhoneNumber,
-            State: selectedAddress.State,
-            Landmark: selectedAddress.Landmark,
-            City: selectedAddress.City,
-            Pincode: selectedAddress.Pincode,
-            Country: selectedAddress.Country
+        console.log(req.session.grandTotal, "granddtotal from session+++++++++++++")
+        console.log(req.session.totalPrice, "total price from session____----------")
+
+        console.log('///////////////////////////////////////////////////////////////////////////////////////////')
+
+        const userData = await user.findOne({ email: req.session.email });
+        const userId = userData._id;
+        const addressinfo = await address.findOne({ userId: userData });
+
+        const paymentMethod = req.body.selectedPaymentMethod
 
 
 
-        },
-        OrderDate: new Date(),
-    });
-    // console.log("order saved", newOrder);
-    const savedOrder = await newOrder.save();
-    if (savedOrder) {
-        const deletecart = await cart.findOneAndDelete({ userId: userId });
-        console.log(deletecart);
+        const orderNumber = generateRandomString(8);
+
+        // const coupons = await coupon.findOne({ Coupon_code: couponCode });
+
+        // const purchaseAmount = req.session.totalPrice
+
+        // const discountedAmount = Math.min(purchaseAmount, coupons.DiscountAmount);
+        // const totalAfterDiscount = Math.floor(purchaseAmount - discountedAmount);
+        // req.session.grandTotal = Math.floor(totalAfterDiscount)
+        // // console
 
 
-
-
-        for (const item of cartDetails.products) {
-            const productId = item.productId;
-            // console.log(productId,"00000000")
-
-            const purchasedQuantity = item.quantity;
-            // console.log(purchasedQuantity,"099090999999999")
-
-            // await product.findOneAndUpdate(
-            // { _id: productId },
-            // { $inc: { stock: -purchasedQuantity } }
-            // );
+        // console.log(amount, "totaaaaallllll amounttnutnutntuntunttuntunt")
+        const selectedAddressId = req.body.selectedAddressId;
+        const selectedAddress = addressinfo.Address.find((address) => address._id == selectedAddressId);
+        if (!selectedAddress) {
+            return res.status(400).json({ success: false, message: 'Selected address not found' });
         }
 
-    }
+        const cartDetails = await cart.findOne({ userId: userId })
 
-    res.redirect('/ordermessage')
+        const productIds = cartDetails.products.map(item => item.productId);
+        // console.log(productIds, "productt idddd")
+
+
+
+        // Fetch product details, including price, for each product ID
+        const itemsPromises = cartDetails.products.map(async (item) => {
+            const productDetails = await product.findOne({ _id: item.productId });
+            return {
+                status: 'Ordered',
+                Price: productDetails.price,
+                productId: item.productId,
+                quantity: item.quantity,
+                grandTotal: undefined,
+                coupon: 0,
+                // discountedAmount: discountedAmount,
+                // grandTotal: totalAfterDiscount
+            };
+        });
+
+        // Wait for all promises to resolve
+        const item = await Promise.all(itemsPromises);
+
+        let amount = 0;
+
+        if (req.session.grandTotal == undefined) {
+            amount = req.session.totalPrice;
+        } else {
+            amount = req.session.grandTotal;
+        }
+
+        // console.log(item, "Items");  /
+
+        // const productid = cartDetails.products.productId
+        // console.log(productid, "this is the product id _________-----------------_______")
+
+        const totalPrice = Math.floor(amount)
+
+
+        const newOrder = new order({
+            Status: 'Pending',
+            Items: item,
+            paymentMethod: paymentMethod,
+            UserID: userId,
+            orderNumber: orderNumber,
+            TotalPrice: totalPrice,
+            Address: {
+
+                Addressname: selectedAddress.name,
+                Firstname: selectedAddress.Firstname,
+                Secondname: selectedAddress.Secondname,
+                Address: selectedAddress.Address,
+                PhoneNumber: selectedAddress.PhoneNumber,
+                State: selectedAddress.State,
+                Landmark: selectedAddress.Landmark,
+                City: selectedAddress.City,
+                Pincode: selectedAddress.Pincode,
+                Country: selectedAddress.Country
+
+
+
+            },
+            OrderDate: new Date(),
+        });
+        // console.log("order saved", newOrder);
+        const savedOrder = await newOrder.save();
+        if (savedOrder) {
+            const deletecart = await cart.findOneAndDelete({ userId: userId });
+            // console.log(deletecart);
+
+
+
+
+            for (const item of cartDetails.products) {
+                const productId = item.productId;
+                // console.log(productId,"00000000")
+
+                const purchasedQuantity = item.quantity;
+                // console.log(purchasedQuantity, "099090999999999")
+
+                await product.findOneAndUpdate(
+                    { _id: productId },
+                    { $inc: { stock: -purchasedQuantity } }
+                );
+            }
+
+        }
+        // console.log('///////////////////////////////////////')
+
+        req.session.grandTotal = undefined
+
+
+
+        // console.log(grandTotal,'after making it undefined')
+
+        console.log('/////////////////////////////////////// reached in making session grandtotal undefined')
+
+
+        res.redirect('/ordermessage')
+    } catch (error) {
+        console.log('error from place order ', error)
+
+    }
 
 
 }
@@ -327,9 +421,15 @@ const placeOrder = async (req, res) => {
 
 
 const getordermessage = async (req, res) => {
-    const users = await user.findOne({ email: req.session.email })
+    try {
+        const users = await user.findOne({ email: req.session.email })
 
-    res.render('user/ordermessage', { users })
+        res.render('user/ordermessage', { users })
+    } catch (error) {
+        console.log(error, "error in sending order message")
+
+    }
+
 }
 
 

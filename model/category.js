@@ -1,4 +1,4 @@
-const mongoose=require('mongoose')
+const mongoose = require('mongoose')
 require('../config/dbconfig')
 require('dotenv').config()
 
@@ -6,15 +6,15 @@ require('dotenv').config()
 
 
 const categorySchema = new mongoose.Schema({
- 
-name: { type: String },
-description: { type: String },
 
-date:{type:Date},
+    name: { type: String,  unique: true, },
+    description: { type: String },
+
+    date: { type: Date },
 
 });
 
 
 
-const category=mongoose.model(process.env.CATEGORY_COLLECTION,categorySchema)
-module.exports=category
+const category = mongoose.model(process.env.CATEGORY_COLLECTION, categorySchema)
+module.exports = category

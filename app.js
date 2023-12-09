@@ -7,6 +7,7 @@ const session = require('express-session')
 const bcrypt = require('bcrypt')
 const multer = require('multer')
 const nodemailer = require('nodemailer');
+const razorpay = require('razorpay')
 const path = require('path');
 const port = 3000
 
@@ -21,8 +22,13 @@ const product = require('./model/product')
 
 app.use(nocache())
 app.use(session({
-    secret: 'raneesa',
-    resave: false
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    },
 }))
 app.use(require('cors')())
 app.use(express.urlencoded({ extended: true }))

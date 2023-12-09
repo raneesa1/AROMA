@@ -240,7 +240,7 @@ a:hover {
   text-decoration: none; /* Remove the underline on hover */
 }
 .address {
-  width: 80%;
+  width: 93%;
   margin-top: 14px;
   /* background-color: rgb(245, 245, 247); */
   display: flex;
@@ -274,4 +274,39 @@ a:hover {
 
 form {
   max-width: 900px;
+}
+.coupon-text {
+  color: #666; /* Light black color */
+  text-decoration: none; /* Remove underline by default */
+  transition: color 0.3s; /* Add a smooth color transition effect */
+
+  /* Optional: Add some padding if needed */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.coupon-text:hover {
+  color: #000; /* Dark black color on hover */
+  text-decoration: underline; /* Underline on hover */
+}
+.css-1w6jlyf {
+  border: 1px dashed rgb(255, 180, 173);
+  border-radius: 2px;
+  padding: 0.625rem 1rem;
+  background: rgb(255, 249, 248);
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  flex: 1 1 auto;
+}
+.css-1tvxbvq {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  border: 1px dashed rgb(255, 180, 173);
+  position: absolute;
+  top: 50%;
+  background-color: rgb(255, 255, 255);
+  left: 0px;
+  transform: translate(-50%, -50%);
 }

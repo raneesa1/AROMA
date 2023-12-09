@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/wallet.css" />
+
+    <title>acccount details</title>
+  </head>
+  <body style="background-color: #eee">
+    <%- include('./partial/header') %>
+    <section>
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-lg-4">
+            <!-- <div class="card mb-4">
+              <div class="card-body text-center">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                  alt="avatar"
+                  class="rounded-circle img-fluid"
+                  style="width: 150px"
+                />
+                <h5 class="my-3">John Smith</h5>
+       <p class="text-muted mb-1">Full Stack Developer</p> -->
+            <!-- <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> -->
+            <!-- </div> -->
+            <!-- </div> -->
+            <div class="card mb-4 mb-lg-0">
+              <div class="card-body p-0">
+                <ul class="list-group list-group-flush rounded-3">
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fas fa-globe fa-lg text-warning"></i>
+                    <p class="mb-0">
+                      <a href="profile">My Account</a>
+                    </p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fas fa-globe fa-lg text-warning"></i>
+                    <p class="mb-0">
+                      <a href="accountdetails">Account Details</a>
+                    </p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fab fa-github fa-lg" style="color: #333333"></i>
+                    <p class="mb-0"><a href="myorder">My Order</a></p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
+                    <p class="mb-0"><a href="cart">Shopping Cart</a></p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i
+                      class="fab fa-instagram fa-lg"
+                      style="color: #000000"
+                    ></i>
+                    <p class="mb-0"><a href="wishlist">Wishlist</a></p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i
+                      class="fab fa-facebook-f fa-lg"
+                      style="color: #000000"
+                    ></i>
+                    <p class="mb-0"><a href="address">Address</a></p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-4">
+                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
+                    <p class="mb-0"><a href="wallet">Wallet</a></p>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center p-3">
+                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
+                    <p class="mb-0">
+                      <button
+                        type="button"
+                        class="btn"
+                        style="color: #000000"
+                        data-toggle="modal"
+                        data-target="#logoutModal"
+                      >
+                        Logout
+                      </button>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="card mb-4">
+                  <div
+                    class="d-flex justify-content-between align-items-center mt-3"
+                  >
+                    <!-- <h3 class="ml-3 mt-3" style="color: #000000">WALLET</h3> -->
+                  </div>
+
+                  <section class="h-100 gradient-custom">
+                    <div class="card-body p-4">
+                      <div class="card shadow-0 border mb-4">
+                        <div class="card-body-wallet">
+                          <div class="d-flex">
+                            <div>
+                              <div
+                                class="text-uppercase"
+                                style="color: rgb(56, 32, 32)"
+                              >
+                                <span
+                                  style="
+                                    font-size: 49px;
+                                    font-weight: bold;
+                                    color: rgb(250, 132, 89);
+                                  "
+                                  class="ml-3"
+                                >
+                                  ₹2000</span
+                                >
+
+                                <p
+                                  style="color: orange; font-weight: 600"
+                                  class="ml-4"
+                                >
+                                  current wallet balance
+                                </p>
+                              </div>
+                              <p class="text-muted text-uppercase"></p>
+                            </div>
+
+                            <div
+                              style="margin-left: 120px; margin-top: 23px"
+                            ></div>
+                            <div style="margin-top: 43px">
+                              <button
+                                class="addbutton"
+                                data-toggle="modal"
+                                data-target="#addmoney"
+                                class="btn btn-dark order-details-btn"
+                                style="
+                                  background-color: rgb(246, 131, 89);
+                                  border: none;
+                                "
+                              >
+                                <div
+                                  href="/"
+                                  class="text-light"
+                                  style="font-size: 15px"
+                                >
+                                  <svg
+                                    style="color: rgb(253, 253, 253)"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="30"
+                                    height="30"
+                                    fill="currentColor"
+                                    class="bi bi-plus"
+                                    viewBox="0 0 16 16"
+                                  >
+                                    <path
+                                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"
+                                    />
+                                  </svg>
+                                  ADD MONEY
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- <hr /> -->
+                      <p
+                        class="mt-5 mb-4"
+                        style="
+                          font-size: 17px;
+                          font-weight: 500;
+                          margin-top: 9px;
+                        "
+                      >
+                        Transaction history
+                      </p>
+
+                      <hr />
+                      <div
+                        class="row mb-4 d-flex justify-content-between align-items-center"
+                      >
+                        <!-- Left Column -->
+                        <div class="col-md-6 col-lg-6 col-xl-6">
+                          <h6 class="mb-2 text-uppercase text-muted">
+                            ARO-808fw94
+                          </h6>
+                          <h6 class="mb-2 text-uppercase">Withdrawel</h6>
+                          <h6 class="text-muted" style="font-size: 14px">
+                            Status : <span class="text-success">Success</span>
+                          </h6>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div
+                          class="col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end"
+                        >
+                          <div>
+                            <h6 class="mb-2">30th Dec, 2023</h6>
+                            <p class="mb-2 text-success text-end">
+                              &#8377; 500
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <hr />
+                      <div
+                        class="row mb-4 d-flex justify-content-between align-items-center"
+                      >
+                        <!-- Left Column -->
+                        <div class="col-md-6 col-lg-6 col-xl-6">
+                          <h6 class="mb-2 text-uppercase text-muted">
+                            ARO-808fw94
+                          </h6>
+                          <h6 class="mb-2 text-uppercase">deposit</h6>
+                          <h6 class="text-muted" style="font-size: 14px">
+                            Status : <span class="text-danger">Failed</span>
+                          </h6>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div
+                          class="col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end align-items-end"
+                        >
+                          <div>
+                            <h6 class="mb-2">30th Dec, 2023</h6>
+                            <p class="mb-2 text-danger">&#8377; 500</p>
+                          </div>
+                        </div>
+                      </div>
+                      <hr />
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="addmoney"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLongTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+              Add Money to Wallet
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="addMoneyForm">
+              <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="amount"
+                  name="amount"
+                  placeholder="Enter amount"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="addMoney()"
+              data-dismiss="modal"
+            >
+              Add Money
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

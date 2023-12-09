@@ -255,3 +255,17 @@ a:hover {
 
 /* padding-left: 500px; */
 }
+.add-to-cart-btn {
+  font-size: 17px;
+  border: none;
+  height: 40px;
+  width: 380px;
+  color: #eaeaea;
+  background: #000000;
+  margin-top: 12px;
+  border-radius: 5px;
+}
+.add-to-cart-btn:hover {
+  color: aliceblue;
+  text-decoration: none;
+}

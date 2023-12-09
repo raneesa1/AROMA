@@ -19,6 +19,8 @@ const OrderSchema = new mongoose.Schema({
         quantity: { type: Number },
     }],
     UserID: { type: mongoose.Schema.Types.ObjectId, },
+    orderNumber: { type: String },
+    TotalPrice: { type: Number },
     Address: {
         Addressname: { type: String },
         Firstname: { type: String },
@@ -34,7 +36,6 @@ const OrderSchema = new mongoose.Schema({
     paymentMethod: { type: String },
     paymentStatus: { type: String },
     CoupenID: { type: mongoose.Schema.Types.ObjectId, },
-    TotalPrice: { type: Number },
     OrderDate: { type: Date },
     PaymentId: { type: Number },
 });

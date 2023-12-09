@@ -109,9 +109,9 @@
             padding-top: 0;
           "
         >
-          <p class="p-3 mt-3">WOMEN</p>
-          <p class="p-3 mt-3">MEN</p>
-          <p class="p-3 mt-3">SHOP</p>
+          <p class="p-3 mt-3">HOME</p>
+          <!-- <p class="p-3 mt-3">MEN</p> -->
+          <p class="p-3 mt-3"><a href="productlist">SHOP</a></p>
           <p class="p-3 mt-3">HELP</p>
         </div>
       </div>
@@ -134,7 +134,7 @@
         <a href="/products?id=<%=product._id%>">
           <div class="col col-size">
             <!-- Create a column for each product -->
-            <div class="product-box">
+            <div class="product-box text-uppercase">
               <img
                 src="<%= product.image[0] %>"
                 alt="Product Name"

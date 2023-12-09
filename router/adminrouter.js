@@ -2,7 +2,8 @@ const express = require('express');
 const multer = require('multer')
 const router = express.Router();
 const admincontroller = require('../contoller/admincontroller');
-const { adminExist, verifyadmin } = require('../middleware/adminauth')
+const { adminExist, verifyadmin } = require('../middleware/adminauth');
+const couponcontroller = require('../contoller/couponcontroller');
 
 
 
@@ -37,6 +38,14 @@ router.get('/deletecategory/:id', verifyadmin, admincontroller.getdelecategory)
 
 router.get('/product', verifyadmin, admincontroller.getproductmanagement)
 router.get('/edit/:id', verifyadmin, admincontroller.geteditproduct)
+
+router.delete('/deleteimage/:productId/:index', verifyadmin, admincontroller.deleteImagess);
+
+
+
+
+
+
 router.get('/editcategory/:id', verifyadmin, admincontroller.geteditcategory)
 router.post('/updatecategory/:id', admincontroller.postupdatecategory)
 router.post('/update/:id', upload.array('images', 5), admincontroller.postupdateproduct)
@@ -52,5 +61,14 @@ router.get('/logout', verifyadmin, admincontroller.getlogout);
 router.get('/moredetials/:id', verifyadmin, admincontroller.getmoredetails)
 
 router.post('/updateStatus/:orderId', verifyadmin, admincontroller.getorderStatus)
+
+
+router.get('/coupon', verifyadmin, couponcontroller.getcoupon)
+router.get('/addcoupon', verifyadmin, couponcontroller.addcoupon)
+router.post('/addcoupon', verifyadmin, couponcontroller.postaddcoupon)
+router.post('/editcoupon/:id', verifyadmin, couponcontroller.posteditcoupon)
+router.get('/deletecoupon/:id', verifyadmin, couponcontroller.deletecoupon)
+
+
 
 module.exports = router;

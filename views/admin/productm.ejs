@@ -111,7 +111,7 @@
         <a href="/admin/product"><div class="menu-item">PRODUCTS</div></a>
         <a href="/admin/category"><div class="menu-item">CATEGORY</div></a>
         <a href="/admin/order"><div class="menu-item">ORDERS</div></a>
-        <a href=""><div class="menu-item">COUPON</div></a>
+        <a href="/admin/coupon"><div class="menu-item">COUPON</div></a>
         <a href=""><div class="menu-item">BANNER</div></a>
         <a href=""> <div class="menu-item">TRANSACTION</div></a>
         <a href="/admin/user"> <div class="menu-item">MANAGE USER</div></a>
@@ -147,7 +147,7 @@
                 <th>Product desciption</th>
                 <!-- <th>Additonal Information</th> -->
                 <th>Category</th>
-                <th>quantity/stock</th>
+                <th>stock</th>
 
                 <th>Price</th>
                 <th>Added Date</th>
@@ -173,16 +173,7 @@
                 <td><%-data.description%></td>
                 <!-- <td><%-data.specification%></td> -->
                 <td><%= data.categoryDetails[0].name %></td>
-                <td>
-                  <!-- Variant column -->
-                  <% data.size.forEach((variant) => { %>
-                  <div>
-                    <span><%- variant.quantity %>ml</span> -
-                    <span><%- variant.stock %></span>
-                  </div>
-                  <!-- <span>price:<%- variant.price %></span> -->
-                  <% }); %>
-                </td>
+                <td><%-data.stock%></td>
 
                 <td><%-data.price%></td>
                 <td>

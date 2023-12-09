@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/productlist.css" />
+
+    <title>product</title>
+  </head>
+  <body>
+   <%- include('./partial/header') %>
+    <div class="container-fluid p-0 m-0">
+      <img src="/photos/banner-13.webp" alt="" height="400px" width="100%" />
+    </div>
+    <div class="d-flex text-center align-content-center">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6 offset-md-3 text-center">
+            <h3 class="mt-5" style="font-family: tahoma">ALL PRODUCTS</h3>
+          </div>
+          <div class="col-md-3 text-right">
+            <div class="search-container" style="margin-top: 57px">
+              <form
+                class="search-form"
+                id="search-id"
+                method="get"
+                action="/search"
+              >
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control search-input"
+                    placeholder="Search on Aroma"
+                    name="search"
+                    autocomplete="on"
+                  />
+                  <div class="input-group-append">
+                    <button type="submit" class="search-button btn pb-0 pt-0">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M21.54 19.97L16.3 14.73C17.36 13.44 17.99 11.79 17.99 9.99C17.99 5.85 14.64 2.5 10.5 2.5C6.35 2.5 3 5.85 3 9.99C3 14.13 6.35 17.48 10.49 17.48C12.29 17.48 13.94 16.84 15.23 15.79L20.47 21.03C20.62 21.18 20.81 21.25 21 21.25C21.19 21.25 21.38 21.18 21.53 21.03C21.83 20.74 21.83 20.26 21.54 19.97ZM10.49 15.98C7.19 15.98 4.5 13.29 4.5 9.99C4.5 6.69 7.19 4 10.49 4C13.79 4 16.48 6.69 16.48 9.99C16.48 13.3 13.8 15.98 10.49 15.98Z"
+                          fill="black"
+                        ></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex ">
+      <div>
+        <div class="ml-2 sort-main-box">
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle text-center"
+              style="
+                background-color: rgb(255, 255, 255);
+                color: black;
+                border: none;
+                width: 200px;
+              "
+              type="button"
+              id="sortDropdown"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Sort By:
+            </button>
+            <div
+              class="dropdown-menu sort-item-box border-none"
+              aria-labelledby="sortDropdown"
+            >
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="sortOption"
+                  id="highToLow"
+                  value="highToLow"
+                />
+                <label class="form-check-label" for="highToLow">
+                  High to Low
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="sortOption"
+                  id="lowToHigh"
+                  value="lowToHigh"
+                />
+                <label class="form-check-label" for="lowToHigh">
+                  Low to High
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="sortOption"
+                  id="newestArrival"
+                  value="newestArrival"
+                />
+                <label class="form-check-label" for="newestArrival">
+                  Newest Arrival
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="container mt-5">
+          <div class="row" id="productListContainer">
+            <% products.forEach(product => { %>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+              <a
+                href="/products?id=<%=product._id%>"
+                class="text-decoration-none"
+              >
+                <div class="product-box">
+                  <img
+                    src="<%= product.image[0] %>"
+                    alt="<%= product.name %>"
+                    width="160"
+                    height="160"
+                  />
+                  <h2 class="product-title text-uppercase">
+                    <%= product.name %>
+                  </h2>
+                  <p class="product-description text-uppercase">
+                    <%= product.description %>
+                  </p>
+                  <p class="product-price">&#8377;<%= product.price %></p>
+                  <a class="add-to-cart">View details</a>
+                </div>
+              </a>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      // alert("script started working");
+      document
+        .querySelector(".search-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const searchTerm = document.querySelector(".search-input").value;
+
+          // alert("script reached in second alert");
+          // alert(searchTerm, "third");
+          try {
+            const response = await fetch("/search", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                // other headers if needed
+              },
+              body: JSON.stringify({ query: searchTerm }),
+            })
+              .then((response) => response.json())
+              .then((res) => {
+                let products = res.products;
+                console.log(products, "products after searching");
+                let productListHTML = "";
+
+                if (products.length >= 1) {
+                  products.forEach((data) => {
+                    if (!data.deletionStatus) {
+                      productListHTML += `
+
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4  text-uppercase">
+                  <a href="/products?id=${data._id}" class="text-decoration-none">
+                    <div class="product-box">
+                      <img src="${data.image[0]}" alt="${data.name}" width="160" height="160">
+                      <h2 class="product-title">${data.name}</h2>
+                      <p class="product-description">${data.description}</p>
+                      <p class="product-price">&#8377;${data.price}</p>
+                      <a class="add-to-cart">View details</a>
+                    </div>
+                  </a>
+                </div>
+
+              `;
+                    }
+                  });
+
+                  // alert(products, "alert for displaying the products");
+
+                  console.log(products, "second --products after searching");
+                  const productListContainer = document.getElementById(
+                    "productListContainer"
+                  );
+                  productListContainer.innerHTML = productListHTML;
+                } else {
+                  document.getElementById(
+                    "productListContainer"
+                  ).innerHTML = `<h3 class="text-center w-100">No search results found</h3>`;
+                }
+              });
+
+            // if (!response.ok) {
+            //   throw new Error(`Failed to fetch data. Please try again.`);
+            // }
+
+            // const data = await response.json();
+            // Process and display search results as needed
+            // console.log(data);
+          } catch (error) {
+            console.error("Fetch error:", error);
+          }
+        });
+    </script>
+  </body>
+</html>

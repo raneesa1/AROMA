@@ -1,0 +1,237 @@
+.product-container {
+  display: flex;
+  flex-wrap: wrap; /* Wrap products to the next row when needed */
+  justify-content: center; /* Center products horizontally */
+  align-items: center; /* Center products vertically */
+
+  /* padding-left: 500px; */
+}
+.brandname {
+  height: 200px;
+  background-color: rgb(182, 182, 182);
+  padding-top: 40px;
+  padding-bottom: 0px;
+}
+.product-box {
+  border: 1px solid #ddd;
+  margin: 29px;
+  align-items: center;
+  padding-bottom: 12px;
+  margin: 10px 0;
+  text-align: center;
+  width: 300px;
+  border: none;
+}
+
+.product-title {
+  font-size: 15px;
+  margin: 4px 0;
+}
+
+.product-description {
+  font-size: 12px;
+}
+
+.product-price {
+  font-size: 14px;
+  color: #030202;
+  font-weight: 500;
+  margin: 5px 0;
+}
+
+.add-to-cart {
+  /* background-color: #000000; */
+  color: #fff;
+  font-size: 10px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.d-flex p {
+  padding: 3px; /* Adjust the top padding to bring the text closer */
+  margin: 0; /* Remove any margin to make it closer to the line */
+  color: #000000;
+  /* font-family: arial; */
+}
+
+.flexMain {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  margin-bottom: 0;
+  height: 50px; /* Adjust the height as needed */
+  width: 100%; /* Adjust the width as needed */
+}
+.flex1 {
+  flex: 1;
+}
+.flex2 {
+  flex: 2;
+}
+.flex3 {
+  flex: 3;
+}
+
+button.siteLink {
+  margin-left: -5px;
+  border: none;
+  padding: 24px;
+  display: inline-block;
+  min-width: 115px;
+}
+.whiteLink {
+  background: #fff;
+}
+.whiteLink:active {
+  background: #000;
+  color: #fff;
+}
+.blackLink {
+  color: #fff;
+  background: #232323;
+  transition: all 300ms linear;
+}
+
+.blackLink:active {
+  color: #000;
+  background: #fff;
+}
+#siteBrand {
+  font-family: lucida;
+  letter-spacing: -1px;
+  font-size: 32px;
+  color: #252525;
+  line-height: 1em;
+  margin-bottom: 0;
+}
+#menuDrawer {
+  background: #fff;
+  position: fixed;
+  height: 100vh;
+  overflow: auto;
+  z-index: 12312;
+  top: 0;
+  left: 0;
+  border-right: 1px solid #eaeaea;
+  min-width: 25%;
+  max-width: 320px;
+  width: 100%;
+  transform: translateX(-100%);
+  transition: transform 200ms linear;
+}
+#mainNavigation {
+  transition: transform 200ms linear;
+  background: #fff;
+  height: 130px;
+}
+.drawMenu > #menuDrawer {
+  transform: translateX(0%);
+}
+.drawMenu > #mainNavigation {
+  transform: translateX(25%);
+}
+.fa-times {
+  cursor: pointer;
+}
+a.nav-menu-item:hover {
+  margin-left: 2px;
+  border-left: 10px solid black;
+}
+a.nav-menu-item {
+  a.nav-menu-item {
+    transition: border 200ms linear;
+    text-decoration: none;
+    display: block;
+    /* padding: 18px; */
+
+    /* padding-top: 30px; Adjust this value to bring the text down */
+    border-bottom: 1px solid #eaeaea;
+    font-weight: bold;
+    color: #000000;
+  }
+}
+select.noStyle {
+  border: none;
+  outline: none;
+}
+.box {
+  padding: 23px;
+  height: 500px;
+  color: rgb(0, 0, 0);
+  border: 200px;
+  width: 340px;
+  font-size: 12px;
+  justify-content: center;
+  gap: 12px;
+  /* align-items: center; */
+  position: absolute;
+  left: 35%;
+  right: 50%;
+  top: 20%;
+}
+* {
+  margin: 0;
+  padding: 0%;
+  box-sizing: border-box;
+}
+.icon-box {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: 6px; /* Add spacing between icons if needed */
+}
+.icon-box svg {
+  width: 20px; /* Adjust the width to make the icons smaller */
+  height: 20px; /* Adjust the height accordingly */
+  fill: #000; /* Modify the color if needed */
+}
+
+a {
+  color: inherit; /* Use the text color of the parent element */
+  text-decoration: none; /* Remove the underline */
+}
+
+/* Add a different color when the anchor tag is hovered */
+a:hover {
+  color: #000000; /* Change to the desired color on hover (e.g., Bootstrap's primary blue) */
+  text-decoration: none; /* Remove the underline on hover */
+}
+.sort-main-box {
+  width: 200px;
+  box-shadow: 0 1px 3px rgba(64, 63, 63, 0.25), 0 1px 2px rgba(71, 70, 70, 0.5);
+  border-radius: 4px;
+  background: #fff;
+  padding: 0 2px 0 1px;
+}
+.sort-item-box {
+  width: 200px;
+  box-shadow: 0 1px 3px rgba(226, 226, 226, 0.25),
+    0 1px 2px rgba(226, 226, 226, 0.5);
+  border-radius: 4px;
+  background: #fff;
+  padding: 12px 22px 12px 22px;
+}
+.search-container {
+  margin-top: 5%;
+}
+
+.input-group {
+  position: relative;
+}
+
+.search-input {
+  border: 1px solid #ced4da;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+
+}
+
+.search-button {
+  border: 1px solid #ced4da;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.search-button svg {
+  margin-top: 3px;
+}

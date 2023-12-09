@@ -1,41 +1,48 @@
-const mongoose=require('mongoose')
+const mongoose = require('mongoose')
 require('../config/dbconfig')
 require('dotenv').config()
 
-const userSchema=new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     profileImage: {
         type: String, // Store the path to the uploaded image
     },
 
-    name:{
-        type:String,
+    name: {
+        type: String,
     },
-    email:{
+    email: {
         type: String,
 
     },
-    password:{
-        type:String,
+    password: {
+        type: String,
 
     },
-    phonenumber:{
-        type:Number
+    phonenumber: {
+        type: Number
     },
     Access: {
         type: String,
-        enum: [ 'block', 'unblock' ]
+        enum: ['block', 'unblock']
     },
-    date:{
-        type:Date,
+    date: {
+        type: Date,
     },
-    isAdmin:{
-        type:Boolean,
-        default:false
+    isAdmin: {
+        type: Boolean,
+        default: false
     },
     status: {
-    type: Boolean,
-    default: false, 
-  }
+        type: Boolean,
+        default: false,
+    },
+    usedCoupons: [
+        {
+            Coupon_code: { type: String },
+            discountedAmount: { type: Number },
+            usedDate: { type: Date }
+        }
+    ],
 })
-const user=mongoose.model(process.env.USER_COLLECTION,userSchema)
-module.exports=user
+const user = mongoose.model(process.env.USER_COLLECTION, userSchema)
+module.exports = user

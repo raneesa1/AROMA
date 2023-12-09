@@ -1,8 +1,9 @@
 const category = require('../model/category');
-const product = require('../model/product');
+// const product = require('../model/product');
 const user = require('../model/users');
 const order = require('../model/order')
-const { ObjectId } = require('mongodb')
+const { ObjectId } = require('mongodb');
+const product = require('../model/product');
 
 
 
@@ -75,31 +76,31 @@ const getproductmanagement = async (req, res) => {
 };
 
 const postaddproduct = async (req, res) => {
-  console.log(JSON.stringify(req.files))
-  console.log(req.body)
-  let variants = []
-  for (let i = 0; i < req.body.variantSize.length; i++) {
-    variants.push({
-      quantity: req.body.variantSize[i],
-      stock: req.body.variantStock[i]
-    })
-  }
-  console.log(variants)
+  try {
 
-  const products = {
-    name: req.body.name,
-    description: req.body.description,
-    category: new ObjectId(req.body.category),
-    specification: req.body.specification,
-    price: req.body.price,
-    size: variants,
-    image: req.files.map((file) => '/photos/' + file.filename),
-    date: Date.now()
 
+    console.log(JSON.stringify(req.files))
+    console.log(req.body)
+
+
+
+    const products = {
+      name: req.body.name,
+      description: req.body.description,
+      category: new ObjectId(req.body.category),
+      specification: req.body.specification,
+      price: req.body.price,
+      stock: req.body.stock,
+      image: req.files.map((file) => '/photos/' + file.filename),
+      date: Date.now()
+
+    }
+    console.log(products)
+    await new product(products).save()
+    res.redirect('/admin/product')
+  } catch (error) {
+    console.log(error, "error from post add product")
   }
-  console.log(products)
-  await new product(products).save()
-  res.redirect('/admin/product')
 
 }
 //add
@@ -130,21 +131,40 @@ const getcategory = async (req, res) => {
 
 //add category
 const getaddcategory = (req, res) => {
-  res.render('admin/addcategory')
+  res.render('admin/addcategory', { err: '' })
 
 }
 const postaddcategory = async (req, res) => {
-  console.log(req.files)
-  const categories = {
-    name: req.body.name,
-    description: req.body.description,
-    stock: req.body.stock,
-    // image: req.files.map((file) => '/photos/'+file.filename),
-    date: Date.now()
+  try {
+
+
+    const { name, description } = req.body;
+
+
+    const existingCategory = await category.findOne({ name: { $regex: new RegExp(`^${name}$`, "i") } });
+    if (existingCategory) {
+      // Category with the same name already exists
+      res.render('admin/addcategory', { err: 'Category already exists' })
+
+
+
+
+    } else {
+
+
+      const categories = {
+        name: req.body.name,
+        description: req.body.description,
+        date: Date.now()
+
+      }
+      await new category(categories).save()
+      res.redirect('/admin/category')
+    }
+  } catch (error) {
+    console.log(error, "error from adding category")
 
   }
-  await new category(categories).save()
-  res.redirect('/admin/category')
 
 }
 //delete category (only for building)
@@ -159,11 +179,11 @@ const getdelecategory = async (req, res) => {
 
 const geteditproduct = async (req, res) => {
   let id = req.params.id;
-  console.log(id, ' id')
+  // console.log(id, ' id')
   let products = await product.findOne({ _id: id });
   let categorydata = await category.find()
-  console.log(categorydata, ' data of');
-  console.log(products);
+  // console.log(categorydata, ' data of');
+  // console.log(products);
   if (products == null) {
     res.redirect('/admin/product');
   } else {
@@ -177,17 +197,10 @@ const geteditproduct = async (req, res) => {
 const postupdateproduct = async (req, res) => {
 
   try {
-    console.log(req.body, 'body of update')
+    // console.log(req.body, 'body of update')
 
     let id = req.params.id;
-    let variants = []
-    for (let i = 0; i < req.body.variantSize.length; i++) {
-      variants.push({
-        quantity: req.body.variantSize[i],
-        stock: req.body.existingVariantStock[i]
 
-      })
-    }
 
     // console.log(req.file);
     // Check if files are present in the request
@@ -196,7 +209,7 @@ const postupdateproduct = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         category: new ObjectId(req.body.category),
-        size: variants,
+        stock: req.body.stock,
         price: req.body.price,
         specification: req.body.specification,
         // Assuming images is an array of files
@@ -216,7 +229,7 @@ const postupdateproduct = async (req, res) => {
         description: req.body.description,
         category: new ObjectId(req.body.category),
         price: req.body.price,
-        size: variants,
+        stock: req.body.stock,
         specification: req.body.specification,
 
 
@@ -298,8 +311,8 @@ const postupdatecategory = async (req, res) => {
   }
 };
 const getorder = async (req, res) => {
-  const orderData = await order.find({}).sort({ OrderDate :-1})
-  console.log(orderData,' order data')
+  const orderData = await order.find({}).sort({ OrderDate: -1 })
+  console.log(orderData, ' order data')
   res.render('admin/orderm', { orderData })
 }
 
@@ -333,24 +346,60 @@ const getmoredetails = async (req, res) => {
 
 
 
-const getorderStatus=async(req,res)=>{
+const getorderStatus = async (req, res) => {
   try {
     const orderId = req.params.orderId;
-      console.log('mmmmmmmmm',orderId);
+    console.log('mmmmmmmmm', orderId);
     const newStatus = req.body.status;
     //   console.log('>>>>>>>>>>>>>',newStatus);  
-    const order = await order.findByIdAndUpdate(orderId, { Status: newStatus });
+    const orders = await order.findByIdAndUpdate(orderId, { Status: newStatus });
 
-    console.log('...............56566556656565',order);
+    console.log('...............56566556656565', orders);
     if (order) {
       res.json({ success: true });
     } else {
       res.json({ success: false });
     }
   } catch (error) {
-    console.log("Updating status error");
+    console.log("Updating status error", error);
+
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 }
 
-module.exports = { getorderStatus, getmoredetails, postupdatecategory, getorder, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };
+
+
+
+
+const deleteImagess = async (req, res) => {
+  console.log('function started')
+  try {
+
+    const productId = req.params.productId;
+    // console.log("product iddddddddd", productId);
+    const imageIndex = req.params.index;
+    // console.log("image indexx0x0x0x00xx00x0x0x0x0x00xx00x0x00x0x0x00x0x0x0x0x0x0x0x00x0xx0x0x0x0x0x0x0x0", imageIndex);
+
+
+    const products = await product.findById(productId);
+    // console.log("Product after findingggngngngngngngngn", products);
+    if (!products) {
+      res.status(404).send('Product not found');
+      return;
+    }
+    // console.log("..............", products);
+    products.image.splice(imageIndex, 1);
+
+    await products.save();
+    // console.log('after spliceeee0e0ee0e00e0eeeeeeeeeeeeeeeee')
+
+    res.status(200).send('Image deleted successfully');
+
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    res.status(500).send('Failed to delete image');
+  }
+}
+
+
+module.exports = { deleteImagess, getorderStatus, getmoredetails, postupdatecategory, getorder, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };

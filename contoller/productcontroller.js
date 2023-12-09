@@ -4,11 +4,13 @@ const { ObjectId } = require('mongodb')
 
 
 const getproduct = async (req, res) => {
+    // console.log('this function is working for product one')  
     // console.log("reached")
     const productId = req.query.id
     const products = await product.findOne({ _id: productId });
-    const related = await product.find({ status: false }).sort({ date: -1 }).limit(4);
+    const related = await product.find({ status: false }).sort({ date: -1 }).limit(3);
     const categorydata = await category.find()
+
     // console.log(products, 'produt')
 
     res.render('user/product1', { products, related, categorydata })

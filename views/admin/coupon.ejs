@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/productm.css" />
+
+    <title>coupon Management</title>
+  </head>
+  <body>
+    <div style="background-color: black; height: 4px" class="w-100"></div>
+
+    <div id="menuHolder">
+      <div
+        role="navigation"
+        class="sticky-top border-bottom border-top"
+        id="mainNavigation"
+      >
+        <div class="flexMain">
+          <div class="flex2"></div>
+          <div
+            class="flex3"
+            id="siteBrand"
+            style="font-size: 32px; margin-bottom: 0px; padding-bottom: 0"
+          >
+            AROMA
+          </div>
+
+          <div class="flex2 text-end d-block d-md-none">
+            <button class="whiteLink siteLink">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+
+          <div class="flex2 text-end d-none d-md-block align-content-lg-end">
+            <div class="d-flex justify-content-end align-items-center pr-5">
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      style="color: black"
+                      fill="currentColor"
+                      class="bi bi-search"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                      /></svg></i
+                ></a>
+              </div>
+
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-person-circle"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                      <path
+                        fill-rule="evenodd"
+                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                      /></svg></i
+                ></a>
+              </div>
+              <div class="icon-box">
+                <a href=""
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      style="color: rgb(0, 0, 0)"
+                      fill="currentColor"
+                      class="bi bi-heart"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.920 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                      /></svg></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <div class="menu-section text-decoration-none">
+        <a href="/admin/"><div class="menu-item">DASHBOARD</div></a>
+        <a href="/admin/product"><div class="menu-item">PRODUCTS</div></a>
+        <a href="/admin/category"><div class="menu-item">CATEGORY</div></a>
+        <a href="/admin/order"><div class="menu-item">ORDERS</div></a>
+        <a href="/admin/coupon"><div class="menu-item">COUPON</div></a>
+        <a href=""><div class="menu-item">BANNER</div></a>
+        <a href=""> <div class="menu-item">TRANSACTION</div></a>
+        <a href="/admin/user"> <div class="menu-item">MANAGE USER</div></a>
+        <a href=""> <div class="menu-item">MANAGE ADMIN</div></a>
+        <a
+          href="/logout"
+          onclick="return confirm('are you sure you want to logout?')"
+          ><div class="menu-item">LOGOUT</div></a
+        >
+      </div>
+      <div style="margin: 22px">
+        <div class="table-edit">
+          <h5 class="text-center m-3 p-2" style="font-weight: bold">
+            COUPON MANAGEMENT
+          </h5>
+          <div class="button-container">
+            <a href="/admin/addcoupon" class="text-light">
+              <button
+                style="background-color: rgb(0, 0, 0); color: azure"
+                class="btn addproduct-btn"
+                type="button"
+              >
+                ADD COUPON
+              </button>
+            </a>
+          </div>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>name</th>
+                <th>code</th>
+                <th>Min-amount</th>
+                <th>Max-amount</th>
+                <th>Start date</th>
+                <th>Expirey</th>
+                <th>Status</th>
+                <th>count</th>
+                <th>Discount Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-center">
+              <% coupons.forEach((x)=>{%>
+              <tr>
+                <td><%-x.CouponName%></td>
+                <td><%-x.Coupon_code%></td>
+                <td><%-x.Min_amount%></td>
+                <td><%-x.Max_amount%></td>
+                <td>
+                  <%- x.Start_date ? x.Start_date.toISOString().split('T')[0] :
+                  '' %>
+                </td>
+                <td>
+                  <%- x.Expirey_date ?
+                  x.Expirey_date.toISOString().split('T')[0] : '' %> %>
+                </td>
+                <td><%-x.IsActive%></td>
+                <td><%-x.Max_count%></td>
+                <td><%-x.DiscountAmount%></td>
+                <td>
+                  <a
+                    href="javascript:void(0);"
+                    data-toggle="modal"
+                    data-target="#editCouponModal<%- x._id %>"
+                  >
+                    <i>
+                      <svg
+                        style="color: rgb(47, 186, 112)"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-pen"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"
+                        />
+                      </svg>
+                    </i>
+                  </a>
+                  <!-- Edit Coupon Modal -->
+                  <div
+                    class="modal fade"
+                    id="editCouponModal<%- x._id %>"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="editCouponModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="editCouponModalLabel">
+                            Edit Coupon
+                          </h5>
+                          <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body text-left">
+                          <!-- Your form for editing coupon details goes here -->
+                          <!-- Populate the form with current coupon details -->
+                          <form
+                            action="/admin/editcoupon/<%=x._id%>"
+                            method="post"
+                          >
+                            <!-- Input fields for editing -->
+                            <!-- <div class="mb-3">
+                              <label for="CouponName">Coupon Name:</label>
+                              <input
+                                type="text"
+                                name="CouponName"
+                                value="<%- x.CouponName %>"
+                              />
+                            </div> -->
+                            <div class="mb-3">
+                              <label for="CouponName">Name</label>
+                              <input
+                                name="CouponName"
+                                id="editedname"
+                                class="form-control form-control-lg"
+                                placeholder="Enter category description"
+                                value="<%- x.CouponName %>"
+                              />
+                              <div
+                                class="error text-danger"
+                                id="editednameError"
+                              ></div>
+                            </div>
+                            <div class="mb-3">
+                              <label for="Coupon_code">Coupon code</label>
+                              <input
+                                name="Coupon_code"
+                                class="form-control form-control-lg"
+                                placeholder="Enter category description"
+                                id="editedCode"
+                                value="<%- x.Coupon_code %>"
+                              />
+                              <div
+                                class="error text-danger"
+                                id="editedCodeError"
+                              ></div>
+                              <div
+                                class="error text-danger"
+                                id="CodeError"
+                              ></div>
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="Min_amount">Min amount</label>
+                              <input
+                                name="editedMin_amount"
+                                class="form-control form-control-lg"
+                                value="<%- x.Min_amount %>"
+                                id="Min_purchase_amount"
+                              />
+                              <div
+                                class="error text-danger"
+                                id="editedminError"
+                              ></div>
+                            </div>
+                            <div class="mb-3">
+                              <label for="Max_amount">Max amount</label>
+                              <input
+                                type="number"
+                                name="Max_amount"
+                                class="form-control form-control-lg"
+                                value="<%- x.Max_amount %>"
+                                id="editedMax_purchase_amount"
+                              />
+
+                              <div
+                                class="error text-danger"
+                                id="editedmaxError"
+                              ></div>
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="addedDate">Expirey date</label>
+                              <input
+                                type="date"
+                                name="Expirey_date"
+                                class="form-control form-control-lg"
+                                value="<%- x.Expirey_date ? x.Expirey_date.toISOString().split('T')[0] : '' %>"
+                                id="editedExpiration_date"
+                              />
+                              <div
+                                class="error text-danger"
+                                id="editedexpDateError"
+                              ></div>
+                            </div>
+                            <div class="mb-3">
+                              <label for="addedDate">start date</label>
+                              <input
+                                type="date"
+                                name="Start_date"
+                                class="form-control form-control-lg"
+                                value="<%- x.Start_date ? x.Start_date.toISOString().split('T')[0] : '' %>"
+                                id="editedStart_date"
+                              />
+                              <div
+                                class="error text-danger"
+                                id="editedstrDateError"
+                              ></div>
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="Max_count">Count </label>
+                              <input
+                                type="number"
+                                name="Max_count"
+                                class="form-control form-control-lg"
+                                value="<%-x.Max_count%>"
+                                id="editedMax_usage_count"
+                              />
+                              <div
+                                class="error text-danger"
+                                id="editedmaxCountError"
+                              ></div>
+                            </div>
+                            <!-- Add other input fields as needed -->
+
+                            <!-- Save changes button -->
+
+                            <div class="mb-3">
+                              <label for="addedDate">Discount amount</label>
+                              <input
+                                type="number"
+                                name="DiscountAmount"
+                                class="form-control form-control-lg"
+                                value="<%- x.DiscountAmount %>"
+                                id="editedDiscount_value"
+                              />
+                              <div
+                                class="error text-danger"
+                                id="editeddiscountError"
+                              ></div>
+                            </div>
+                            <button
+                              type="submit"
+                              class="btn"
+                              style="color: white; background: #000"
+                              onclick="saveChanges('<%- x._id %>')"
+                            >
+                              Save Changes
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <a
+                    href="/admin/deletecoupon/<%-x._id%>"
+                    onclick="return confirm('are you sure you want to delete this coupon?')"
+                    ><i
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        style="color: black"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-trash"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"
+                        />
+                        <path
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"
+                        /></svg></i
+                  ></a>
+                </td>
+              </tr>
+              <%})%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap and JavaScript dependencies -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      setTimeout(function () {
+        document.getElementById("errorMessage").style.display = "none";
+      }, 5000);
+
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          function isEmpty(value) {
+            const trimmedValue = value.trim();
+            return trimmedValue === "";
+          }
+          function isDateBeforeToday(date) {
+            const currentDate = new Date();
+            const inputDate = new Date(date);
+            currentDate.setHours(0, 0, 0, 0);
+            inputDate.setHours(0, 0, 0, 0);
+
+            return inputDate < currentDate;
+          }
+          function maxcheck(min, max) {
+            return max > min;
+          }
+
+          function isDateBefore(date1, date2) {
+            const firstDate = new Date(date1);
+            const secondDate = new Date(date2);
+            firstDate.setHours(0, 0, 0, 0);
+            secondDate.setHours(0, 0, 0, 0);
+
+            return firstDate > secondDate;
+          }
+          function isValueLessThanZero(value) {
+            return value < 0;
+          }
+          function isValuegreaterThanhundred(value) {
+            return value < 0;
+          }
+
+          const editedname = document.getElementById("editedname");
+          const editednameValue = name.value;
+          const editednameError = document.getElementById("editednameError");
+
+          const editedcode = document.getElementById("editedCode");
+          const editedcodeValue = code.value;
+          const editedcodeError = document.getElementById("editedCodeError");
+
+          const editedMin_purchase_amount = document.getElementById(
+            "Min_purchase_amountedited"
+          );
+          const editedMin_purchase_amountValue =
+            editedMin_purchase_amount.value;
+          const editedminError = document.getElementById("editedminError");
+
+          const editedMax_purchase_amount = document.getElementById(
+            "editedMax_purchase_amount"
+          );
+          const editedMax_purchase_amountValue =
+            editedMax_purchase_amount.value;
+          const editedmaxError = document.getElementById("editedmaxError");
+
+          const editedExpiration_date = document.getElementById(
+            "editedExpiration_date"
+          );
+          const editedExpiration_dateValue = editedStart_date.value;
+          const editedexpDateError =
+            document.getElementById("editedexpDateError");
+
+          const editedStart_date = document.getElementById("editedStart_date");
+          const editedStart_dateValue = editedExpiration_date.value;
+          const editedstrDateError =
+            document.getElementById("editedstrDateError");
+
+          const editedMax_usage_count = document.getElementById(
+            "editedMax_usage_count"
+          );
+          const editedMax_usage_countValue = editedMax_usage_count.value;
+          const editedmaxCountError = document.getElementById(
+            "editedmaxCountError"
+          );
+
+          const editedDiscount_value = document.getElementById(
+            "editedDiscount_value"
+          );
+          const editedDiscount_valueValue = editedDiscount_value.value;
+          const editeddiscountError = document.getElementById(
+            "editeddiscountError"
+          );
+
+          editednameError.textContent = "";
+          editedcodeError.textContent = "";
+          editedminError.textContent = "";
+          editedmaxError.textContent = "";
+          editedexpDateError.textContent = "";
+          editedStart_date.textContent = "";
+          editedmaxCountError.textContent = "";
+          editeddiscountError.textContent = "";
+
+          if (isEmpty(editednameValue)) {
+            editednameError.textContent = "name can't be empty";
+            event.preventDefault();
+          }
+
+          if (isEmpty(editedcodeValue)) {
+            editedcodeError.textContent = "coupon code field can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(editedMin_purchase_amountValue)) {
+            editedminError.textContent =
+              "min purchase amount field can't be empty";
+            event.preventDefault();
+          }
+          if (isValueLessThanZero(editedMin_purchase_amountValue)) {
+            editedminError.textContent =
+              "min purchase amount field can't be less than 0";
+            event.preventDefault();
+          }
+          if (isEmpty(editedMax_purchase_amountValue)) {
+            editedmaxError.textContent =
+              "max purchase amount field can't be empty";
+            event.preventDefault();
+          }
+          if (
+            maxcheck(
+              editedMin_purchase_amountValue,
+              editedMax_purchase_amountValue
+            )
+          ) {
+            editedmaxError.textContent =
+              "max purchase amount  can't be less than min amount";
+            event.preventDefault();
+          }
+
+          if (isValueLessThanZero(editedMax_purchase_amountValue)) {
+            editedmaxError.textContent =
+              "max purchase amount field can't be less than 0";
+            event.preventDefault();
+          }
+          if (isEmpty(editedStart_dateValue)) {
+            editedstrDateError.textContent =
+              " starting date field can't be empty";
+            event.preventDefault();
+          }
+          if (isDateBeforeToday(editedStart_dateValue)) {
+            editedstrDateError.textContent = "not a valida date";
+            event.preventDefault();
+          }
+
+          if (isEmpty(editedExpiration_dateValue)) {
+            editedexpDateError.textContent =
+              " Expiration date field can't be empty";
+            event.preventDefault();
+          }
+          if (isDateBeforeToday(editedExpiration_dateValue)) {
+            editedexpDateError.textContent = "not a valida date";
+            event.preventDefault();
+          }
+
+          if (isDateBefore(editedStart_dateValue, editedExpiration_dateValue)) {
+            editedexpDateError.textContent =
+              "expire date can't be before start date";
+            event.preventDefault();
+          }
+          if (isEmpty(editedMax_usage_countValue)) {
+            editedmaxCountError.textContent = "max usage field can't be empty";
+            event.preventDefault();
+          }
+
+          if (isValueLessThanZero(editedMax_usage_countValue)) {
+            editedmaxCountError.textContent =
+              "usage count field can't be less than 0";
+            event.preventDefault();
+          }
+          if (isEmpty(editedDiscount_valueValue)) {
+            editeddiscountError.textContent =
+              "discount value field can't be empty";
+            event.preventDefault();
+          }
+          if (isValueLessThanZero(editedDiscount_valueValue)) {
+            editeddiscountError.textContent =
+              "discount value can't be less than 0";
+            event.preventDefault();
+          }
+        });
+    </script>
+  </body>
+</html>

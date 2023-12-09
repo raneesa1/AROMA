@@ -177,7 +177,7 @@
 
                         <input
                           id="displayinput"
-                         onchange="displayImages('displayinput','selectedImages')"
+                          onchange="displayImages('displayinput','selectedImages')"
                           type="file"
                           name="images"
                           class="form-control-file"
@@ -227,46 +227,17 @@
                           required
                         />
                       </div>
-                      <hr />
-                      <div class="">
-                        <div class="" style="color: rgb(0, 0, 0)">
-                          <h4>ADD VARIANT</h4>
-                        </div>
-                        <div class="card-body" id="variantsContainer">
-                          <!-- This is where the variants will be added -->
-                        </div>
+                      <!-- <hr /> -->
 
-                        <div class="mb-3">
-                          <label for="variantSize">Size/ML</label>
-                          <select
-                            name="variantSize[]"
-                            class="form-control form-control-lg"
-                          >
-                            <option value="100" style="font-size: 10px">
-                              100 ML
-                            </option>
-                            <option value="125">125 ML</option>
-                            <option value="200">200 ML</option>
-                          </select>
-                        </div>
-                        <div class="mb-3">
-                          <label for="variantStock">Stock</label>
-                          <input
-                            type="number"
-                            name="variantStock[]"
-                            class="form-control form-control-lg"
-                            placeholder="Enter stock for selected size/ml"
-                            required
-                          />
-                        </div>
-                        <button
-                          type="button"
-                          onclick="addVariant()"
-                          class="mb-5 btn"
-                          style="background-color: black; color: #ffffff"
-                        >
-                          Add Variant
-                        </button>
+                      <div class="mb-5">
+                        <label for="price">Stock</label>
+                        <input
+                          type="number"
+                          name="stock"
+                          class="form-control form-control-lg"
+                          placeholder="Enter the product stock"
+                          required
+                        />
                       </div>
                       <input
                         style="
@@ -312,6 +283,23 @@
       }
     </script>
 
+    <script>
+      function validateStock() {
+        var stockInput = document.getElementById("stockInput");
+        var stockError = document.getElementById("stockError");
+
+        var stockValue = parseInt(stockInput.value, 10);
+
+        if (isNaN(stockValue) || stockValue < 0) {
+          stockError.textContent = "Stock must be a non-negative number.";
+          stockInput.focus();
+          return false;
+        } else {
+          stockError.textContent = ""; // Clear the error message
+          return true; // Allow form submission
+        }
+      }
+    </script>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -328,33 +316,5 @@
       crossorigin="anonymous"
     ></script>
     <!-- Add this script at the end of your HTML body -->
-
-    <script>
-      function addVariant() {
-        const variantsContainer = document.getElementById("variantsContainer");
-        const newVariant = document.createElement("div");
-        newVariant.innerHTML = `
-      <div class="mb-3">
-        <label for="variantSize">Size/ML</label>
-        <select name="variantSize[]" class="form-control form-control-lg">
-          <option value="100">100 ML</option>
-          <option value="200">200 ML</option>
-          <!-- Add more size/ml options as needed -->
-        </select>
-      </div>
-      <div class="mb-3">
-        <label for="variantStock">Stock</label>
-        <input
-          type="number"
-          name="variantStock[]"
-          class="form-control form-control-lg"
-          placeholder="Enter stock for selected size/ml"
-          required
-        />
-      </div>
-    `;
-        variantsContainer.appendChild(newVariant);
-      }
-    </script>
   </body>
 </html>

@@ -10,6 +10,7 @@ const OTP = require('../model/otp')
 const category = require('../model/category')
 const user = require('../model/users')
 const { findOne } = require('../model/cart')
+const coupon = require('../model/coupon')
 require("dotenv").config()
 
 
@@ -20,19 +21,31 @@ require("dotenv").config()
 
 const getaddress = async (req, res) => {
 
+    try {
+        const users = await user.findOne({ email: req.session.email });
+        const userId = users._id
+        const addressofuser = await Address.findOne({ userId: users._id })
+        // console.log(users._id)
+        res.render('user/address', { addressofuser })
+
+    } catch (error) {
+        console.log(error, 'error from getaddress')
+
+    }
 
 
-    const users = await user.findOne({ email: req.session.email });
-    const userId = users._id
-    const addressofuser = await Address.findOne({ userId: users._id })
-    // console.log(users._id)
-    res.render('user/address', { addressofuser })
 }
 
 
 
 const getaddaddress = async (req, res) => {
-    res.render('user/addaddress')
+    try {
+        res.render('user/addaddress')
+
+    } catch (error) {
+        console.log(error, "error from add address function")
+    }
+
 }
 
 
@@ -157,22 +170,28 @@ const postupdateaddress = async (req, res) => {
 
 //delete address
 const getdeleteaddress = async (req, res) => {
-    const users = await user.findOne({ email: req.session.email });
-    const userid = users._id
-    const addressid = req.params.id
+    try {
 
-    // console.log(addressid, "====================")
-    // let id = req.params.id
-    // console.log(addressId, "this i sthe eljnoef erfmjke frje foimerfoiemfoiemrfoiemfioermfoe")
-    // console.log(addressId, "adressss")
-    let Address = await address.updateOne({ userId: userid, "Address._id": addressid }, {
-        $pull: {
-            Address: { _id: addressid },
-        },
-    })
+        const users = await user.findOne({ email: req.session.email });
+        const userid = users._id
+        const addressid = req.params.id
 
-    console.log(Address)
-    res.redirect('/address')
+        // console.log(addressid, "====================")
+        // let id = req.params.id
+        // console.log(addressId, "this i sthe eljnoef erfmjke frje foimerfoiemfoiemrfoiemfioermfoe")
+        // console.log(addressId, "adressss")
+        let Address = await address.updateOne({ userId: userid, "Address._id": addressid }, {
+            $pull: {
+                Address: { _id: addressid },
+            },
+        })
+
+        console.log(Address)
+        res.redirect('/address')
+
+    } catch (error) {
+        console.log(error, "couldnt delete address")
+    }
 
 }
 
@@ -235,6 +254,7 @@ const postcheckoutaddaddress = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 }
+
 
 
 module.exports = { postcheckoutaddaddress, getdeleteaddress, postupdateaddress, postaddaddress, getaddress, geteditaddress, getaddaddress }

@@ -38,9 +38,9 @@ const getorderdetials = async (req, res) => {
 
 
     const orderData = await order.find({ _id: orderid }).populate('Items.productId');
-    console.log(orderData, "orderdata))))000000000((((((((((((((((((")
+    // console.log(orderData, "orderdata))))000000000((((((((((((((((((")
 
-    console.log(orderData.TotalPrice, "tototaaaallll238202408204202")
+    // console.log(orderData.TotalPrice, "tototaaaallll238202408204202")
     res.render('user/orderdetials', {
         orderData
     })
@@ -51,5 +51,48 @@ const getorderdetials = async (req, res) => {
 
 
 
+const postcancelorder = async (req, res) => {
 
-module.exports = { getmyorder, getorderdetials }
+    console.log('startedpost cancel order function')
+
+
+    try {
+        const orderId = req.body.orderId;
+        const orderData = await order.findById(orderId);
+
+
+        if (orderData.Status === 'Shipped') {
+            return res.json({ success: false, message: 'Cannot cancel the order. It has already been shipped.' })
+        }
+
+        if (orderData.Status !== 'shipped') {
+            orderData.Status = 'Cancelled';
+
+            await orderData.save();
+            return res.json({ success: true, message: 'Order has been canceled' });
+
+        }
+
+
+
+        // for (const item of orderData.Items) {
+        //   if (item.productId) {
+        //     const product = await product.findById(item.productId);
+
+        //     if (product) {
+        //       product.stock += item.quantity;
+        //       await product.save();
+        //     }
+        //   }
+        // }
+
+
+
+    } catch (error) {
+        console.error('Error canceling order:', error);
+        return res.status(500).json({ success: false, message: 'An error occurred while canceling the order' });
+    }
+
+}
+
+module.exports = { postcancelorder, getmyorder, getorderdetials }
