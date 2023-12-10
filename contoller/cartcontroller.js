@@ -10,6 +10,8 @@ const { productget } = require("./usercontroller");
 const address = require("../model/address");
 const order = require("../model/order");
 const { ObjectId } = mongoose.Types;
+const razorpay = require('razorpay');
+
 
 
 
@@ -268,53 +270,25 @@ const generateRandomString = (length) => {
 const placeOrder = async (req, res) => {
     try {
 
-
-        // console.log('post method is working')
-
-        // console.log(req.session, "session offfffffffffffffffff place order")
-
-        console.log('///////////////////////////////////////////////////////////////////////////////////////////')
-
-        console.log(req.session.grandTotal, "granddtotal from session+++++++++++++")
-        console.log(req.session.totalPrice, "total price from session____----------")
-
-        console.log('///////////////////////////////////////////////////////////////////////////////////////////')
-
         const userData = await user.findOne({ email: req.session.email });
         const userId = userData._id;
         const addressinfo = await address.findOne({ userId: userData });
-
         const paymentMethod = req.body.selectedPaymentMethod
-
-
-
         const orderNumber = generateRandomString(8);
-
-        // const coupons = await coupon.findOne({ Coupon_code: couponCode });
-
-        // const purchaseAmount = req.session.totalPrice
-
-        // const discountedAmount = Math.min(purchaseAmount, coupons.DiscountAmount);
-        // const totalAfterDiscount = Math.floor(purchaseAmount - discountedAmount);
-        // req.session.grandTotal = Math.floor(totalAfterDiscount)
-        // // console
-
-
-        // console.log(amount, "totaaaaallllll amounttnutnutntuntunttuntunt")
         const selectedAddressId = req.body.selectedAddressId;
         const selectedAddress = addressinfo.Address.find((address) => address._id == selectedAddressId);
+
+
         if (!selectedAddress) {
             return res.status(400).json({ success: false, message: 'Selected address not found' });
         }
 
         const cartDetails = await cart.findOne({ userId: userId })
+        console.log(cartDetails, 'cartdetailss++++++++++++++++')
 
         const productIds = cartDetails.products.map(item => item.productId);
-        // console.log(productIds, "productt idddd")
 
-
-
-        // Fetch product details, including price, for each product ID
+        console.log(productIds, "productId----------------------")
         const itemsPromises = cartDetails.products.map(async (item) => {
             const productDetails = await product.findOne({ _id: item.productId });
             return {
@@ -324,12 +298,11 @@ const placeOrder = async (req, res) => {
                 quantity: item.quantity,
                 grandTotal: undefined,
                 coupon: 0,
-                // discountedAmount: discountedAmount,
-                // grandTotal: totalAfterDiscount
+
             };
         });
 
-        // Wait for all promises to resolve
+
         const item = await Promise.all(itemsPromises);
 
         let amount = 0;
@@ -339,11 +312,6 @@ const placeOrder = async (req, res) => {
         } else {
             amount = req.session.grandTotal;
         }
-
-        // console.log(item, "Items");  /
-
-        // const productid = cartDetails.products.productId
-        // console.log(productid, "this is the product id _________-----------------_______")
 
         const totalPrice = Math.floor(amount)
 
@@ -373,22 +341,15 @@ const placeOrder = async (req, res) => {
             },
             OrderDate: new Date(),
         });
-        // console.log("order saved", newOrder);
+
         const savedOrder = await newOrder.save();
+
         if (savedOrder) {
             const deletecart = await cart.findOneAndDelete({ userId: userId });
-            // console.log(deletecart);
-
-
-
 
             for (const item of cartDetails.products) {
                 const productId = item.productId;
-                // console.log(productId,"00000000")
-
                 const purchasedQuantity = item.quantity;
-                // console.log(purchasedQuantity, "099090999999999")
-
                 await product.findOneAndUpdate(
                     { _id: productId },
                     { $inc: { stock: -purchasedQuantity } }
@@ -396,18 +357,34 @@ const placeOrder = async (req, res) => {
             }
 
         }
-        // console.log('///////////////////////////////////////')
-
-        req.session.grandTotal = undefined
-
-
-
-        // console.log(grandTotal,'after making it undefined')
-
-        console.log('/////////////////////////////////////// reached in making session grandtotal undefined')
-
-
         res.redirect('/ordermessage')
+
+
+
+        // req.session.grandTotal = undefined
+
+        // if (paymentMethod == "cod") {
+        //     res.json({
+        //         codSuccess: true,
+        //         message: "order Success"
+        //     });
+        // } else if (paymentMethod == "online") {
+        //     const order = {
+        //         amount: totalPrice * 100,
+        //         currency: "INR",
+        //         receipt: savedOrder._id,
+        //     };
+        //     await razorpay
+        //         .createRazorpayOrder(order)
+        //         .then((createdOrder) => {
+        //             res.json({ online: true, createdOrder, order });
+        //         })
+        //         .catch((err) => {
+        //             console.log('error from razorpay in backend function', err)
+        //         });
+
+        // }
+
     } catch (error) {
         console.log('error from place order ', error)
 
@@ -415,6 +392,110 @@ const placeOrder = async (req, res) => {
 
 
 }
+
+
+
+const generateRazorpay = async (req, res) => {
+    try {
+
+
+        console.log('function for generating razor pay payment is being called')
+        const userData = await user.findOne({ email: req.session.email });
+        const userId = userData._id;
+
+
+        let amount = 0;
+
+        if (req.session.grandTotal == undefined) {
+            amount = req.session.totalPrice;
+        } else {
+            amount = req.session.grandTotal;
+        }
+
+        const totalPrice = Math.floor(amount)
+
+        // const amount = req.session.subtotal;
+
+        const razorpayInstance = new razorpay({
+            key_id: 'rzp_test_sFW0lvsM9VcWEf',
+            key_secret: 'j6SVHsqESWXwWV1L4moiZRv3',
+        });
+
+        console.log('================================================')
+        const options = {
+            amount: totalPrice * 100, // Amount should be in paise
+            currency: "INR",
+            receipt: userId,
+            payment_capture: 1,
+        };
+
+        console.log('creating an order , console just above creating the order function')
+
+        // Creating a Promise wrapper for razorpay.orders.create
+        const createOrder = () => {
+            return new Promise((resolve, reject) => {
+                razorpayInstance.orders.create(options, (error, order) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(order);
+                    }
+                });
+            });
+        };
+
+        const order = await createOrder(); // Wait for the order creation
+
+        console.log('order saved in razor pay payment methhodd function')
+
+        res.json({ order });
+    } catch (error) {
+        console.log(error.message + " generateRazorpay");
+        return res.status(500).json({ error: "Razorpay order creation error" });
+    }
+};
+
+
+
+
+const verifyRazorpayPayment = async (req, res) => {
+    try {
+
+
+        console.log('this function for verifying razor pay payment is working')
+        console.log('Razorpay Key ID:', process.env.RAZORPAY_KEYID);
+        console.log('Razorpay Key Secret:', process.env.RAZORPAY_KEY_SECRET);
+
+        const { orderId, paymentId } = req.body;
+        const razorpayInstance = new razorpay({
+            key_id: 'rzp_test_sFW0lvsM9VcWEf',
+            key_secret: 'j6SVHsqESWXwWV1L4moiZRv3',
+        });
+
+
+        razorpayInstance.payments.fetch(paymentId)
+            .then((payment) => {
+                if (payment.status === 'captured') {
+                    res.json({ status: true });
+
+                } else {
+                    res.status(400).json({ status: false, message: "Payment verification failed" });
+                }
+            })
+
+            .catch((err) => {
+                console.error("Razorpay payment verification error:", err);
+                res.status(500).json({
+                    status: false,
+                    message: "An error occurred while verifying the payment: " + err,
+                });
+            });
+    } catch (error) {
+        console.log(error.message + " verifyRazorpayPayment");
+        res.status(500).json({ status: false, message: "Error in verifying Razorpay payment" });
+    }
+};
+
 
 
 
@@ -435,4 +516,4 @@ const getordermessage = async (req, res) => {
 
 
 
-module.exports = { placeOrder, getordermessage, getcart, addTocart, removeCart, updateQuantity };
+module.exports = { generateRazorpay, verifyRazorpayPayment, placeOrder, getordermessage, getcart, addTocart, removeCart, updateQuantity };

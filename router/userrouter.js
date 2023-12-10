@@ -22,6 +22,7 @@ const { route } = require('./adminrouter');
 
 
 
+
 router.get('/', userExist, usercontroller.getlanding);
 router.get('/login', userExist, usercontroller.login);
 router.post('/login', userExist, usercontroller.loginpost);
@@ -117,6 +118,10 @@ router.post('/addnewaddress', verifyuser, addresscontroller.postcheckoutaddaddre
 router.get('/orderdetails/:id', verifyuser, ordercontoller.getorderdetials)
 router.get('/ordermessage', verifyuser, cartcontroller.getordermessage)
 router.post('/cancel-order/:orderId', verifyuser, ordercontoller.postcancelorder)
+
+
+router.post('/generateRazorpayPayment', verifyuser, cartcontroller.generateRazorpay)
+router.post("/verifyrazorpaypayment", verifyuser, cartcontroller.verifyRazorpayPayment)
 
 
 //coupon

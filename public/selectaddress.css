@@ -310,3 +310,69 @@ form {
   left: 0px;
   transform: translate(-50%, -50%);
 }
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  #siteBrand {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .address {
+    width: 100%;
+    height: auto;
+  }
+
+  .address .address-card {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .addaddress {
+    align-items: center !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .address .address-card {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .address .address-card span.text-muted {
+    font-size: 14px; /* Adjust the font size for smaller screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .address .address-card span.text-muted {
+    font-size: 12px; /* Further adjust font size for even smaller screens */
+  }
+}
+
+@media (min-width: 772px) and (max-width: 898px) {
+  .address .address-card span.text-muted {
+    font-size: 14px; /* Adjust the font size for screens between 772px and 898px */
+  }
+}
+@media (min-width: 800px) and (max-width: 900px) {
+  .address .address-card span.text-muted {
+    font-size: 14px; /* Adjust the font size for screens between 800px and 900px */
+    line-height: 1.2; /* Adjust the line height for screens between 800px and 900px */
+    overflow: hidden; /* Hide any overflow content */
+    white-space: normal; /* Allow text to wrap onto the next line */
+    word-wrap: break-word; /* Break words to prevent overflow */
+  }
+}

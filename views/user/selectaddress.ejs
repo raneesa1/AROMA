@@ -590,7 +590,19 @@
 </div>
     <section class="py-5"></section>
 
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://checkout.razorpay.com/v1/upi.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+ 
+
+
     <script>
+
+
      
       function showErrorMessage(message) {
         // Set the error message in the modal
@@ -625,28 +637,12 @@
         const selectedPaymentMethod = $("input[name='paymentMethod']:checked").val();
 
        
-        // const TotalPrice=document.getElementById('TotalPrice').innerText
-        // alert(TotalPrice)
-
-        // const productPriceElement = document.getElementById("productPrice");
-        // const productPriceText = productPriceElement.innerText;
-
-// Assuming the price is prefixed with the currency symbol (like ₹ or &#8377;)
-        // const productPrice = parseFloat(productPriceText.replace(/[^\d.]/g, ''));
-
-
-        // alert(productPrice,"product price")
-
-        // alert("this is working now");
-
-        // alert(selectedAddressCheckbox);
 
         // Check if a checkbox is selected
         if (selectedAddressCheckbox) {
           const selectedAddressId = selectedAddressCheckbox.value;
 
-
-
+          if(selectedPaymentMethod === "cod"){
           try {
             const response = await fetch("/topaymentpage", {
               method: "POST",
@@ -655,22 +651,130 @@
               },
               body: JSON.stringify({ selectedAddressId ,selectedPaymentMethod}),
             });
-            window.location.href = "/ordermessage";
+           
+            // alert('cod alert one')
             if (response.ok) {
-              // Handle the success case if needed
-              console.log("Selected address sent successfully!");
+                // alert('alert for success in cod')
+                        console.log("Order successful");
+                        window.location.href = "/ordermessage";
+              // console.log("Selected address sent successfully!");
             } else {
-              // Handle the error case if needed
+              // alert('alert in else case cod')
               console.error("Failed to send selected address");
             }
+             const result = await response.json();
+                    // if (result.codSuccess) {
+                    //   alert('alert for success in cod')
+                    //     console.log("Order successful");
+                    //     window.location.href = "/ordermessage";
+                    // } 
+                    // else {
+                    //   alert('alert for order faild in cod')
+                    //     console.error("Order not successful:", result.message);
+                    // }
+
           } catch (error) {
             console.error("Error during fetch:", error);
           }
-        } else {
-          // Handle the case where no address is selected
-          console.error("No address selected");
+        } else if(selectedPaymentMethod === "online"){
+
+          alert(selectedPaymentMethod,"selected payment method")
+           var paymentId;
+            fetch('/generateRazorpayPayment',{
+                method:"POST",
+                headers:{"content-type":"application/json"},
+                body:JSON.stringify({hi:"HIe"})
+              
+            }).then(response=>response.json()).then(res=>{
+                if(res.order){
+                  alert("reached in res.order")
+                  alert(res.order.amount,"amount of order")
+                    // const orderTotalPaise=orderTotal*100
+                    var options = {
+                        "key": "rzp_test_sFW0lvsM9VcWEf", 
+                        "amount": res.order.amount, //showing error here why
+                        "currency": "INR",
+                        "name": "AROMA",
+                        "description": "Test Transaction",
+                        "image": "https://example.com/your_logo",
+                        "order_id": res.order.id, 
+                        "handler": function (response) {
+                            paymentId=response.razorpay_payment_id
+                            alert(paymentId,"payment idd")
+                            if(paymentId){
+                              alert("inside payment id")
+                              alert('just above the veryfy paymentt in razorlay')
+                                fetch('/verifyrazorpaypayment',{
+                                    method:"post",
+                                    headers:{"Content-Type":"application/json"},
+                                    body:JSON.stringify({orderId:res.order.id,paymentId})
+                                }).then(response=>response.json()).then(res=>{
+                                    if(res.status){
+
+                                        window.location.href = "/ordermessage";
+                                      // alert('alert for res.status just above the fetch function to payment page')
+                                        // fetch('/topaymentpage', {
+                                        //     method: "POST",
+                                        //     headers: {
+                                        //         "Content-Type": "application/json"
+                                        //     },
+                                        //      body: JSON.stringify({ selectedAddressId ,selectedPaymentMethod}),
+                                        // }).then(response => response.json()).then((res) => {
+                                        //     if (res.status) {
+                                        //       alert('order success alerttttttt')
+                                        //         window.location.href = "/ordermessage";
+                                        //         console.log('success vinovnaeirvnreoignorignerngqergrq')
+                                        //     }
+                                        // });
+                                        
+                                        
+                                    }else{
+                                        alert("Payment failed")
+                                    }
+                                })
+                            }
+                           
+                        },
+                          theme: {
+                color: "#4CAF50", // Change the color to your preferred theme color
+              },
+              prefill: {
+                name: 'AROMa',
+                email: '',
+                contact: '',
+              },
+              notes: {
+                address: '',
+              },
+              "checkout": {
+                "method": {
+                  "netbanking": true,
+                  "card": true,
+                  "upi": true,
+                  "wallet": true,
+                },
+              }
+                    }
+                    var rzp1 = new Razorpay(options);
+                    rzp1.on('payment.failed', function (response) {
+                        alert("fail")
+                        alert(response.error.code);
+                        alert(response.error.description);
+                        alert(response.error.source);
+                        alert(response.error.step);
+                        alert(response.error.reason);
+                        alert(response.error.metadata.order_id);
+                        alert(response.error.metadata.payment_id);
+                    });
+                    rzp1.open();
+                }else{
+                    alert(JSON.stringify(res))
+                }
+            })
         }
       }
+    }
+//===============================================
          function applyCoupon() {
         const couponCode = document.getElementById("couponCode").value;
 
@@ -708,10 +812,7 @@
   });
 </script>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-      <div class="modal fade" id="errorModal" tabindex="-1">
+     <div class="modal fade" id="errorModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
