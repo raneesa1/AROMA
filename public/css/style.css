@@ -99,7 +99,7 @@ button.siteLink {
   margin-bottom: 0;
 }
 #menuDrawer {
-  background: #fff;
+  background: #ffffff;
   position: fixed;
   height: 100vh;
   overflow: auto;
@@ -192,4 +192,9 @@ a {
 a:hover {
   color: #000000; /* Change to the desired color on hover (e.g., Bootstrap's primary blue) */
   text-decoration: none; /* Remove the underline on hover */
+}
+
+.teg{
+  color: #1a1919;
+
 }

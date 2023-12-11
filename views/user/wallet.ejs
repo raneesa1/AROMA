@@ -97,6 +97,67 @@
               </div>
             </div>
           </div>
+
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="addmoney"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLongTitle"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">
+                    Add Money to Wallet
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="addMoneyForm">
+                    <div class="form-group">
+                      <label for="amount">Amount:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="amount"
+                        name="amount"
+                        placeholder="Enter amount"
+                        required
+                      />
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="addMoney()"
+                    data-dismiss="modal"
+                  >
+                    Add Money
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="col-lg-8">
             <div class="card mb-4">
               <div class="card-body">
@@ -125,7 +186,9 @@
                                   "
                                   class="ml-3"
                                 >
-                                  ₹2000</span
+                                  ₹<%= walletinfo && walletinfo.Account_balance
+                                  ? walletinfo.Account_balance.toFixed(2) :
+                                  '0.00' %></span
                                 >
 
                                 <p
@@ -141,15 +204,16 @@
                             <div
                               style="margin-left: 120px; margin-top: 23px"
                             ></div>
-                            <div style="margin-top: 43px">
+                            <div style="margin-top: 33px">
                               <button
-                                class="addbutton"
+                                class="addbutton p-2"
                                 data-toggle="modal"
                                 data-target="#addmoney"
                                 class="btn btn-dark order-details-btn"
                                 style="
                                   background-color: rgb(246, 131, 89);
                                   border: none;
+                                  border-radius: 14px;
                                 "
                               >
                                 <div
@@ -191,17 +255,22 @@
                       </p>
 
                       <hr />
+                      <%if(walletinfo){ %> <%
+                      walletinfo.Transactions.forEach((value)=>{%>
                       <div
                         class="row mb-4 d-flex justify-content-between align-items-center"
                       >
                         <!-- Left Column -->
                         <div class="col-md-6 col-lg-6 col-xl-6">
-                          <h6 class="mb-2 text-uppercase text-muted">
-                            ARO-808fw94
+                         
+                          <h6 class="mb-2 text-uppercase">
+                            <%=value.Transaction_type%>
                           </h6>
-                          <h6 class="mb-2 text-uppercase">Withdrawel</h6>
                           <h6 class="text-muted" style="font-size: 14px">
                             Status : <span class="text-success">Success</span>
+                          </h6>
+                          <h6 class="text-muted" style="font-size: 14px">
+                            <%-value.Description%>
                           </h6>
                         </div>
 
@@ -210,40 +279,19 @@
                           class="col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end"
                         >
                           <div>
-                            <h6 class="mb-2">30th Dec, 2023</h6>
+                            <h6 class="mb-2">
+                              <%= value.Date.toLocaleDateString('en-US', { day:
+                              'numeric' , month: 'short' , year: 'numeric' }) %>
+                            </h6>
                             <p class="mb-2 text-success text-end">
-                              &#8377; 500
+                              &#8377; <%=value.Amount%>
                             </p>
                           </div>
                         </div>
                       </div>
 
                       <hr />
-                      <div
-                        class="row mb-4 d-flex justify-content-between align-items-center"
-                      >
-                        <!-- Left Column -->
-                        <div class="col-md-6 col-lg-6 col-xl-6">
-                          <h6 class="mb-2 text-uppercase text-muted">
-                            ARO-808fw94
-                          </h6>
-                          <h6 class="mb-2 text-uppercase">deposit</h6>
-                          <h6 class="text-muted" style="font-size: 14px">
-                            Status : <span class="text-danger">Failed</span>
-                          </h6>
-                        </div>
-
-                        <!-- Right Column -->
-                        <div
-                          class="col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end align-items-end"
-                        >
-                          <div>
-                            <h6 class="mb-2">30th Dec, 2023</h6>
-                            <p class="mb-2 text-danger">&#8377; 500</p>
-                          </div>
-                        </div>
-                      </div>
-                      <hr />
+                      <%})%> <% }%>
                     </div>
                   </section>
                 </div>
@@ -269,64 +317,73 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="addmoney"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLongTitle"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">
-              Add Money to Wallet
-            </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="addMoneyForm">
-              <div class="form-group">
-                <label for="amount">Amount:</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="amount"
-                  name="amount"
-                  placeholder="Enter amount"
-                  required
-                />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onclick="addMoney()"
-              data-dismiss="modal"
-            >
-              Add Money
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <script src="https://checkout.razorpay.com/v1/upi.js"></script>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+      function addMoney() {
+        const amount = document.getElementById("amount").value;
+
+        // alert("Adding money:", amount);
+
+        fetch("/razorpay/wallet", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ amount: parseFloat(amount) }),
+        })
+          .then((response) => response.json())
+          .then((order) => {
+            alert(amount);
+            const options = {
+              key: "rzp_test_sFW0lvsM9VcWEf",
+              amount: amount * 100,
+              currency: "INR",
+              order_id: order.id,
+              name: "AROMA",
+              description: "Add money to wallet",
+              handler: function (response) {
+                console.log("Payment successful:", response);
+
+                // alert("in handler function");
+                // alert("calling the add money to wallet fetch");
+
+                fetch("/addMoneyToWallet", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ amount: parseFloat(amount) }),
+                })
+                  .then((response) => {
+                    console.log("Raw response:", response);
+                    return response.json();
+                  })
+                  .then((data) => {
+                    console.log("Wallet updated successfully:", data);
+                    window.location.reload();
+                    // alert("success");
+                  })
+                  .catch((error) => {
+                    console.error("Error updating wallet:", error);
+                    // alert("alert from catch");
+                  })
+                  .finally(() => {
+                    window.location.reload();
+                  });
+              },
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+          })
+          .catch((error) => {
+            console.error("Error creating Razorpay order:", error);
+            // alert(error, "error from adding money to wallet");
+          });
+      }
+    </script>
   </body>
 </html>

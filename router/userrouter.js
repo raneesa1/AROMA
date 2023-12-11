@@ -19,6 +19,7 @@ const walletcontroller = require('../contoller/walletcontroller')
 
 const { userExist, verifyuser } = require('../middleware/userauth')
 const { route } = require('./adminrouter');
+const order = require('../model/order');
 
 
 
@@ -130,8 +131,22 @@ router.post('/apply-coupon', verifyuser, couponcontroller.useCoupon)
 
 //wallet
 router.get('/wallet', verifyuser, walletcontroller.getwalletpage)
+router.post('/razorpay/wallet', verifyuser, walletcontroller.wallet_razorpay)
+router.post('/addMoneyToWallet', verifyuser, walletcontroller.addMoneyToWallet)
 
 
+
+
+router.get('/downloadinvoice/:invoicePath', ordercontoller.downloadInvoice);
+
+
+
+
+
+//invoice-------------------------------------------------------
+router.post('/downloadinvoice', verifyuser, ordercontoller.generateInvoices)
+router.get('/downloadinvoice/:orderId', verifyuser, ordercontoller.downloadInvoice)
+router.get('/viewinvoice/:orderId', verifyuser, ordercontoller.renderInvoicePage);
 
 
 module.exports = router

@@ -269,6 +269,14 @@
                           >
                             Return product
                           </button>
+                          <%}%> <% if (order.Status==="Delivered" ){%>
+                          <button
+                            type="button"
+                            class="btn btn-dark m-2"
+                            onclick="generateAndDownloadInvoice('<%-orderId%>')"
+                          >
+                            Download Invoice
+                          </button>
                           <%}%>
                         </div>
                       </div>
@@ -330,8 +338,25 @@
           });
         });
       });
+      async function generateAndDownloadInvoice(orderId) {
+        try {
+          const response = await fetch("/downloadinvoice", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ orderId }),
+          });
+          if (response.ok) {
+            console.log("inside response");
+            // Redirect to a new page to display the invoice
+            window.location.href = `/viewinvoice/${orderId}`;
+          }
+        } catch (error) {
+          console.error("Error in downloading the invoice:", error);
+        }
+      }
     </script>
-
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

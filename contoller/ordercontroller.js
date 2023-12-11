@@ -4,11 +4,15 @@ const product = require("../model/product"); // Import the product model
 const user = require("../model/users");
 const cart = require("../model/cart");
 
+
+
+const pdf = require('html-pdf');
 const order = require('../model/order')
 const { json } = require("express");
 const mongoose = require('mongoose');
 const { productget } = require("./usercontroller");
 const { ObjectId } = mongoose.Types;
+const { generateInvoice } = require('../servise/invoice')
 
 
 
@@ -42,7 +46,8 @@ const getorderdetials = async (req, res) => {
 
     // console.log(orderData.TotalPrice, "tototaaaallll238202408204202")
     res.render('user/orderdetials', {
-        orderData
+        orderData: orderData,
+        orderId: orderid
     })
 
     // console.log()
@@ -95,4 +100,69 @@ const postcancelorder = async (req, res) => {
 
 }
 
-module.exports = { postcancelorder, getmyorder, getorderdetials }
+
+
+//generate invoice
+const generateInvoices = async (req, res) => {
+    try {
+        const { orderId } = req.body;
+
+        const orderDetails = await order.find({ _id: orderId }).populate("Items.productId");
+
+
+        const ordersId = orderDetails[0]._id;
+
+        if (orderDetails) {
+            const invoicePath = await generateInvoice(orderDetails);
+            res.json({ success: true, message: 'Invoice generated successfully', invoicePath });
+        } else {
+            res.status(500).json({ success: false, message: 'Failed to generate the invoice' });
+        }
+
+
+    } catch (error) {
+        console.error('error in invoice downloading', error)
+        res.status(500).json({ success: false, message: 'Error in generating the invoice' });
+    }
+}
+
+
+
+//download invoice
+const downloadInvoice = async (req, res) => {
+    try {
+        const id = req.params.orderId
+
+        const filePath = path.join(__dirname, '../pdf', `${id}.pdf`);
+
+        res.download(filePath, `invoice.pdf`)
+    } catch (error) {
+        console.error('Error in downloading the invoice:', error);
+        res.status(500).json({ success: false, message: 'Error in downloading the invoice' });
+    }
+}
+
+
+const renderInvoicePage = async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+
+        // Retrieve order details and pass them to the invoice template
+        const orderDetails = await order.findById(orderId).populate("Items.productId");
+
+        if (orderDetails) {
+            // Pass the order details to the invoice template
+            res.render('invoicePage', { orderDetails });
+        } else {
+            res.status(500).json({ success: false, message: 'Failed to retrieve order details for the invoice page' });
+        }
+    } catch (error) {
+        console.error('Error rendering the invoice page:', error);
+        res.status(500).json({ success: false, message: 'Error rendering the invoice page' });
+    }
+};
+
+
+
+
+module.exports = { renderInvoicePage, generateInvoices, downloadInvoice, downloadInvoice, postcancelorder, getmyorder, getorderdetials }

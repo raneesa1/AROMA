@@ -11,6 +11,7 @@ const address = require("../model/address");
 const order = require("../model/order");
 const { ObjectId } = mongoose.Types;
 const razorpay = require('razorpay');
+const wallet = require("../model/wallet");
 
 
 
@@ -270,6 +271,8 @@ const generateRandomString = (length) => {
 const placeOrder = async (req, res) => {
     try {
 
+
+
         const userData = await user.findOne({ email: req.session.email });
         const userId = userData._id;
         const addressinfo = await address.findOne({ userId: userData });
@@ -315,6 +318,29 @@ const placeOrder = async (req, res) => {
 
         const totalPrice = Math.floor(amount)
 
+        if (paymentMethod === "wallet") {
+            const userWallet = await wallet.findOne({ User_id: userId });
+
+            if (!userWallet || userWallet.Account_balance < totalPrice) {
+                return res.status(400).json({ success: false, message: 'Not enough balance' });
+            }
+
+            await wallet.updateOne(
+                { User_id: userId },
+                {
+                    $inc: { Account_balance: -totalPrice },
+                    $push: {
+                        Transactions: {
+                            Amount: totalPrice,
+                            Date: new Date(),
+                            Description: 'placed an order',
+                            Transaction_type: 'debited'
+                        }
+                    }
+                }
+            );
+
+        }
 
         const newOrder = new order({
             Status: 'Pending',
@@ -357,11 +383,15 @@ const placeOrder = async (req, res) => {
             }
 
         }
+
+
         res.redirect('/ordermessage')
 
 
 
-        // req.session.grandTotal = undefined
+
+
+        req.session.grandTotal = undefined
 
         // if (paymentMethod == "cod") {
         //     res.json({
@@ -446,6 +476,10 @@ const generateRazorpay = async (req, res) => {
 
         const order = await createOrder(); // Wait for the order creation
 
+
+        req.session.grandTotal = undefined
+
+
         console.log('order saved in razor pay payment methhodd function')
 
         res.json({ order });
@@ -498,6 +532,21 @@ const verifyRazorpayPayment = async (req, res) => {
 
 
 
+// const walletPayment = async(req,res)=>{
+
+//     const userdata =  await user.findOne({email: req.session.email})
+//     console.log(userdata,"userdata from wallet payment function")
+
+//     const walletOfUser = await wallet.findOne({ User_id : userdata._id})
+
+
+//     console.log(walletOfUser,"information from wallet of user")
+
+
+
+
+
+// }
 
 
 

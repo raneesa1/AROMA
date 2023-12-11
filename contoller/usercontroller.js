@@ -6,7 +6,7 @@ const { default: mongoose } = require('mongoose')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const OTP = require('../model/otp')
-
+const wallet = require('../model/wallet')
 const category = require('../model/category')
 const user = require('../model/users')
 const cart = require('../model/cart')
@@ -137,7 +137,7 @@ const signuppost = async (req, res) => {
 
             }
 
-            
+
             req.session.data = data
             // console.log(data);
 
@@ -436,6 +436,8 @@ const getselectaddress = async (req, res) => {
     // console.log(req.params.id, "session")
     // console.log(serId, "user id")
 
+    const walletBalance = await wallet.findOne({ User_id: users._id })
+    const formattedWalletBalance = walletBalance ? walletBalance.Account_balance : 0;
 
     const userId = User._id;
 
@@ -453,6 +455,7 @@ const getselectaddress = async (req, res) => {
             gstAmount: 0,
             totalQuantity: 0,
             User,
+            walletBalance: formattedWalletBalance,
 
         });
     }
@@ -491,6 +494,7 @@ const getselectaddress = async (req, res) => {
         totalQuantity: totalQuantity,
         total: total,
         User,
+        walletBalance: formattedWalletBalance,
 
     })
 }

@@ -431,17 +431,18 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4 mb-3" style="margin-left: 100px">
+          
+           <div class="col-lg-4 mb-3" style="margin-left: 100px">
             <!-- Default radio -->
             <div class="form-check h-100 border rounded-3">
               <div class="p-3">
-
-                  My Wallet <br />
+                 <input class="form-check-input" type="radio" name="paymentMethod" id="wallet" value="wallet" />
+                <label class="form-check-label" for="wallet">
+                  wallet (balance ₹<%=walletBalance%>) <br />
                 </label>
               </div>
             </div>
           </div>
-
           <!--  -->
 
       </div>
@@ -591,9 +592,13 @@
     <section class="py-5"></section>
 
 
+    <!-- <img src="/public/photos/logo_aroma.jpeg" alt=""> -->
+
+
+    <script src="https://checkout.razorpay.com/v1/upi.js"></script>
+
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script src="https://checkout.razorpay.com/v1/upi.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -642,7 +647,7 @@
         if (selectedAddressCheckbox) {
           const selectedAddressId = selectedAddressCheckbox.value;
 
-          if(selectedPaymentMethod === "cod"){
+          if(selectedPaymentMethod === "cod" ||selectedPaymentMethod === "wallet"){
           try {
             const response = await fetch("/topaymentpage", {
               method: "POST",
@@ -672,13 +677,14 @@
                     //   alert('alert for order faild in cod')
                     //     console.error("Order not successful:", result.message);
                     // }
+                    
 
           } catch (error) {
             console.error("Error during fetch:", error);
           }
         } else if(selectedPaymentMethod === "online"){
 
-          alert(selectedPaymentMethod,"selected payment method")
+          // alert(selectedPaymentMethod,"selected payment method")
            var paymentId;
             fetch('/generateRazorpayPayment',{
                 method:"POST",
@@ -687,8 +693,8 @@
               
             }).then(response=>response.json()).then(res=>{
                 if(res.order){
-                  alert("reached in res.order")
-                  alert(res.order.amount,"amount of order")
+                  // alert("reached in res.order")
+                  // alert(res.order.amount,"amount of order")
                     // const orderTotalPaise=orderTotal*100
                     var options = {
                         "key": "rzp_test_sFW0lvsM9VcWEf", 
@@ -696,14 +702,13 @@
                         "currency": "INR",
                         "name": "AROMA",
                         "description": "Test Transaction",
-                        "image": "https://example.com/your_logo",
                         "order_id": res.order.id, 
                         "handler": function (response) {
                             paymentId=response.razorpay_payment_id
-                            alert(paymentId,"payment idd")
+                            // alert(paymentId,"payment idd")
                             if(paymentId){
-                              alert("inside payment id")
-                              alert('just above the veryfy paymentt in razorlay')
+                              // alert("inside payment id")
+                              // alert('just above the veryfy paymentt in razorlay')
                                 fetch('/verifyrazorpaypayment',{
                                     method:"post",
                                     headers:{"Content-Type":"application/json"},
@@ -712,20 +717,20 @@
                                     if(res.status){
 
                                         window.location.href = "/ordermessage";
-                                      // alert('alert for res.status just above the fetch function to payment page')
-                                        // fetch('/topaymentpage', {
-                                        //     method: "POST",
-                                        //     headers: {
-                                        //         "Content-Type": "application/json"
-                                        //     },
-                                        //      body: JSON.stringify({ selectedAddressId ,selectedPaymentMethod}),
-                                        // }).then(response => response.json()).then((res) => {
-                                        //     if (res.status) {
-                                        //       alert('order success alerttttttt')
-                                        //         window.location.href = "/ordermessage";
-                                        //         console.log('success vinovnaeirvnreoignorignerngqergrq')
-                                        //     }
-                                        // });
+                                      alert('alert for res.status just above the fetch function to payment page')
+                                        fetch('/topaymentpage', {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json"
+                                            },
+                                             body: JSON.stringify({ selectedAddressId ,selectedPaymentMethod}),
+                                        }).then(response => response.json()).then((res) => {
+                                            if (res.status) {
+                                              alert('order success alerttttttt')
+                                                window.location.href = "/ordermessage";
+                                                console.log('success vinovnaeirvnreoignorignerngqergrq')
+                                            }
+                                        });
                                         
                                         
                                     }else{
@@ -736,10 +741,10 @@
                            
                         },
                           theme: {
-                color: "#4CAF50", // Change the color to your preferred theme color
+                color: "#000", // Change the color to your preferred theme color
               },
               prefill: {
-                name: 'AROMa',
+                name: 'AROMA',
                 email: '',
                 contact: '',
               },
@@ -772,8 +777,9 @@
                 }
             })
         }
-      }
+      
     }
+  }
 //===============================================
          function applyCoupon() {
         const couponCode = document.getElementById("couponCode").value;
@@ -804,6 +810,7 @@
             showErrorMessage("An error occurred while applying the coupon");
           });
       }
+
     </script>
     <script>
 
