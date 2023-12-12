@@ -128,6 +128,7 @@ const addTocart = async function (req, res) {
             }
             await cart(cartData).save();
             req.session.userCart = cartData._id;
+            res.json({ success: true, message: 'Product added to cart successfully' });
 
             // console.log(req.session.userCart, "session of usercarrrrttttttttttrtrtrrtrtr")
         } else {
@@ -138,12 +139,14 @@ const addTocart = async function (req, res) {
             }]);
             await cart(cartData).save();
             req.session.userCart = cartData._id;
+            res.json({ success: true, message: 'Product added to cart successfully' });
 
             // console.log(cartData, "cartdatttaaaaa")
             // console.log(req.session.userCart, "session of usercart")
 
 
         }
+
 
 
     } catch (error) {

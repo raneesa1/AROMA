@@ -21,7 +21,7 @@
     <title>product</title>
   </head>
   <body>
-   <%- include('./partial/header') %>
+    <%- include('./partial/header') %>
     <div class="container-fluid p-0 m-0">
       <img src="/photos/banner-13.webp" alt="" height="400px" width="100%" />
     </div>
@@ -70,7 +70,7 @@
         </div>
       </div>
     </div>
-    <div class="d-flex ">
+    <div class="d-flex">
       <div>
         <div class="ml-2 sort-main-box">
           <div class="dropdown">
@@ -185,7 +185,7 @@
       // alert("script started working");
       document
         .querySelector(".search-form")
-        .addEventListener("submit", async (event) => {
+        .addEventListener("input", async (event) => {
           event.preventDefault();
 
           const searchTerm = document.querySelector(".search-input").value;

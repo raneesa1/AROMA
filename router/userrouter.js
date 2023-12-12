@@ -14,6 +14,7 @@ const addresscontroller = require('../contoller/addresscontroller')
 const ordercontoller = require('../contoller/ordercontroller')
 const couponcontroller = require('../contoller/couponcontroller')
 const walletcontroller = require('../contoller/walletcontroller')
+const wishlistcontroller = require('../contoller/wishlistcontroller')
 
 
 
@@ -41,7 +42,9 @@ router.post('/search', verifyuser, usercontroller.search)
 
 
 router.get('/logout', verifyuser, usercontroller.getlogout);
-router.get('/wishlist', verifyuser, usercontroller.getwishlist);
+
+
+
 router.get('/checkout', verifyuser, usercontroller.getcheckout);
 
 
@@ -120,7 +123,7 @@ router.get('/orderdetails/:id', verifyuser, ordercontoller.getorderdetials)
 router.get('/ordermessage', verifyuser, cartcontroller.getordermessage)
 router.post('/cancel-order/:orderId', verifyuser, ordercontoller.postcancelorder)
 
-
+//razorpay
 router.post('/generateRazorpayPayment', verifyuser, cartcontroller.generateRazorpay)
 router.post("/verifyrazorpaypayment", verifyuser, cartcontroller.verifyRazorpayPayment)
 
@@ -147,6 +150,12 @@ router.get('/downloadinvoice/:invoicePath', ordercontoller.downloadInvoice);
 router.post('/downloadinvoice', verifyuser, ordercontoller.generateInvoices)
 router.get('/downloadinvoice/:orderId', verifyuser, ordercontoller.downloadInvoice)
 router.get('/viewinvoice/:orderId', verifyuser, ordercontoller.renderInvoicePage);
+
+
+//wishlist
+router.get('/wishlist', verifyuser, wishlistcontroller.getwishlist);
+router.post('/addToWishlist', verifyuser, wishlistcontroller.addToWishlist)
+router.delete('/remove-from-wishlist/:productId',verifyuser,wishlistcontroller.removeFromWishlist)
 
 
 module.exports = router

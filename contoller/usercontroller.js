@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const OTP = require('../model/otp')
 const wallet = require('../model/wallet')
+const wishlist = require('../model/wishlist')
 const category = require('../model/category')
 const user = require('../model/users')
 const cart = require('../model/cart')
@@ -267,9 +268,10 @@ const getcheckout = async (req, res) => {
     })
 
 }
-const getwishlist = (req, res) => {
-    res.render('user/wishlist')
-}
+
+
+
+
 const getforgotpassword = (req, res) => {
     res.render('user/forgotpassword', { err: null })
 }
@@ -525,5 +527,5 @@ const search = async (req, res) => {
 
 
 
-module.exports = { search, getproductlist, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getwishlist, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
+module.exports = { search, getproductlist, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
 

@@ -8,6 +8,13 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -21,7 +28,77 @@
   </head>
   <body>
     <%- include('./partial/header') %>
-    <h1 class="text-center">WISHLIST</h1>
+    <h2 class="text-uppercase text-center mt-5">My Wishlist</h2>
+
+    <div>
+      <div class="container mt-5">
+        <div class="row" id="productListContainer">
+          <% if(wishListData && wishListData.length > 0) { %> <%
+          wishListData.forEach((wishlistItem) => { %> <%
+          wishlistItem.Product.forEach((product) => { %>
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <a
+              href="/products?id=<%= product.Product_id._id %>"
+              class="text-decoration-none"
+            >
+              <div class="product-box">
+                <img
+                  src="<%= product.Product_id.image[0] %>"
+                  alt="<%= product.Product_id.name %>"
+                  width="160"
+                  height="160"
+                />
+                <h2 class="product-title text-uppercase">
+                  <%= product.Product_id.name %>
+                </h2>
+                <p class="product-description text-uppercase">
+                  <%= product.Product_id.description %>
+                </p>
+                <p class="product-price">
+                  &#8377;<%= product.Product_id.price %>
+                </p>
+                <!-- <a class="add-to-cart">View details</a> -->
+                <% if (product.Product_id.stock <= 0) { %>
+                <p class="out-of-stock-message text-danger">Out of Stock</p>
+
+                <% } %>
+
+                <div class="button-container mt-3">
+                  <% if (product.Product_id.stock <= 0) { %>
+                  <button
+                    class="add-to-cart-btn btn"
+                    id="addToCartButton"
+                    disabled
+                  >
+                    Add to Cart
+                  </button>
+                  <% } else { %>
+                  <button
+                    class="add-to-cart-btn btn"
+                    id="addToCartButton"
+                    onclick="addtocart('<%=product.Product_id._id%>')"
+                  >
+                    Add to Cart
+                  </button>
+                  <% } %>
+
+                  <button
+                    class="delete-btn btn"
+                    onclick="remove('<%=product.Product_id._id%>')"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <% }) %> <% }) %> <% }else{ %>
+          <h2>N products in wishlist</h2>
+          <% }%>
+        </div>
+      </div>
+    </div>
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -38,5 +115,72 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script>
+      function addtocart(productId) {
+        event.preventDefault();
+        var requestData = {
+          key: productId,
+        };
+
+        fetch(`/add-to-cart?productId=${requestData.key}`)
+          .then((response) => response.json())
+          .then((data) => {
+            swal({
+              title: "",
+              text: "Product added to cart!",
+              icon: "success",
+              timer: 2000, // Set the duration in milliseconds (e.g., 2000ms = 2 seconds)
+              showConfirmButton: false, // Hide the "OK" button
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+            // Handle the error (e.g., show an error message)
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Failed to add the product to the cart.",
+            });
+          });
+      }
+
+      function remove(productId) {
+        if (
+          confirm("Are you sure you want to remove this item from whishlist?")
+        ) {
+          fetch(`/remove-from-wishlist/${productId}`, {
+            method: "DELETE",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.message) {
+                Toastify({
+                  text: data.message,
+                  className: "info",
+                  close: true,
+                  // position: "top-right",
+                  style: {
+                    background: "#000",
+                    color: "#fff",
+                  },
+                }).showToast();
+              } else {
+                // Handle error, e.g., show an error message
+                console.error(
+                  "Error removing product from wishlist:",
+                  data.error
+                );
+              }
+            })
+            .catch((error) => {
+              console.error("Error removing product from wishlist:", error);
+            });
+        }
+      }
+    </script>
   </body>
 </html>

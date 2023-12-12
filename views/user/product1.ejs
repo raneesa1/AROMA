@@ -8,6 +8,11 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Bootstrap CSS -->
     <link
@@ -95,7 +100,11 @@
           <p class="product-price" id="productPrice">
             &#8377;<%= products.price %>
           </p>
-          <button class="fav-btn btn" style="margin-left: 279px">
+          <button
+            class="fav-btn btn"
+            style="margin-left: 279px"
+            onclick="wishlist('<%=products.id%>')"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -113,7 +122,7 @@
 
         <hr />
         <% if (products.stock <= 0) { %>
-        <p class="out-of-stock-message text-danger" >Out of Stock</p>
+        <p class="out-of-stock-message text-danger">Out of Stock</p>
         <button class="add-to-cart-btn" id="addToCartButton" disabled>
           <span class="add-to-cart-btn">ADD TO CART</span>
         </button>
@@ -225,6 +234,10 @@
     ></script>
 
     <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
       crossorigin="anonymous"
@@ -288,7 +301,6 @@
           // Create an object to send in the request
           var requestData = {
             key: productId,
-            
           };
           fetch(`/add-to-cart?productId=${requestData.key}`)
             .then((response) => response.json())
@@ -306,6 +318,47 @@
               });
             });
         });
+
+      //=====================================================
+      function wishlist(productid) {
+        const url = "/addToWishlist";
+
+        const data = {
+          id: productid,
+        };
+
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        console.log("just before calling the fetch function");
+
+        fetch(url, {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.message) {
+              Toastify({
+                text: data.message,
+                className: "info",
+                close: true,
+                // position: "top-right",
+                style: {
+                  background: "#000",
+                  color:'#fff'
+                },
+              }).showToast();
+            } else {
+              console.error("Error adding item to the wishlist.");
+            }
+          })
+          .catch((error) => {
+            console.error("Network error:", error);
+          });
+      }
     </script>
   </body>
 </html>

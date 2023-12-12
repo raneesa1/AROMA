@@ -205,6 +205,10 @@ footer {
   font-size: 11px;
   line-height: 20px;
 }
+a {
+  color: #000;
+  text-decoration: none;
+}
 
 /* Add a different color when the anchor tag is hovered */
 a:hover {
@@ -260,4 +264,15 @@ a:hover {
   width: 20px; /* Adjust the width to make the icons smaller */
   height: 20px; /* Adjust the height accordingly */
   fill: #000; /* Modify the color if needed */
+}
+
+.add-to-cart-btn {
+  border-radius: 22px;
+  border-color: #000;
+  margin-right: 2px;
+  
+}
+.delete-btn {
+  border-radius: 22px;
+  border-color: #000;
 }
