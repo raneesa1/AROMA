@@ -82,22 +82,33 @@ const postaddproduct = async (req, res) => {
     console.log(JSON.stringify(req.files))
     console.log(req.body)
 
+    const newname = req.body.name
+
+    const existing = await product.findOne({ name: newname })
+
+    if (existing) {
+      const categorydata = await category.find()
+      res.render('admin/addproduct', { categorydata, err: "Product with this name already exist" })
+    } else {
 
 
-    const products = {
-      name: req.body.name,
-      description: req.body.description,
-      category: new ObjectId(req.body.category),
-      specification: req.body.specification,
-      price: req.body.price,
-      stock: req.body.stock,
-      image: req.files.map((file) => '/photos/' + file.filename),
-      date: Date.now()
 
+
+      const products = {
+        name: req.body.name,
+        description: req.body.description,
+        category: new ObjectId(req.body.category),
+        specification: req.body.specification,
+        price: req.body.price,
+        stock: req.body.stock,
+        image: req.files.map((file) => '/photos/' + file.filename),
+        date: Date.now()
+
+      }
+      console.log(products)
+      await new product(products).save()
+      res.redirect('/admin/product')
     }
-    console.log(products)
-    await new product(products).save()
-    res.redirect('/admin/product')
   } catch (error) {
     console.log(error, "error from post add product")
   }
@@ -109,7 +120,7 @@ const getaddproduct = async (req, res) => {
   console.log(categorydata, 'ghjkghj')
 
 
-  res.render('admin/addproduct', { categorydata })
+  res.render('admin/addproduct', { categorydata, err: "" })
 
 }
 
@@ -126,7 +137,7 @@ const getdeleteproduct = async (req, res) => {
 
 const getcategory = async (req, res) => {
   const categorydata = await category.find().sort({ date: -1 })
-  res.render('admin/category', { categorydata })
+  res.render('admin/category', { categorydata, err: "" })
 }
 
 //add category
@@ -143,8 +154,9 @@ const postaddcategory = async (req, res) => {
 
     const existingCategory = await category.findOne({ name: { $regex: new RegExp(`^${name}$`, "i") } });
     if (existingCategory) {
+      const categorydata = await category.find({})
       // Category with the same name already exists
-      res.render('admin/addcategory', { err: 'Category already exists' })
+      res.render('admin/addcategory', { err: 'Category already exists', categorydata: categorydata })
 
 
 
@@ -270,8 +282,10 @@ const geteditcategory = async (req, res) => {
   } else {
     console.log('editing category')
     res.render('admin/editcategory', {
+      err: '',
       title: "Edit category",
-      categories: categories
+      categories: categories,
+
     });
   }
 };
@@ -280,36 +294,32 @@ const postupdatecategory = async (req, res) => {
   try {
     let id = req.params.id;
 
-    // Check if files are present in the request
-    if (req.files && req.files.length > 0) {
-      const categorydetails = {
-        name: req.body.name,
-        description: req.body.description,
-        stock: req.body.stock,
-        // Assuming images is an array of files
-      };
-      // Update the product using findOneAndUpdate
-      await category.findOneAndUpdate({ _id: id }, { $set: categorydetails });
+    const { name, description } = req.body;
+
+    const categorydetails = {
+      name: req.body.name,
+      description: req.body.description,
+    };
+
+
+    const categories = await category.find({})
+
+    const existingCategory = await category.findOne({ name: { $regex: new RegExp(`^${name}$`, "i") } });
+    if (existingCategory) {
+      res.render('admin/editcategory', { err: 'Category already exists', categories: categories })
     } else {
 
-
-      // No files were uploaded, update only non-file fields
-      const categorydetails = {
-        name: req.body.name,
-        description: req.body.description,
-        stock: req.body.stock,
-      };
-
-      // Update the product using findOneAndUpdate
       await category.findOneAndUpdate({ _id: id }, { $set: categorydetails });
+      res.redirect('/admin/category');
     }
-
-    res.redirect('/admin/category');
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
   }
 };
+
+
+
 const getorder = async (req, res) => {
   const orderData = await order.find({}).sort({ OrderDate: -1 })
   console.log(orderData, ' order data')

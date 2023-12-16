@@ -118,6 +118,7 @@
               <form
                 action="/admin/update/<%=products._id%>"
                 method="post"
+                id="edited-add-form"
                 enctype="multipart/form-data"
               >
                 <div class="mb-3">
@@ -125,9 +126,11 @@
                   <input
                     type="text"
                     name="name"
+                    id="edited-name"
                     class="form-control form-control-lg"
                     value="<%=products.name%>"
                   />
+                  <small id="edited-nameError" class="text-danger"></small>
                 </div>
 
                 <div class="mb-3">
@@ -172,29 +175,42 @@
                   <input
                     type="file"
                     name="images"
+                    id="edited-displayinput"
                     class="form-control-file"
                     multiple
                   />
+                  <small id="edited-imagesError" class="text-danger"></small>
                 </div>
                 <div class="mb-3">
                   <label for="description">Description</label>
                   <textarea
                     name="description"
+                    id="edited-desciption"
                     class="form-control form-control-lg"
                   >
 <%=products.description%>
 </textarea
                   >
+                  <small
+                    id="edited-desciptionError"
+                    class="text-danger"
+                  ></small>
                 </div>
                 <div class="mb-3">
                   <label for="category">Additional Information</label>
                   <textarea
                     type="text"
+                    id="edited-additionalinfo"
                     name="specification"
                     class="form-control form-control-lg"
                   >
+                  
 <%=products.specification%></textarea
                   >
+                  <small
+                    id="edited-additionalinfoError"
+                    class="text-danger"
+                  ></small>
                 </div>
 
                 <div class="mb-3">
@@ -211,19 +227,23 @@
                   <label for="price">Price</label>
                   <input
                     type="number"
+                    id="edited-price"
                     name="price"
                     class="form-control form-control-lg"
                     value="<%=products.price%>"
                   />
+                  <small id="edited-priceError" class="text-danger"></small>
                 </div>
                 <div class="mb-3">
                   <label for="price">Stock</label>
                   <input
                     type="number"
                     name="stock"
+                    id="edited-stock"
                     class="form-control form-control-lg"
                     value="<%=products.stock%>"
                   />
+                  <small id="edited-stockError" class="text-danger"></small>
                 </div>
 
                 <hr />
@@ -261,6 +281,97 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script>
+      document
+        .getElementById("edited-add-form")
+        .addEventListener("submit", function (event) {
+          function isEmpty(value) {
+            const trimmedValue = value.trim();
+            return trimmedValue === "";
+          }
+
+          const editedName = document.getElementById("edited-name");
+          const editedNameValue = editedName.value;
+          const editedNameError = document.getElementById("edited-nameError");
+
+          const editedDesciption = document.getElementById("edited-desciption");
+          const editedDesciptionValue = editedDesciption.value;
+          const editedDesciptionError = document.getElementById(
+            "edited-desciptionError"
+          );
+
+          const editedAdditionalinfo = document.getElementById(
+            "edited-additionalinfo"
+          );
+          const editedAdditionalinfoValue = editedAdditionalinfo.value;
+          const editedAdditionalinfoError = document.getElementById(
+            "edited-additionalinfoError"
+          );
+
+          const editedPrice = document.getElementById("edited-price");
+          const editedPriceValue = parseFloat(editedPrice.value);
+          const editedPriceError = document.getElementById("edited-priceError");
+
+          const editedStock = document.getElementById("edited-stock");
+          const editedStockValue = parseInt(editedStock.value, 10);
+          const editedStockError = document.getElementById("edited-stockError");
+
+          const editedImages = document.getElementById("edited-displayinput");
+          const editedImagesError =
+            document.getElementById("edited-imagesError");
+          const existingImages = document.querySelectorAll(
+            "input[name='existingImages[]']"
+          );
+
+          editedNameError.textContent = "";
+          editedDesciptionError.textContent = "";
+          editedAdditionalinfoError.textContent = "";
+          editedPriceError.textContent = "";
+          editedStockError.textContent = "";
+          editedImagesError.textContent = "";
+
+          if (existingImages.length === 0 && editedImages.files.length === 0) {
+            editedImagesError.textContent = "Please upload at least one image";
+            event.preventDefault();
+          }
+
+          if (isEmpty(editedNameValue)) {
+            editedNameError.textContent = "Name can't be empty";
+            event.preventDefault();
+          }
+
+          if (isEmpty(editedDesciptionValue)) {
+            editedDesciptionError.textContent = "Description can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(editedAdditionalinfoValue)) {
+            editedAdditionalinfoError.textContent =
+              "Additional information can't be empty";
+            event.preventDefault();
+          }
+          if (isNaN(editedPriceValue) || editedPriceValue <= 0) {
+            editedPriceError.textContent = "Price must be a valid number";
+            event.preventDefault();
+          }
+
+          if (isNaN(editedStockValue) || editedStockValue <= 0) {
+            editedStockError.textContent =
+              "Stock must be a positive integer greater than 0";
+            event.preventDefault();
+          }
+          if (editedDesciptionValue.length > 45) {
+            editedDesciptionError.textContent =
+              "Description must not exceed 45 characters";
+            event.preventDefault();
+          }
+          if (editedAdditionalinfoValue.length < 60) {
+            editedAdditionalinfoError.textContent =
+              "Additional information must be at least 60 characters";
+            event.preventDefault();
+          }
+        });
+    </script>
+
     <script>
       function addVariant() {
         const newVariantsContainer = document.getElementById(

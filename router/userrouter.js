@@ -36,7 +36,6 @@ router.get('/home', verifyuser, usercontroller.gethome)
 //products
 router.get('/product', verifyuser, productcontroller.getproduct);
 router.get('/productlist', verifyuser, usercontroller.getproductlist)
-router.post('/search', verifyuser, usercontroller.search)
 
 
 
@@ -97,7 +96,7 @@ const storage = multer.diskStorage({
 const uploadprofile = multer({ storage: storage });
 
 
-//userprofile
+//userprofilex
 router.get('/profile', verifyuser, usercontroller.getprofile);
 router.get('/editprofile', verifyuser, usercontroller.geteditprofile)
 router.post('/editprofile', uploadprofile.single('editProfilePhoto'), verifyuser, usercontroller.posteditprofile)
@@ -122,6 +121,7 @@ router.post('/addnewaddress', verifyuser, addresscontroller.postcheckoutaddaddre
 router.get('/orderdetails/:id', verifyuser, ordercontoller.getorderdetials)
 router.get('/ordermessage', verifyuser, cartcontroller.getordermessage)
 router.post('/cancel-order/:orderId', verifyuser, ordercontoller.postcancelorder)
+router.post('/return-order', verifyuser, ordercontoller.returnOrder)
 
 //razorpay
 router.post('/generateRazorpayPayment', verifyuser, cartcontroller.generateRazorpay)
@@ -138,24 +138,16 @@ router.post('/razorpay/wallet', verifyuser, walletcontroller.wallet_razorpay)
 router.post('/addMoneyToWallet', verifyuser, walletcontroller.addMoneyToWallet)
 
 
-
-
-router.get('/downloadinvoice/:invoicePath', ordercontoller.downloadInvoice);
-
-
-
-
-
 //invoice-------------------------------------------------------
-router.post('/downloadinvoice', verifyuser, ordercontoller.generateInvoices)
-router.get('/downloadinvoice/:orderId', verifyuser, ordercontoller.downloadInvoice)
-router.get('/viewinvoice/:orderId', verifyuser, ordercontoller.renderInvoicePage);
+router.post('/downloadinvoice', verifyuser, ordercontoller.postinvoice)
 
 
 //wishlist
 router.get('/wishlist', verifyuser, wishlistcontroller.getwishlist);
 router.post('/addToWishlist', verifyuser, wishlistcontroller.addToWishlist)
-router.delete('/remove-from-wishlist/:productId',verifyuser,wishlistcontroller.removeFromWishlist)
+router.delete('/remove-from-wishlist/:productId', verifyuser, wishlistcontroller.removeFromWishlist)
 
+
+router.post('/api/updateProducts', verifyuser, productcontroller.updateProducts)
 
 module.exports = router

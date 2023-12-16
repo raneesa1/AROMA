@@ -126,28 +126,24 @@
                   <label for="name">Name</label>
                   <input
                     type="text"
+                    id="name"
                     name="name"
                     class="form-control form-control-lg"
                     placeholder="Enter category name"
                   />
+                  <small id="nameError" class="text-danger"></small>
                 </div>
                 <div class="mb-3">
                   <label for="description">Description</label>
                   <textarea
                     name="description"
+                    id="desciption"
                     class="form-control form-control-lg"
                     placeholder="Enter category description"
                   ></textarea>
+                  <small id="desciptionError" class="text-danger"></small>
                 </div>
 
-                <div class="mb-3">
-                  <label for="addedDate">Date</label>
-                  <input
-                    type="date"
-                    name="addedDate"
-                    class="form-control form-control-lg"
-                  />
-                </div>
                 <input
                   style="
                     background-color: rgb(0, 0, 0);
@@ -167,6 +163,37 @@
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script>
+      document
+        .getElementById("add-form")
+        .addEventListener("submit", function (event) {
+          function isEmpty(value) {
+            const trimmedValue = value.trim();
+            return trimmedValue === "";
+          }
+
+          const name = document.getElementById("name");
+          const namenameValue = name.value;
+          const nameError = document.getElementById("nameError");
+
+          const desciption = document.getElementById("desciption");
+          const desciptionValue = desciption.value;
+          const desciptionError = document.getElementById("desciptionError");
+
+          nameError.textContent = "";
+          desciptionError.textContent = "";
+
+          if (isEmpty(namenameValue)) {
+            nameError.textContent = "name can't be empty";
+            event.preventDefault();
+          }
+
+          if (isEmpty(desciptionValue)) {
+            desciptionError.textContent = "Desciption can't be empty";
+            event.preventDefault();
+          }
+        });
+    </script>
 
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -184,9 +211,9 @@
       crossorigin="anonymous"
     ></script>
     <script>
-              setTimeout(function () {
-                document.getElementById("errorMessage").style.display = "none";
-              }, 3000);
+      setTimeout(function () {
+        document.getElementById("errorMessage").style.display = "none";
+      }, 3000);
       document
         .getElementById("add-category-form")
         .addEventListener("submit", async function (event) {
@@ -212,16 +239,11 @@
             } else {
               // Display error message
               // document.getElementById("errorMessage").innerText = data.message;
-
             }
           } catch (error) {
             console.error("Error during fetch:", error);
           }
         });
-
-
-
-
     </script>
   </body>
 </html>

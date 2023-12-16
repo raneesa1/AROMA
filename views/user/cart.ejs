@@ -474,35 +474,6 @@
       }
       updateCartUI();
 
-      // function applyCoupon() {
-      //   const couponCode = document.getElementById("couponCode").value;
-
-      //   fetch("/apply-coupon", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({
-      //       couponCode: couponCode,
-      //     }),
-      //   })
-      //     .then((response) => response.json())
-      //     .then((data) => {
-      //       if (data.success) {
-      //         showErrorMessage("Coupon applied successfully");
-      //         console.log("Coupon applied successfully");
-      //         $("#grandTotal").text(data.grandTotal);
-      //         $("#discount").text("- ₹" + data.coupon);
-      //       } else {
-      //         showErrorMessage(` ${data.message}`);
-      //         console.error("Coupon application failed:", data.message);
-      //       }
-      //     })
-      //     .catch((error) => {
-      //       console.error("Fetch error:", error);
-      //       showErrorMessage("An error occurred while applying the coupon");
-      //     });
-      // }
     </script>
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

@@ -32,7 +32,7 @@
             <h3 class="mt-5" style="font-family: tahoma">ALL PRODUCTS</h3>
           </div>
           <div class="col-md-3 text-right">
-            <div class="search-container" style="margin-top: 57px">
+            <div class="search-container m-5" style="margin-top: 57px">
               <form
                 class="search-form"
                 id="search-id"
@@ -48,7 +48,7 @@
                     autocomplete="on"
                   />
                   <div class="input-group-append">
-                    <button type="submit" class="search-button btn pb-0 pt-0">
+                    <button type="button" class="search-button btn pb-0 pt-0">
                       <svg
                         width="24"
                         height="24"
@@ -72,71 +72,54 @@
     </div>
     <div class="d-flex">
       <div>
-        <div class="ml-2 sort-main-box">
-          <div class="dropdown">
-            <button
-              class="btn btn-secondary dropdown-toggle text-center"
-              style="
-                background-color: rgb(255, 255, 255);
-                color: black;
-                border: none;
-                width: 200px;
-              "
-              type="button"
-              id="sortDropdown"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Sort By:
-            </button>
-            <div
-              class="dropdown-menu sort-item-box border-none"
-              aria-labelledby="sortDropdown"
-            >
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="sortOption"
-                  id="highToLow"
-                  value="highToLow"
-                />
-                <label class="form-check-label" for="highToLow">
-                  High to Low
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="sortOption"
-                  id="lowToHigh"
-                  value="lowToHigh"
-                />
-                <label class="form-check-label" for="lowToHigh">
-                  Low to High
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="sortOption"
-                  id="newestArrival"
-                  value="newestArrival"
-                />
-                <label class="form-check-label" for="newestArrival">
-                  Newest Arrival
-                </label>
-              </div>
-            </div>
-          </div>
+        <h4 class="ml-5 mr-5">Sort items:</h4>
+        <div class="ml-5" style="width: 120px; padding: 0 2px 0 1px">
+          <h6>By Price:</h6>
+          <label class="m-3">
+            <input
+              type="radio"
+              class="sortRadio"
+              name="sortOrder"
+              value="asc"
+            />
+
+            Lowest to Highest
+          </label>
+          <label class="m-3">
+            <input
+              type="radio"
+              class="sortRadio"
+              name="sortOrder"
+              value="desc"
+            />
+            Highest to Lowest
+          </label>
+
+          <!-- Add more checkboxes for other sorting options -->
+        </div>
+
+        <h4 class="ml-5 mt-5">Filter items</h4>
+        <h6 class="ml-5">By Category:</h6>
+        <div class="ml-5" style="width: 100px; padding: 0 2px 0 1px">
+          <label>
+            <input
+              type="checkbox"
+              class="categoryCheckbox"
+              value="WOMEN"
+              name="category"
+            />
+
+            Women
+          </label>
+          <label>
+            <input type="checkbox" class="categoryCheckbox" value="MEN" /> Men
+          </label>
+          <!-- Add more checkboxes for other sorting options -->
         </div>
       </div>
       <div>
         <div class="container mt-5">
-          <div class="row" id="productListContainer">
+          <div class="row text-uppercase" id="productListContainer">
             <% products.forEach(product => { %>
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
               <a
@@ -166,6 +149,9 @@
         </div>
       </div>
     </div>
+    <div class="d-flex justify-content-center">
+      <ul class="pagination" id="pagination-container"></ul>
+    </div>
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -181,78 +167,131 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+    <!-- search sort filter -->
+
     <script>
-      // alert("script started working");
-      document
-        .querySelector(".search-form")
-        .addEventListener("input", async (event) => {
-          event.preventDefault();
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .querySelectorAll(".categoryCheckbox, .sortRadio")
+          .forEach(function (checkbox) {
+            checkbox.addEventListener("change", updateProducts);
+          });
+
+        document
+          .getElementById("pagination-container")
+          .addEventListener("click", function (event) {
+            if (event.target.tagName === "A") {
+              const pageNumber = parseInt(event.target.dataset.page);
+              updateProducts(pageNumber);
+            }
+          });
+
+        document
+          .querySelector(".search-input")
+          .addEventListener("input", updateProducts);
+
+        function updateProducts(page = 1) {
+          const selectedCategories = Array.from(
+            document.querySelectorAll(".categoryCheckbox:checked")
+          ).map(function (checkbox) {
+            return checkbox.value;
+          });
 
           const searchTerm = document.querySelector(".search-input").value;
 
-          // alert("script reached in second alert");
-          // alert(searchTerm, "third");
-          try {
-            const response = await fetch("/search", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                // other headers if needed
-              },
-              body: JSON.stringify({ query: searchTerm }),
+          const sortOrder =
+            document.querySelector(".sortRadio:checked")?.value === "asc"
+              ? "asc"
+              : "desc";
+          const sortOrderArray = [sortOrder];
+
+          // Send a request to the server to fetch updated products
+          fetch("/api/updateProducts", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              categories: selectedCategories,
+              search: searchTerm,
+              sortOrder: sortOrderArray,
+              page: page,
+            }),
+          })
+            .then(function (response) {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
             })
-              .then((response) => response.json())
-              .then((res) => {
-                let products = res.products;
-                console.log(products, "products after searching");
-                let productListHTML = "";
+            .then(function (data) {
+              console.log("Data received from server:", data);
+              const { products, totalPages } = data;
+              displayUpdatedProducts(products);
+              generatePaginationLinks(page, totalPages);
+            })
+            .catch(function (error) {
+              console.error("Error updating products:", error);
+              alert("Error updating products");
+            });
+        }
 
-                if (products.length >= 1) {
-                  products.forEach((data) => {
-                    if (!data.deletionStatus) {
-                      productListHTML += `
+        function displayUpdatedProducts(products) {
+          const updatedProductsContainer = document.getElementById(
+            "productListContainer"
+          );
+          updatedProductsContainer.innerHTML = "";
 
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4  text-uppercase">
-                  <a href="/products?id=${data._id}" class="text-decoration-none">
+          console.log(products);
+          products.forEach(function (product) {
+            const productHtml = `
+
+            <div class="row"
+                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                  <a href="/products?id=${product._id}" class="text-decoration-none">
                     <div class="product-box">
-                      <img src="${data.image[0]}" alt="${data.name}" width="160" height="160">
-                      <h2 class="product-title">${data.name}</h2>
-                      <p class="product-description">${data.description}</p>
-                      <p class="product-price">&#8377;${data.price}</p>
+                      <img src="${product.image[0]}" alt="${product.name}" width="160" height="160">
+                      <h2 class="product-title">${product.name}</h2>
+                      <p class="product-description">${product.description}</p>
+                      <p class="product-price">&#8377;${product.price}</p>
                       <a class="add-to-cart">View details</a>
                     </div>
                   </a>
                 </div>
+                </div>
 
-              `;
-                    }
-                  });
 
-                  // alert(products, "alert for displaying the products");
+                    `;
+            updatedProductsContainer.insertAdjacentHTML(
+              "beforeend",
+              productHtml
+            );
+          });
+        }
 
-                  console.log(products, "second --products after searching");
-                  const productListContainer = document.getElementById(
-                    "productListContainer"
-                  );
-                  productListContainer.innerHTML = productListHTML;
-                } else {
-                  document.getElementById(
-                    "productListContainer"
-                  ).innerHTML = `<h3 class="text-center w-100">No search results found</h3>`;
-                }
-              });
+        function generatePaginationLinks(currentPage, totalPages) {
+          const paginationContainer = document.getElementById(
+            "pagination-container"
+          );
+          paginationContainer.innerHTML = "";
 
-            // if (!response.ok) {
-            //   throw new Error(`Failed to fetch data. Please try again.`);
-            // }
-
-            // const data = await response.json();
-            // Process and display search results as needed
-            // console.log(data);
-          } catch (error) {
-            console.error("Fetch error:", error);
+          for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.href = "#";
+            a.innerText = i;
+            a.dataset.page = i;
+            if (i === currentPage) {
+              li.classList.add("active");
+            }
+            li.appendChild(a);
+            paginationContainer.appendChild(li);
           }
-        });
+        }
+
+        // Initial load with page 1
+        updateProducts(1);
+      });
     </script>
   </body>
 </html>

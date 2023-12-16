@@ -7,6 +7,10 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css"
+    />
 
     <!-- Bootstrap CSS -->
     <link
@@ -139,17 +143,15 @@
             </a>
           </div>
 
-          <table class="table table-bordered">
+          <table class="table table-bordered" id="couponTable">
             <thead>
               <tr>
                 <th>name</th>
                 <th>code</th>
                 <th>Min-amount</th>
-                <th>Max-amount</th>
                 <th>Start date</th>
                 <th>Expirey</th>
                 <th>Status</th>
-                <th>count</th>
                 <th>Discount Amount</th>
                 <th>Action</th>
               </tr>
@@ -160,7 +162,6 @@
                 <td><%-x.CouponName%></td>
                 <td><%-x.Coupon_code%></td>
                 <td><%-x.Min_amount%></td>
-                <td><%-x.Max_amount%></td>
                 <td>
                   <%- x.Start_date ? x.Start_date.toISOString().split('T')[0] :
                   '' %>
@@ -170,14 +171,9 @@
                   x.Expirey_date.toISOString().split('T')[0] : '' %> %>
                 </td>
                 <td><%-x.IsActive%></td>
-                <td><%-x.Max_count%></td>
                 <td><%-x.DiscountAmount%></td>
                 <td>
-                  <a
-                    href="javascript:void(0);"
-                    data-toggle="modal"
-                    data-target="#editCouponModal<%- x._id %>"
-                  >
+                  <a href="/admin/editcoupon/<%=x._id%>">
                     <i>
                       <svg
                         style="color: rgb(47, 186, 112)"
@@ -195,181 +191,6 @@
                     </i>
                   </a>
                   <!-- Edit Coupon Modal -->
-                  <div
-                    class="modal fade"
-                    id="editCouponModal<%- x._id %>"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="editCouponModalLabel"
-                    aria-hidden="true"
-                  >
-                    <div class="modal-dialog modal-lg" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="editCouponModalLabel">
-                            Edit Coupon
-                          </h5>
-                          <button
-                            type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                          >
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body text-left">
-                          <!-- Your form for editing coupon details goes here -->
-                          <!-- Populate the form with current coupon details -->
-                          <form
-                            action="/admin/editcoupon/<%=x._id%>"
-                            method="post"
-                          >
-                            <!-- Input fields for editing -->
-                            <!-- <div class="mb-3">
-                              <label for="CouponName">Coupon Name:</label>
-                              <input
-                                type="text"
-                                name="CouponName"
-                                value="<%- x.CouponName %>"
-                              />
-                            </div> -->
-                            <div class="mb-3">
-                              <label for="CouponName">Name</label>
-                              <input
-                                name="CouponName"
-                                id="editedname"
-                                class="form-control form-control-lg"
-                                placeholder="Enter category description"
-                                value="<%- x.CouponName %>"
-                              />
-                              <div
-                                class="error text-danger"
-                                id="editednameError"
-                              ></div>
-                            </div>
-                            <div class="mb-3">
-                              <label for="Coupon_code">Coupon code</label>
-                              <input
-                                name="Coupon_code"
-                                class="form-control form-control-lg"
-                                placeholder="Enter category description"
-                                id="editedCode"
-                                value="<%- x.Coupon_code %>"
-                              />
-                              <div
-                                class="error text-danger"
-                                id="editedCodeError"
-                              ></div>
-                              <div
-                                class="error text-danger"
-                                id="CodeError"
-                              ></div>
-                            </div>
-
-                            <div class="mb-3">
-                              <label for="Min_amount">Min amount</label>
-                              <input
-                                name="editedMin_amount"
-                                class="form-control form-control-lg"
-                                value="<%- x.Min_amount %>"
-                                id="Min_purchase_amount"
-                              />
-                              <div
-                                class="error text-danger"
-                                id="editedminError"
-                              ></div>
-                            </div>
-                            <div class="mb-3">
-                              <label for="Max_amount">Max amount</label>
-                              <input
-                                type="number"
-                                name="Max_amount"
-                                class="form-control form-control-lg"
-                                value="<%- x.Max_amount %>"
-                                id="editedMax_purchase_amount"
-                              />
-
-                              <div
-                                class="error text-danger"
-                                id="editedmaxError"
-                              ></div>
-                            </div>
-
-                            <div class="mb-3">
-                              <label for="addedDate">Expirey date</label>
-                              <input
-                                type="date"
-                                name="Expirey_date"
-                                class="form-control form-control-lg"
-                                value="<%- x.Expirey_date ? x.Expirey_date.toISOString().split('T')[0] : '' %>"
-                                id="editedExpiration_date"
-                              />
-                              <div
-                                class="error text-danger"
-                                id="editedexpDateError"
-                              ></div>
-                            </div>
-                            <div class="mb-3">
-                              <label for="addedDate">start date</label>
-                              <input
-                                type="date"
-                                name="Start_date"
-                                class="form-control form-control-lg"
-                                value="<%- x.Start_date ? x.Start_date.toISOString().split('T')[0] : '' %>"
-                                id="editedStart_date"
-                              />
-                              <div
-                                class="error text-danger"
-                                id="editedstrDateError"
-                              ></div>
-                            </div>
-
-                            <div class="mb-3">
-                              <label for="Max_count">Count </label>
-                              <input
-                                type="number"
-                                name="Max_count"
-                                class="form-control form-control-lg"
-                                value="<%-x.Max_count%>"
-                                id="editedMax_usage_count"
-                              />
-                              <div
-                                class="error text-danger"
-                                id="editedmaxCountError"
-                              ></div>
-                            </div>
-                            <!-- Add other input fields as needed -->
-
-                            <!-- Save changes button -->
-
-                            <div class="mb-3">
-                              <label for="addedDate">Discount amount</label>
-                              <input
-                                type="number"
-                                name="DiscountAmount"
-                                class="form-control form-control-lg"
-                                value="<%- x.DiscountAmount %>"
-                                id="editedDiscount_value"
-                              />
-                              <div
-                                class="error text-danger"
-                                id="editeddiscountError"
-                              ></div>
-                            </div>
-                            <button
-                              type="submit"
-                              class="btn"
-                              style="color: white; background: #000"
-                              onclick="saveChanges('<%- x._id %>')"
-                            >
-                              Save Changes
-                            </button>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
                   <a
                     href="/admin/deletecoupon/<%-x._id%>"
@@ -415,190 +236,20 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#couponTable").DataTable({
+          columnDefs: [
+            { orderable: false, targets: "_all" }, // Disable sorting for all columns
+          ],
+        });
+      });
+    </script>
     <script>
       setTimeout(function () {
         document.getElementById("errorMessage").style.display = "none";
       }, 5000);
-
-      document
-        .querySelector("form")
-        .addEventListener("submit", function (event) {
-          function isEmpty(value) {
-            const trimmedValue = value.trim();
-            return trimmedValue === "";
-          }
-          function isDateBeforeToday(date) {
-            const currentDate = new Date();
-            const inputDate = new Date(date);
-            currentDate.setHours(0, 0, 0, 0);
-            inputDate.setHours(0, 0, 0, 0);
-
-            return inputDate < currentDate;
-          }
-          function maxcheck(min, max) {
-            return max > min;
-          }
-
-          function isDateBefore(date1, date2) {
-            const firstDate = new Date(date1);
-            const secondDate = new Date(date2);
-            firstDate.setHours(0, 0, 0, 0);
-            secondDate.setHours(0, 0, 0, 0);
-
-            return firstDate > secondDate;
-          }
-          function isValueLessThanZero(value) {
-            return value < 0;
-          }
-          function isValuegreaterThanhundred(value) {
-            return value < 0;
-          }
-
-          const editedname = document.getElementById("editedname");
-          const editednameValue = name.value;
-          const editednameError = document.getElementById("editednameError");
-
-          const editedcode = document.getElementById("editedCode");
-          const editedcodeValue = code.value;
-          const editedcodeError = document.getElementById("editedCodeError");
-
-          const editedMin_purchase_amount = document.getElementById(
-            "Min_purchase_amountedited"
-          );
-          const editedMin_purchase_amountValue =
-            editedMin_purchase_amount.value;
-          const editedminError = document.getElementById("editedminError");
-
-          const editedMax_purchase_amount = document.getElementById(
-            "editedMax_purchase_amount"
-          );
-          const editedMax_purchase_amountValue =
-            editedMax_purchase_amount.value;
-          const editedmaxError = document.getElementById("editedmaxError");
-
-          const editedExpiration_date = document.getElementById(
-            "editedExpiration_date"
-          );
-          const editedExpiration_dateValue = editedStart_date.value;
-          const editedexpDateError =
-            document.getElementById("editedexpDateError");
-
-          const editedStart_date = document.getElementById("editedStart_date");
-          const editedStart_dateValue = editedExpiration_date.value;
-          const editedstrDateError =
-            document.getElementById("editedstrDateError");
-
-          const editedMax_usage_count = document.getElementById(
-            "editedMax_usage_count"
-          );
-          const editedMax_usage_countValue = editedMax_usage_count.value;
-          const editedmaxCountError = document.getElementById(
-            "editedmaxCountError"
-          );
-
-          const editedDiscount_value = document.getElementById(
-            "editedDiscount_value"
-          );
-          const editedDiscount_valueValue = editedDiscount_value.value;
-          const editeddiscountError = document.getElementById(
-            "editeddiscountError"
-          );
-
-          editednameError.textContent = "";
-          editedcodeError.textContent = "";
-          editedminError.textContent = "";
-          editedmaxError.textContent = "";
-          editedexpDateError.textContent = "";
-          editedStart_date.textContent = "";
-          editedmaxCountError.textContent = "";
-          editeddiscountError.textContent = "";
-
-          if (isEmpty(editednameValue)) {
-            editednameError.textContent = "name can't be empty";
-            event.preventDefault();
-          }
-
-          if (isEmpty(editedcodeValue)) {
-            editedcodeError.textContent = "coupon code field can't be empty";
-            event.preventDefault();
-          }
-          if (isEmpty(editedMin_purchase_amountValue)) {
-            editedminError.textContent =
-              "min purchase amount field can't be empty";
-            event.preventDefault();
-          }
-          if (isValueLessThanZero(editedMin_purchase_amountValue)) {
-            editedminError.textContent =
-              "min purchase amount field can't be less than 0";
-            event.preventDefault();
-          }
-          if (isEmpty(editedMax_purchase_amountValue)) {
-            editedmaxError.textContent =
-              "max purchase amount field can't be empty";
-            event.preventDefault();
-          }
-          if (
-            maxcheck(
-              editedMin_purchase_amountValue,
-              editedMax_purchase_amountValue
-            )
-          ) {
-            editedmaxError.textContent =
-              "max purchase amount  can't be less than min amount";
-            event.preventDefault();
-          }
-
-          if (isValueLessThanZero(editedMax_purchase_amountValue)) {
-            editedmaxError.textContent =
-              "max purchase amount field can't be less than 0";
-            event.preventDefault();
-          }
-          if (isEmpty(editedStart_dateValue)) {
-            editedstrDateError.textContent =
-              " starting date field can't be empty";
-            event.preventDefault();
-          }
-          if (isDateBeforeToday(editedStart_dateValue)) {
-            editedstrDateError.textContent = "not a valida date";
-            event.preventDefault();
-          }
-
-          if (isEmpty(editedExpiration_dateValue)) {
-            editedexpDateError.textContent =
-              " Expiration date field can't be empty";
-            event.preventDefault();
-          }
-          if (isDateBeforeToday(editedExpiration_dateValue)) {
-            editedexpDateError.textContent = "not a valida date";
-            event.preventDefault();
-          }
-
-          if (isDateBefore(editedStart_dateValue, editedExpiration_dateValue)) {
-            editedexpDateError.textContent =
-              "expire date can't be before start date";
-            event.preventDefault();
-          }
-          if (isEmpty(editedMax_usage_countValue)) {
-            editedmaxCountError.textContent = "max usage field can't be empty";
-            event.preventDefault();
-          }
-
-          if (isValueLessThanZero(editedMax_usage_countValue)) {
-            editedmaxCountError.textContent =
-              "usage count field can't be less than 0";
-            event.preventDefault();
-          }
-          if (isEmpty(editedDiscount_valueValue)) {
-            editeddiscountError.textContent =
-              "discount value field can't be empty";
-            event.preventDefault();
-          }
-          if (isValueLessThanZero(editedDiscount_valueValue)) {
-            editeddiscountError.textContent =
-              "discount value can't be less than 0";
-            event.preventDefault();
-          }
-        });
     </script>
   </body>
 </html>

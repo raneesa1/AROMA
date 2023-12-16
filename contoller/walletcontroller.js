@@ -8,12 +8,19 @@ const { placeOrder } = require('./cartcontroller');
 
 
 const getwalletpage = async (req, res) => {
+    try {
+        
+   console.log("reached wallet");
     const users = await user.findOne({ email: req.session.email });
     const userId = users._id;
     const walletinfo = await wallet.findOne({
         User_id: userId
     })
     res.render('user/wallet', { walletinfo })
+    } catch (error) {
+        console.log('error',error)
+
+    }
 }
 
 

@@ -24,66 +24,7 @@
     <section>
       <div class="container py-5">
         <div class="row">
-          <div class="col-lg-4">
-            <div class="card mb-4 mb-lg-0">
-              <div class="card-body p-0">
-                <ul class="list-group list-group-flush rounded-3">
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fas fa-globe fa-lg text-warning"></i>
-                    <p class="mb-0">
-                      <a href="profile">My Account</a>
-                    </p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fas fa-globe fa-lg text-warning"></i>
-                    <p class="mb-0">
-                      <a href="accountdetails">Account Details</a>
-                    </p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fab fa-github fa-lg" style="color: #333333"></i>
-                    <p class="mb-0"><a href="myorder">My Order</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
-                    <p class="mb-0"><a href="cart">Shopping Cart</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i
-                      class="fab fa-instagram fa-lg"
-                      style="color: #000000"
-                    ></i>
-                    <p class="mb-0"><a href="wishlist">Wishlist</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i
-                      class="fab fa-facebook-f fa-lg"
-                      style="color: #000000"
-                    ></i>
-                    <p class="mb-0">Address</p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
-                    <p class="mb-0"><a href="wallet">Wallet</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-3">
-                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
-                    <p class="mb-0">
-                      <button
-                        type="button"
-                        class="btn"
-                        style="color: #000000"
-                        data-toggle="modal"
-                        data-target="#logoutModal"
-                      >
-                        Logout
-                      </button>
-                    </p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <%-include('./partial/sidebar-profile')%>
 
           <div class="col-lg-8">
             <div class="card mb-4">
@@ -117,11 +58,12 @@
                     <label for="exampleInputEmail1">First Name </label>
                     <input
                       type="name"
+                      id="firstname"
                       class="form-control"
                       placeholder=""
                       name="Firstname"
-                      required
                     />
+                    <small id="firstNameError" class="text-danger"></small>
                   </div>
                   <div class="form-group">
                     <label for="exampleInputEmail1">Second Name </label>
@@ -129,9 +71,10 @@
                       type="name"
                       class="form-control"
                       placeholder=""
+                      id="secondname"
                       name="Secondname"
-                      required
                     />
+                    <small id="secondNameError" class="text-danger"></small>
                   </div>
 
                   <div class="form-group">
@@ -139,29 +82,33 @@
                     <textarea
                       class="form-control"
                       rows="3"
+                      id="address"
                       name="Address"
-                      required
                     ></textarea>
+                    <small id="addressError" class="text-danger"></small>
                   </div>
                   <div class="form-group">
                     <label for="phonenumber">Phone number</label>
                     <input
                       type="number"
                       class="form-control"
+                      id="phonenumber"
                       placeholder=""
                       name="PhoneNumber"
-                      required
                     />
+                    <small id="phonenumberError" class="text-danger"></small>
                   </div>
                   <div class="form-group">
                     <label for="City">State</label>
                     <input
                       type="text"
                       name="State"
+                      id="state"
                       class="form-control"
                       placeholder="palakkad"
-                      required
                     />
+
+                    <small id="stateError" class="text-danger"></small>
                     <!-- <small id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
                     > -->
@@ -171,10 +118,11 @@
                     <input
                       type="text"
                       name="City"
+                      id="city"
                       class="form-control"
                       placeholder="palakkad"
-                      required
                     />
+                    <small id="cityError" class="text-danger"></small>
                     <!-- <small id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
                     > -->
@@ -208,10 +156,12 @@
                     <label for="Pincode">Pincode</label>
                     <input
                       type="number"
+                      id="pincode"
                       class="form-control"
                       placeholder=""
                       name="Pincode"
                     />
+                    <small id="pincodeError" class="text-danger"></small>
                     <!-- <small id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
                     > -->
@@ -219,13 +169,13 @@
                   <button
                     type="submit"
                     value="submit"
-                    class="btn text-light btn-lg"
+                    class="btn text-light btn-block"
                     style="background-color: #000000; border-radius: 0%"
                   >
                     SAVE
                   </button>
                   <button
-                    class="btn btn-lg btn-light border-dark"
+                    class="btn btn-block btn-light border-dark"
                     style="border-radius: 0%"
                   >
                     CANCEL
@@ -237,6 +187,110 @@
         </div>
       </div>
     </section>
+    <script>
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          function isEmpty(value) {
+            const trimmedValue = value.trim();
+            return trimmedValue === "";
+          }
+
+          function validateAddress(address) {
+            const minLength = 40;
+            return address.trim().length >= minLength;
+          }
+          function validatePhone(phonenumber) {
+            const phoneRegex = /^\d{10}$/;
+            return phoneRegex.test(phonenumber);
+          }
+
+          function validatePinc(pincode) {
+            const pinRegex = /^\d{6}$/;
+            return pinRegex.test(pincode);
+          }
+
+          const firstname = document.getElementById("firstname");
+          const firstnameValue = firstname.value;
+          const firstnameError = document.getElementById("firstNameError");
+
+          const secondname = document.getElementById("secondname");
+          const secondnameValue = secondname.value;
+          const secondnameError = document.getElementById("secondNameError");
+
+          const address = document.getElementById("address");
+          const addressValue = address.value;
+          const addressError = document.getElementById("addressError");
+
+          const state = document.getElementById("state");
+          const stateValue = state.value;
+          const stateError = document.getElementById("stateError");
+
+          const city = document.getElementById("city");
+          const cityValue = city.value;
+          const cityError = document.getElementById("cityError");
+
+          const pincode = document.getElementById("pincode");
+          const pincodeValue = pincode.value;
+          const pincodeError = document.getElementById("pincodeError");
+
+          const phonenumber = document.getElementById("phonenumber");
+          const phonenumberValue = phonenumber.value;
+          const phonenumberError = document.getElementById("phonenumberError");
+
+          firstnameError.textContent = "";
+          secondnameError.textContent = "";
+          addressError.textContent = "";
+          stateError.textContent = "";
+          cityError.textContent = "";
+          pincodeError.textContent = "";
+          phonenumberError.textContent = "";
+
+          if (isEmpty(firstnameValue)) {
+            firstnameError.textContent = "First name can't be empty";
+            event.preventDefault();
+          }
+
+          if (isEmpty(secondnameValue)) {
+            secondnameError.textContent = "Second name can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(addressValue)) {
+            addressError.textContent = "Address field can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(stateValue)) {
+            stateError.textContent = "State field can't be be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(cityValue)) {
+            cityError.textContent = "City field can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(pincodeValue)) {
+            pincodeError.textContent = "Pincode field can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(phonenumberValue)) {
+            phonenumberError.textContent = "Phone number field can't be empty";
+            event.preventDefault();
+          }
+          if (!validatePhone(phonenumberValue)) {
+            phonenumberError.textContent =
+              "Phone number must contain 10 characters";
+            event.preventDefault();
+          }
+          if (!validatePinc(pincodeValue)) {
+            pincodeError.textContent = "Enter a valid pincode";
+            event.preventDefault();
+          }
+          if (!validateAddress(addressValue)) {
+            addressError.textContent =
+              "Address should have at least 40 characters";
+            event.preventDefault();
+          }
+        });
+    </script>
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

@@ -8,6 +8,10 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
+     <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css"
+    />
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -139,7 +143,7 @@
             </a>
           </div> -->
 
-          <table class="table ">
+          <table class="table " id="orderTable">
             <thead>
               <tr>
                 <th scope="col">No</th>
@@ -217,6 +221,16 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+      <script>
+       $(document).ready(function () {
+    $("#orderTable").DataTable({
+      "columnDefs": [
+        { "orderable": false, "targets": "_all" } // Disable sorting for all columns
+      ]
+    });
+  });
+    </script>
     <script>
   function updateOrderStatus(orderId, newStatus) {
     fetch(`/admin/updateStatus/${orderId}`, {

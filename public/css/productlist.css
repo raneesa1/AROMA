@@ -223,7 +223,6 @@ a:hover {
   border: 1px solid #ced4da;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-
 }
 
 .search-button {
@@ -234,4 +233,33 @@ a:hover {
 
 .search-button svg {
   margin-top: 3px;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+}
+
+.pagination li {
+  margin: 0 5px;
+  display: inline-block;
+}
+
+.pagination a {
+  color: #333;
+  text-decoration: none;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.pagination a:hover {
+  background-color: #ddd;
+}
+
+.pagination .active a {
+  background-color: #000000;
+  color: #fff;
 }

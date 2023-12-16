@@ -130,10 +130,20 @@
                         <input
                           type="text"
                           name="name"
+                          id="name"
                           class="form-control form-control-lg"
                           placeholder="Enter product name"
-                          required
                         />
+                        <% if(err){ %>
+
+                        <small
+                          id="errorMessage"
+                          style="color: red; margin-top: 10px"
+                        >
+                          <%=err%>
+                        </small>
+                        <%}%>
+                        <small id="nameError" class="text-danger"></small>
                       </div>
                       <div class="mb-3">
                         <div id="selectedImages" class="mb-3">
@@ -182,26 +192,32 @@
                           name="images"
                           class="form-control-file"
                           multiple
-                          required
                         />
+
+                        <small id="imagesError" class="text-danger"></small>
                       </div>
                       <div class="mb-3">
                         <label for="description">Description</label>
                         <textarea
                           name="description"
+                          id="desciption"
                           class="form-control form-control-lg"
                           placeholder="Enter product description"
-                          required
                         ></textarea>
+                        <small id="desciptionError" class="text-danger"></small>
                       </div>
                       <div class="mb-3">
                         <label for="description">Additional Information</label>
                         <textarea
                           name="specification"
+                          id="additionalinfo"
                           class="form-control form-control-lg"
                           placeholder="Enter Additional Information"
-                          required
                         ></textarea>
+                        <small
+                          id="additionalinfoError"
+                          class="text-danger"
+                        ></small>
                       </div>
                       <div class="mb-3">
                         <label for="category">Category</label>
@@ -222,10 +238,11 @@
                         <input
                           type="number"
                           name="price"
+                          id="price"
                           class="form-control form-control-lg"
                           placeholder="Enter product price"
-                          required
                         />
+                        <small id="priceError" class="text-danger"></small>
                       </div>
                       <!-- <hr /> -->
 
@@ -234,10 +251,11 @@
                         <input
                           type="number"
                           name="stock"
+                          id="stock"
                           class="form-control form-control-lg"
                           placeholder="Enter the product stock"
-                          required
                         />
+                        <small id="stockError" class="text-danger"></small>
                       </div>
                       <input
                         style="
@@ -264,6 +282,88 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
     <script>
+      document
+        .getElementById("add-form")
+        .addEventListener("submit", function (event) {
+          function isEmpty(value) {
+            const trimmedValue = value.trim();
+            return trimmedValue === "";
+          }
+
+          const name = document.getElementById("name");
+          const namenameValue = name.value;
+          const nameError = document.getElementById("nameError");
+
+          const desciption = document.getElementById("desciption");
+          const desciptionValue = desciption.value;
+          const desciptionError = document.getElementById("desciptionError");
+
+          const additionalinfo = document.getElementById("additionalinfo");
+          const additionalinfoValue = additionalinfo.value;
+          const additionalinfoError = document.getElementById(
+            "additionalinfoError"
+          );
+
+          const price = document.getElementById("price");
+          const priceValue = parseFloat(price.value);
+          const priceError = document.getElementById("priceError");
+
+          const stock = document.getElementById("stock");
+          const stockValue = parseInt(stock.value, 10);
+          const stockError = document.getElementById("stockError");
+
+          const images = document.getElementById("displayinput");
+          const imagesError = document.getElementById("imagesError");
+
+          nameError.textContent = "";
+          desciptionError.textContent = "";
+          additionalinfoError.textContent = "";
+          priceError.textContent = "";
+          stockError.textContent = "";
+          imagesError.textContent = "";
+
+          if (images.files.length === 0) {
+            imagesError.textContent = "Please select at least one image";
+            event.preventDefault();
+          }
+
+          if (isEmpty(namenameValue)) {
+            nameError.textContent = "name can't be empty";
+            event.preventDefault();
+          }
+
+          if (isEmpty(desciptionValue)) {
+            desciptionError.textContent = "Desciption can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(additionalinfoValue)) {
+            additionalinfoError.textContent =
+              "Additional information can't be empty";
+            event.preventDefault();
+          }
+          if (isNaN(priceValue) || priceValue <= 0) {
+            priceError.textContent = "Price must be a valid number";
+            event.preventDefault();
+          }
+
+          if (isNaN(stockValue) || stockValue <= 0) {
+            stockError.textContent =
+              "Stock must be a positive integer greater than 0";
+            event.preventDefault();
+          }
+          if (desciptionValue.length > 45) {
+            desciptionError.textContent =
+              "Description must not exceed 45 characters";
+            event.preventDefault();
+          }
+          if (additionalinfoValue.length < 60) {
+            additionalinfoError.textContent =
+              "Additional information must be at least 60 characters";
+            event.preventDefault();
+          }
+        });
+    </script>
+    <script>
       function displayImages(inputId, outputId) {
         var input = document.getElementById(inputId);
         var output = document.getElementById(outputId);
@@ -283,23 +383,6 @@
       }
     </script>
 
-    <script>
-      function validateStock() {
-        var stockInput = document.getElementById("stockInput");
-        var stockError = document.getElementById("stockError");
-
-        var stockValue = parseInt(stockInput.value, 10);
-
-        if (isNaN(stockValue) || stockValue < 0) {
-          stockError.textContent = "Stock must be a non-negative number.";
-          stockInput.focus();
-          return false;
-        } else {
-          stockError.textContent = ""; // Clear the error message
-          return true; // Allow form submission
-        }
-      }
-    </script>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

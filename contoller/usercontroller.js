@@ -295,10 +295,11 @@ const postforgotpassword = async (req, res) => {
     }
 }
 const getresetpassword = (req, res) => {
-    res.render('user/resetpassword')
+    res.render('user/resetpassword', { err: "" })
 }
 const postresetpassword = async (req, res) => {
     try {
+        
         const newPassword = req.body.newPassword;
         const confirmPassword = req.body.confirmPassword;
         console.log(newPassword, confirmPassword, "----------");
@@ -507,25 +508,5 @@ const getproductlist = async (req, res) => {
 
 
 
-const search = async (req, res) => {
-    console.log('this function started working')
-    const searchQuery = req.body.query;
-    console.log(searchQuery)
-
-    try {
-        // Perform a search query on your database
-        const products = await product.find({ name: { $regex: "^" + req.body.query, $options: 'i' } });
-        console.log(products)
-
-        res.json({ products });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-}
-
-
-
-
-module.exports = { search, getproductlist, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
+module.exports = {  getproductlist, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
 

@@ -43,11 +43,11 @@ router.delete('/deleteimage/:productId/:index', verifyadmin, admincontroller.del
 
 
 
-
-
-
 router.get('/editcategory/:id', verifyadmin, admincontroller.geteditcategory)
-router.post('/updatecategory/:id', admincontroller.postupdatecategory)
+router.post('/updatecategory/:id',verifyadmin, admincontroller.postupdatecategory)
+
+
+
 router.post('/update/:id', upload.array('images', 5), admincontroller.postupdateproduct)
 
 router.get('/', verifyadmin, admincontroller.getdash)
@@ -66,7 +66,8 @@ router.post('/updateStatus/:orderId', verifyadmin, admincontroller.getorderStatu
 router.get('/coupon', verifyadmin, couponcontroller.getcoupon)
 router.get('/addcoupon', verifyadmin, couponcontroller.addcoupon)
 router.post('/addcoupon', verifyadmin, couponcontroller.postaddcoupon)
-router.post('/editcoupon/:id', verifyadmin, couponcontroller.posteditcoupon)
+router.get('/editcoupon/:id', verifyadmin, couponcontroller.geteditcoupon)
+router.post('/updatecoupon/:id', verifyadmin, couponcontroller.posteditcoupon)
 router.get('/deletecoupon/:id', verifyadmin, couponcontroller.deletecoupon)
 
 

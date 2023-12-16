@@ -115,43 +115,40 @@
               <h3>EDIT CATEGORY</h3>
             </div>
             <div class="card-body p-4">
-              <form action="/admin/updatecategory/<%=categories._id%>" method="post">
+              <form
+                action="/admin/updatecategory/<%=categories._id%>"
+                method="post"
+                id="edit-cat"
+              >
                 <div class="mb-3">
                   <label for="name">Name</label>
                   <input
                     type="text"
                     name="name"
+                    id="editedname"
                     class="form-control form-control-lg"
                     value="<%=categories.name%>"
                   />
+                  <% if(err){ %>
+
+                  <small style="color: red; margin-top: 10px"> <%=err%> </small>
+                  <%}%>
+
+                  <small id="editednameError" class="text-danger"></small>
                 </div>
-                <div class="mb-3">
-                  <label for="images">Images</label>
-                  <input
-                    type="file"
-                    name="images"
-                    class="form-control-file"
-                    multiple
-                  />
-                </div>
+
                 <div class="mb-3">
                   <label for="description">Description</label>
                   <textarea
                     name="description"
+                    id="editeddesciption"
                     class="form-control form-control-lg"
                   >
 <%=categories.description%></textarea
                   >
+                  <small id="editeddesciptionError" class="text-danger"></small>
                 </div>
-                <div class="mb-3">
-                  <label for="stock">Stock</label>
-                  <input
-                    type="number"
-                    name="stock"
-                    class="form-control form-control-lg"
-                    value="<%=categories.stock%>"
-                  />
-                </div>
+
                 <input
                   style="
                     background-color: rgb(0, 0, 0);
@@ -169,6 +166,39 @@
         </div>
       </div>
     </div>
+    <script>
+      document
+        .getElementById("edit-cat")
+        .addEventListener("submit", function (event) {
+          function isEmpty(value) {
+            const trimmedValue = value.trim();
+            return trimmedValue === "";
+          }
+
+          const name = document.getElementById("editedname");
+          const namenameValue = name.value;
+          const nameError = document.getElementById("editednameError");
+
+          const desciption = document.getElementById("editeddesciption");
+          const desciptionValue = desciption.value;
+          const desciptionError = document.getElementById(
+            "editeddesciptionError"
+          );
+
+          nameError.textContent = "";
+          desciptionError.textContent = "";
+
+          if (isEmpty(namenameValue)) {
+            nameError.textContent = "name can't be empty";
+            event.preventDefault();
+          }
+
+          if (isEmpty(desciptionValue)) {
+            desciptionError.textContent = "Desciption can't be empty";
+            event.preventDefault();
+          }
+        });
+    </script>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

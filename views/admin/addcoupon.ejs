@@ -113,7 +113,7 @@
             >
               <h5>ADD NEW COUPON</h5>
             </div>
-         
+
             <div class="card-body">
               <form action="/admin/addcoupon" method="post" id="add-form">
                 <div class="mb-3">
@@ -125,7 +125,7 @@
                     class="form-control form-control-lg"
                     placeholder="Enter category name"
                   />
-                  <div class="error text-danger" id="nameError"></div>
+                  <small class="error text-danger" id="nameError"></small>
                 </div>
                 <div class="mb-3">
                   <label for="description">Coupon code</label>
@@ -135,7 +135,13 @@
                     id="Code"
                     placeholder="Enter category description"
                   />
-                  <div class="error text-danger" id="CodeError"></div>
+                  <small class="error text-danger" id="CodeError"></small>
+                  <% if(err){ %>
+
+                  <small id="errorMessage" style="color: red; margin-top: 10px">
+                    <%=err%>
+                  </small>
+                  <%}%>
                 </div>
 
                 <div class="mb-3">
@@ -145,17 +151,7 @@
                     id="Min_purchase_amount"
                     class="form-control form-control-lg"
                   />
-                  <div class="error text-danger" id="minError"></div>
-                </div>
-                <div class="mb-3">
-                  <label for="addedDate">Max amount</label>
-                  <input
-                    type="number"
-                    id="Max_purchase_amount"
-                    name="Max_amount"
-                    class="form-control form-control-lg"
-                  />
-                  <div class="error text-danger" id="maxError"></div>
+                  <small class="error text-danger" id="minError"></small>
                 </div>
 
                 <div class="mb-3">
@@ -166,7 +162,7 @@
                     class="form-control form-control-lg"
                     id="Start_date"
                   />
-                  <div class="error text-danger" id="strDateError"></div>
+                  <small class="error text-danger" id="strDateError"></small>
                 </div>
                 <div class="mb-3">
                   <label for="addedDate">Expirey date</label>
@@ -176,19 +172,9 @@
                     name="Expirey_date"
                     class="form-control form-control-lg"
                   />
-                  <div class="error text-danger" id="expDateError"></div>
+                  <small class="error text-danger" id="expDateError"></small>
                 </div>
 
-                <div class="mb-3">
-                  <label for="Max_count">Count </label>
-                  <input
-                    type="number"
-                    id="Max_usage_count"
-                    name="Max_count"
-                    class="form-control form-control-lg"
-                  />
-                  <div class="error text-danger" id="maxCountError"></div>
-                </div>
                 <!-- <div class="mb-3">
                   <label for="addedDate">Active</label>
                   <input name="IsActive" class="form-control form-control-lg" />
@@ -201,7 +187,7 @@
                     name="DiscountAmount"
                     class="form-control form-control-lg"
                   />
-                  <div class="error text-danger" id="discountError"></div>
+                  <small class="error text-danger" id="discountError"></small>
                 </div>
                 <input
                   style="
@@ -250,31 +236,9 @@
             const trimmedValue = value.trim();
             return trimmedValue === "";
           }
-          function isDateBeforeToday(date) {
-            const currentDate = new Date();
-            const inputDate = new Date(date);
-            currentDate.setHours(0, 0, 0, 0);
-            inputDate.setHours(0, 0, 0, 0);
 
-            return inputDate < currentDate;
-          }
-          function maxcheck(min, max) {
-            return min > max;
-          }
-
-          function isDateBefore(date1, date2) {
-            const firstDate = new Date(date1);
-            const secondDate = new Date(date2);
-            firstDate.setHours(0, 0, 0, 0);
-            secondDate.setHours(0, 0, 0, 0);
-
-            return firstDate > secondDate;
-          }
           function isValueLessThanZero(value) {
-            return value < 0;
-          }
-          function isValuegreaterThanhundred(value) {
-            return value < 0;
+            return value <= 0;
           }
 
           const name = document.getElementById("name");
@@ -291,12 +255,6 @@
           const Min_purchase_amountValue = Min_purchase_amount.value;
           const minError = document.getElementById("minError");
 
-          const Max_purchase_amount = document.getElementById(
-            "Max_purchase_amount"
-          );
-          const Max_purchase_amountValue = Max_purchase_amount.value;
-          const maxError = document.getElementById("maxError");
-
           const Expiration_date = document.getElementById("Expiration_date");
           const Expiration_dateValue = Expiration_date.value;
           const expDateError = document.getElementById("expDateError");
@@ -305,10 +263,6 @@
           const Start_dateValue = Start_date.value;
           const strDateError = document.getElementById("strDateError");
 
-          const Max_usage_count = document.getElementById("Max_usage_count");
-          const Max_usage_countValue = Max_usage_count.value;
-          const maxCountError = document.getElementById("maxCountError");
-
           const Discount_value = document.getElementById("Discount_value");
           const Discount_valueValue = Discount_value.value;
           const discountError = document.getElementById("discountError");
@@ -316,14 +270,12 @@
           nameError.textContent = "";
           codeError.textContent = "";
           minError.textContent = "";
-          maxError.textContent = "";
           expDateError.textContent = "";
           Start_date.textContent = "";
-          maxCountError.textContent = "";
           discountError.textContent = "";
 
           if (isEmpty(nameValue)) {
-            nameError.textContent = "add   name can't be empty";
+            nameError.textContent = "name can't be empty";
             event.preventDefault();
           }
 
@@ -332,67 +284,39 @@
             event.preventDefault();
           }
           if (isEmpty(Min_purchase_amountValue)) {
-            minError.textContent = "min purchase amount field can't be empty";
+            minError.textContent = "minimum purchase amount can't be empty";
             event.preventDefault();
           }
-          if (isValueLessThanZero(Min_purchase_amountValue)) {
+          if (
+            isEmpty(Min_purchase_amountValue) ||
+            isNaN(Min_purchase_amountValue)
+          ) {
             minError.textContent =
-              "min purchase amount field can't be less than 0";
-            event.preventDefault();
-          }
-          if (isEmpty(Max_purchase_amountValue)) {
-            maxError.textContent = "max purchase amount field can't be empty";
-            event.preventDefault();
-          }
-          if (maxcheck(Min_purchase_amountValue, Max_purchase_amountValue)) {
-            maxError.textContent =
-              "max purchase amount  can't be less than min amount";
+              "minimum purchase amount must be a valid number";
             event.preventDefault();
           }
 
-          if (isValueLessThanZero(Max_purchase_amountValue)) {
-            maxError.textContent =
-              "max purchase amount field can't be less than 0";
-            event.preventDefault();
-          }
           if (isEmpty(Start_dateValue)) {
-            strDateError.textContent = " starting date field can't be empty";
-            event.preventDefault();
-          }
-          if (isDateBeforeToday(Start_dateValue)) {
-            strDateError.textContent = "not a valida date";
+            strDateError.textContent = " starting date can't be empty";
             event.preventDefault();
           }
 
           if (isEmpty(Expiration_dateValue)) {
-            expDateError.textContent = " Expiration date field can't be empty";
-            event.preventDefault();
-          }
-          if (isDateBeforeToday(Expiration_dateValue)) {
-            expDateError.textContent = "not a valida date";
+            expDateError.textContent = " Expiration date can't be empty";
             event.preventDefault();
           }
 
-          if (isDateBefore(Start_dateValue, Expiration_dateValue)) {
-            expDateError.textContent = "expire date can't be before start date";
-            event.preventDefault();
-          }
-          if (isEmpty(Max_usage_countValue)) {
-            maxCountError.textContent = "max usage field can't be empty";
-            event.preventDefault();
-          }
-
-          if (isValueLessThanZero(Max_usage_countValue)) {
-            maxCountError.textContent =
-              "usage count field can't be less than 0";
-            event.preventDefault();
-          }
           if (isEmpty(Discount_valueValue)) {
-            discountError.textContent = "discount value field can't be empty";
+            discountError.textContent = "discount value can't be empty";
             event.preventDefault();
           }
           if (isValueLessThanZero(Discount_valueValue)) {
             discountError.textContent = "discount value can't be less than 0";
+            event.preventDefault();
+          }
+          if (Start_dateValue >= Expiration_dateValue) {
+            strDateError.textContent =
+              " Starting date must be before the Expiration date";
             event.preventDefault();
           }
         });

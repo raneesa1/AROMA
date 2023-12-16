@@ -24,68 +24,8 @@
     <section>
       <div class="container py-5">
         <div class="row">
-          <div class="col-lg-4">
-            <div class="card mb-4 mb-lg-0">
-              <div class="card-body p-0">
-                <ul class="list-group list-group-flush rounded-3">
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fas fa-globe fa-lg text-warning"></i>
-                    <p class="mb-0">
-                      <a href="profile">My Account</a>
-                    </p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fas fa-globe fa-lg text-warning"></i>
-                    <p class="mb-0">
-                      <a href="accountdetails">Account Details</a>
-                    </p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fab fa-github fa-lg" style="color: #333333"></i>
-                    <p class="mb-0"><a href="myorder">My Order</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
-                    <p class="mb-0"><a href="cart">Shopping Cart</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i
-                      class="fab fa-instagram fa-lg"
-                      style="color: #000000"
-                    ></i>
-                    <p class="mb-0"><a href="wishlist">Wishlist</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i
-                      class="fab fa-facebook-f fa-lg"
-                      style="color: #000000"
-                    ></i>
-                    <p class="mb-0"><a href="address">Address</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
-                    <p class="mb-0"><a href="wallet">Wallet</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-3">
-                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
-                    <p class="mb-0">
-                      <button
-                        type="button"
-                        class="btn"
-                        style="color: #000000"
-                        data-toggle="modal"
-                        data-target="#logoutModal"
-                      >
-                        Logout
-                      </button>
-                    </p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <% addressofuser.Address.forEach(address => { %>
+          <%-include('./partial/sidebar-profile')%> <%
+          addressofuser.Address.forEach(address => { %>
           <div class="col-lg-8">
             <div class="card mb-4">
               <div class="card-body">
@@ -120,25 +60,42 @@
                     <input
                       type="text"
                       name="Firstname"
+                      id="editedFirstname"
                       class="form-control"
                       value="<%=address.Firstname%>"
                     />
+                    <small
+                      id="editedFirstNameError"
+                      class="text-danger"
+                    ></small>
                   </div>
+
                   <div class="form-group">
                     <label for="exampleInputEmail1">Second Name </label>
                     <input
                       type="text"
+                      id="editedSecondname"
                       name="Secondname"
                       class="form-control"
                       value="<%=address.Secondname%>"
                     />
+                    <small
+                      id="editedSecondNameError"
+                      class="text-danger"
+                    ></small>
                   </div>
 
                   <div class="form-group">
                     <label for="Address">Address </label>
-                    <textarea class="form-control" rows="3" name="Address">
-<%=address.Address%></textarea
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="Address"
+                      id="editedAddress"
                     >
+<%=address.Address%> </textarea
+                    >
+                    <small id="editedAddressError" class="text-danger"></small>
                   </div>
 
                   <div class="form-group">
@@ -146,18 +103,25 @@
                     <input
                       type="text"
                       name="PhoneNumber"
+                      id="editedPhonenumber"
                       class="form-control"
                       value="<%=address.PhoneNumber%>"
                     />
+                    <small
+                      id="editedPhonenumberError"
+                      class="text-danger"
+                    ></small>
                   </div>
                   <div class="form-group">
                     <label for="City">State</label>
                     <input
                       type="text"
                       name="State"
+                      id="editedState"
                       class="form-control"
                       value="<%=address.State%>"
                     />
+                    <small id="editedStateError" class="text-danger"></small>
                     <!-- <small id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
                     > -->
@@ -167,10 +131,16 @@
                     <input
                       type="text"
                       name="City"
+                      id="editedCity"
                       class="form-control"
                       value="<%=address.City%>"
                     />
-                    <!-- <small id="emailHelp" class="form-text text-muted"
+                    <small id="editedCityError" class="text-danger"></small>
+                    <!-- <sma
+                        <small
+                      id="editedSecondNameError"
+                      class="text-danger"
+                    ></small>ll id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
                     > -->
                   </div>
@@ -182,6 +152,7 @@
                       class="form-control"
                       value="<%=address.Landmark%>"
                     />
+
                     <!-- <small id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
                     > -->
@@ -205,6 +176,7 @@
                     <label for="Postcode">Post Code</label>
                     <input
                       type="text"
+                      id="editedPincode"
                       name="Postcode"
                       class="form-control"
                       value="<%=address.Pincode%>"
@@ -212,10 +184,10 @@
                     <!-- <small id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
                     > -->
+                    <small id="editedPincodeError" class="text-danger"></small>
                   </div>
                   <button
-                    type="submit"
-                    class="btn text-light btn-lg"
+                    class="btn text-light btn-block"
                     style="background-color: #000000; border-radius: 0%"
                     type="submit"
                     name="submit"
@@ -224,7 +196,7 @@
                     SAVE
                   </button>
                   <button
-                    class="btn btn-lg btn-light border-dark"
+                    class="btn btn-block btn-light border-dark"
                     style="border-radius: 0%"
                   >
                     CANCEL
@@ -253,6 +225,122 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+
+    <script>
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          function isEmpty(value) {
+            const trimmedValue = value.trim();
+            return trimmedValue === "";
+          }
+
+          function validatePhone(phonenumber) {
+            const phoneRegex = /^\d{10}$/;
+            return phoneRegex.test(phonenumber);
+          }
+
+          function validateAddress(address) {
+            const minLength = 40;
+            return address.trim().length >= minLength;
+          }
+          function validatePinc(pincode) {
+            const pinRegex = /^\d{6}$/;
+            return pinRegex.test(pincode);
+          }
+
+          const editedFirstname = document.getElementById("editedFirstname");
+          const editedFirstnameValue = editedFirstname.value;
+          const editedFirstnameError = document.getElementById(
+            "editedFirstNameError"
+          );
+
+          const editedSecondname = document.getElementById("editedSecondname");
+          const editedSecondnameValue = editedSecondname.value;
+          const editedSecondnameError = document.getElementById(
+            "editedSecondNameError"
+          );
+
+          const editedAddress = document.getElementById("editedAddress");
+          const editedAddressValue = editedAddress.value;
+          const editedAddressError =
+            document.getElementById("editedAddressError");
+
+          const editedState = document.getElementById("editedState");
+          const editedStateValue = editedState.value;
+          const editedStateError = document.getElementById("editedStateError");
+
+          const editedCity = document.getElementById("editedCity");
+          const editedCityValue = editedCity.value;
+          const editedCityError = document.getElementById("editedCityError");
+
+          const editedPincode = document.getElementById("editedPincode");
+          const editedPincodeValue = editedPincode.value;
+          const editedPincodeError =
+            document.getElementById("editedPincodeError");
+
+          const editedPhonenumber =
+            document.getElementById("editedPhonenumber");
+          const editedPhonenumberValue = editedPhonenumber.value;
+          const editedPhonenumberError = document.getElementById(
+            "editedPhonenumberError"
+          );
+
+          editedFirstnameError.textContent = "";
+          editedSecondnameError.textContent = "";
+          editedAddressError.textContent = "";
+          editedStateError.textContent = "";
+          editedCityError.textContent = "";
+          editedPincodeError.textContent = "";
+          editedPhonenumberError.textContent = "";
+
+          if (isEmpty(editedFirstnameValue)) {
+            editedFirstnameError.textContent = "First name can't be empty";
+            event.preventDefault();
+          }
+
+          if (isEmpty(editedSecondnameValue)) {
+            editedSecondnameError.textContent = "Second name can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(editedAddressValue)) {
+            editedAddressError.textContent = "Address field can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(editedStateValue)) {
+            editedStateError.textContent = "State field can't be be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(editedCityValue)) {
+            editedCityError.textContent = "City field can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(editedPincodeValue)) {
+            editedPincodeError.textContent = "Pincode field can't be empty";
+            event.preventDefault();
+          }
+          if (isEmpty(editedPhonenumberValue)) {
+            editedPhonenumberError.textContent =
+              "Phone number field can't be empty";
+            event.preventDefault();
+          }
+          if (!validatePhone(editedPhonenumberValue)) {
+            editedPhonenumberError.textContent =
+              "Phone number must contain 10 characters";
+            event.preventDefault();
+          }
+          if (!validatePinc(editedPincodeValue)) {
+            editedPincodeError.textContent = "Enter a valid pincode";
+            event.preventDefault();
+          }
+
+          if (!validateAddress(editedAddressValue)) {
+            editedAddressError.textContent =
+              "Address should have at least 40 characters";
+            event.preventDefault();
+          }
+        });
+    </script>
     <div
       class="modal fade"
       id="logoutModal"

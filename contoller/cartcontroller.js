@@ -116,6 +116,8 @@ const addTocart = async function (req, res) {
 
 
         // const existingCart = await cart.findOne({ userId: userId._id, 'products.productId': productId });
+        
+
 
         let cartData = await cart.findOne({ userId: userId });
         // console.log(cartData, 'cartdataaaaaaaa')

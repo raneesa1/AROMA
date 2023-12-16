@@ -1,76 +1,148 @@
-const easyinvoice = require('easyinvoice');
-const fs = require('fs');
-const path = require('path');
+const product = require("../model/product");
+const user = require("../model/users");
+const order = require('../model/order');
+const puppeteer = require('puppeteer');
 
+async function generateInvoiceData(orderId) {
+    try {
+        const orders = await order.findOne({ _id: orderId });
 
-module.exports = {
-    generateInvoice: async (orderDetails) => {
-        try {
-            var data = {
-
-                "customize": {
-
-                },
-
-                "images": {
-
-                    // "logo": fs.readFileSync(path.join(__dirname, '..', 'public', 'assets', 'logoPhonebazar.png'), 'base64'),
-
-
-                },
-                "sender": {
-                    "company": "Gizmo",
-                    "address": "Vellayil",
-                    "zip": "673001",
-                    "city": "Calicut",
-                    "country": "Kerala"
-                },
-                "client": {
-                    "company": orderDetails[0].Address.name,
-                    "address": orderDetails[0].Address.addressLine,
-                    "zip": orderDetails[0].Address.pincode,
-                    "city": orderDetails[0].Address.city,
-                    "state": orderDetails[0].Address.state,
-                    // "Mob No":orderDetails[0].Address.mobileNumber,
-                    // "state": orderDetails.Address.State,
-                    // "Mob No": orderDetails.Address.Mobaile
-                },
-                "information": {
-                    "Order ID": orderDetails[0]._id,
-                    "date": orderDetails[0].OrderDate,
-                    "invoice date": orderDetails[0].OrderDate,
-                },
-                "products": (orderDetails[0].Items && orderDetails[0].Items.length > 0) ? orderDetails[0].Items.map((product) => ({
-                    "quantity": product.quantity,
-                    "description": product.productId.ProductName,
-                    "tax-rate": 18,
-                    "price": product.productId.DiscountAmount
-                })) : [],
-
-
-                "bottom-notice": "Thank You For Your Purchase",
-                "settings": {
-                    "currency": "USD",
-                    "tax-notation": "vat",
-                    "currency": "INR",
-                    "tax-notation": "GST",
-                    "margin-top": 50,
-                    "margin-right": 50,
-                    "margin-left": 50,
-                    "margin-bottom": 25
-                },
-
-
-            }
-            const result = await easyinvoice.createInvoice(data);
-
-            const filePath = path.join(__dirname, '..', 'pdf', `${orderDetails[0]._id}.pdf`);
-            await fs.promises.writeFile(filePath, result.pdf, 'base64');
-
-            return filePath;
-        } catch (error) {
-            console.error(error);
-            throw error;
+        const gstRate = 18;
+        if (!orders) {
+            throw new Error('Order not found');
         }
+
+        // Function to generate items HTML
+        async function generateItemsHTML(items) {
+            const itemsHTMLPromises = items.map(async (item) => {
+                const productDetails = await product.findOne({ _id: item.productId });
+
+                return `
+                    <tr>
+                        <td>${productDetails.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.Price}</td>
+                        <td>${item.quantity * item.Price}</td> <!-- Calculate total for each product -->
+                    </tr>
+                `;
+            });
+
+            return Promise.all(itemsHTMLPromises);
+        }
+
+        const itemsHTML = (await generateItemsHTML(orders.Items)).join('');
+
+        // Function to calculate subtotal
+        function calculateSubtotal(items) {
+            return items.reduce((subtotal, item) => subtotal + item.Price * item.quantity, 0);
+        }
+
+        // Function to calculate GST amount
+        function calculateGST(items, gstRate) {
+            const subtotal = calculateSubtotal(items);
+            return (subtotal * gstRate) / 100;
+        }
+
+        // Function to calculate total amount
+        function calculateTotal(items, gstRate) {
+            const subtotal = calculateSubtotal(items);
+            const gstAmount = calculateGST(items, gstRate);
+            return subtotal + gstAmount;
+        }
+
+        const invoiceHTML = `
+           <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    body {
+                        font-family: 'Arial', sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f5f5f5;
+                    }
+                    header {
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+                    section {
+                        margin-bottom: 30px;
+                        padding: 20px;
+                        background-color: #fff;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 10px;
+                    }
+                    th, td {
+                        border: 1px solid #ddd;
+                        padding: 12px;
+                        text-align: left;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                    }
+                    .summary {
+                        text-align: right;
+                    }
+                    footer {
+                        margin-top: 20px;
+                        text-align: center;
+                    }
+                </style>
+            </head>
+            <body>
+                <header>
+                    <h1>Invoice</h1>
+                </header>
+                <section>
+                 <div class="address-section">
+                <div>
+                    <p><strong>From:</strong> AROMA,<p> Kozhikode, Kerala, India</p></p>
+                </div>
+                <div>
+                    <p><strong>To:</strong> ,${orders.Address.Firstname}${orders.Address.Secondname}<p>${orders.Address.Address},</p> ${orders.Address.City}, ${orders.Address.State},<p> ${orders.Address.Pincode}, ${orders.Address.Country},<p/> ${orders.Address.PhoneNumber}</p>
+                </div>
+            </div>
+                    <h2>Order Details</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsHTML}
+                        </tbody>
+                    </table>
+                </section>
+                <section class="summary">
+                    <h2>Invoice Summary</h2>
+                    <p><strong>Subtotal:</strong> ${calculateSubtotal(orders.Items)}</p>
+                    <p><strong>GST (${gstRate}%):</strong> ${calculateGST(orders.Items, gstRate)}</p>
+                    <hr>
+                    <p><strong>Total:</strong> ${calculateTotal(orders.Items, gstRate)}</p>
+                </section>
+                <footer>
+                    <p>Thank You For Your Purchase</p>
+                </footer>
+            </body>
+            </html>
+        `;
+
+        return invoiceHTML;
+    } catch (error) {
+        console.error('Error generating invoice data:', error);
+        throw error;
     }
-};
+}
+
+module.exports = { generateInvoiceData };

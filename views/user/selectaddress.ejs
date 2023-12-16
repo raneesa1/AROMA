@@ -213,13 +213,17 @@
             <form id="addressForm" action="/addnewaddress" method="post">
               <div class="form-group">
                 <label for="Addressname">Address Name:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="Addressname"
-                  name="Addressname"
-                  required
-                />
+               <select
+                      class="form-control"
+                      id="exampleSelect1"
+                      name="Addressname"
+                    >
+                      <option>home</option>
+                      <option>office</option>
+                      <option>Hostel</option>
+                      <!-- <option>For Someone else</option> -->
+                    </select>
+
               </div>
 
               <div class="form-group">
@@ -227,10 +231,11 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="Firstname"
+                  id="checkoutFirstname"
                   name="Firstname"
-                  required
+
                 />
+                 <small id="checkoutFirstNameError" class="text-danger"></small>
               </div>
 
               <div class="form-group">
@@ -238,10 +243,11 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="Secondname"
+                  id="checkoutSecondname"
                   name="Secondname"
-                  required
+
                 />
+                 <small id="checkoutSecondNameError" class="text-danger"></small>
               </div>
 
               <div class="form-group">
@@ -249,10 +255,11 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="Address"
+                  id="checkoutAddress"
                   name="Address"
-                  required
+
                 />
+                 <small id="checkoutAddressError" class="text-danger"></small>
               </div>
 
               <div class="form-group">
@@ -260,10 +267,11 @@
                 <input
                   type="tel"
                   class="form-control"
-                  id="PhoneNumber"
+                  id="checkoutPhonenumber"
                   name="PhoneNumber"
-                  required
+
                 />
+                 <small id="checkoutPhonenumberError" class="text-danger"></small>
               </div>
 
               <div class="form-group">
@@ -271,20 +279,22 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="State"
+                  id="checkoutState"
                   name="State"
-                  required
+
                 />
+                 <small id="checkoutStateError" class="text-danger"></small>
               </div>
 
               <div class="form-group">
-                <label for="Landmark">Landmark:</label>
+                <label for="Landmark">Landmark(optional) :</label>
                 <input
                   type="text"
                   class="form-control"
                   id="Landmark"
                   name="Landmark"
                 />
+
               </div>
 
               <div class="form-group">
@@ -292,10 +302,11 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="City"
+                  id="checkoutCity"
                   name="City"
-                  required
+
                 />
+                 <small id="checkoutCityError" class="text-danger"></small>
               </div>
 
               <div class="form-group">
@@ -303,10 +314,11 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="Pincode"
+                  id="checkoutPincode"
                   name="Pincode"
-                  required
+
                 />
+                 <small id="checkoutPincodeError" class="text-danger"></small>
               </div>
 
               <div class="form-group">
@@ -316,8 +328,9 @@
                   class="form-control"
                   id="Country"
                   name="Country"
-                  required
+
                 />
+                 <small id="secondNameError" class="text-danger"></small>
               </div>
 
               <button
@@ -592,20 +605,143 @@
     <section class="py-5"></section>
 
 
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <!-- <img src="/public/photos/logo_aroma.jpeg" alt=""> -->
 
 
-    <script src="https://checkout.razorpay.com/v1/upi.js"></script>
+    <!-- <script src="https://checkout.razorpay.com/v1/upi.js"></script> -->
 
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
- 
+
+     <script>
+
+    document.getElementById("addressForm").addEventListener("submit", function (event) {
+      function isEmpty(value) {
+        const trimmedValue = value.trim();
+        return trimmedValue === "";
+      }
+
+      
+      function validateAddress(address) {
+        const minLength = 40;
+        return address.trim().length >= minLength;
+      }
+
+      function validatePhone(phonenumber) {
+        const phoneRegex = /^\d{10}$/;
+        return phoneRegex.test(phonenumber);
+      }
+
+      function validatePinc(pincode) {
+        const pinRegex = /^\d{6}$/;
+        return pinRegex.test(pincode);
+      }
+
+      const checkoutFirstname = document.getElementById("checkoutFirstname");
+      const checkoutFirstnameValue = checkoutFirstname.value;
+      const checkoutFirstnameError = document.getElementById("checkoutFirstNameError");
+
+      const checkoutSecondname = document.getElementById("checkoutSecondname");
+      const checkoutSecondnameValue = checkoutSecondname.value;
+      const checkoutSecondnameError = document.getElementById("checkoutSecondNameError");
+
+      const checkoutAddress = document.getElementById("checkoutAddress");
+      const checkoutAddressValue = checkoutAddress.value;
+      const checkoutAddressError = document.getElementById("checkoutAddressError");
+
+      const checkoutState = document.getElementById("checkoutState");
+      const checkoutStateValue = checkoutState.value;
+      const checkoutStateError = document.getElementById("checkoutStateError");
+
+      const checkoutCity = document.getElementById("checkoutCity");
+      const checkoutCityValue = checkoutCity.value;
+      const checkoutCityError = document.getElementById("checkoutCityError");
+
+      const checkoutPincode = document.getElementById("checkoutPincode");
+      const checkoutPincodeValue = checkoutPincode.value;
+      const checkoutPincodeError = document.getElementById("checkoutPincodeError");
+
+      const checkoutPhonenumber = document.getElementById("checkoutPhonenumber");
+      const checkoutPhonenumberValue = checkoutPhonenumber.value;
+      const checkoutPhonenumberError = document.getElementById("checkoutPhonenumberError");
+
+      checkoutFirstnameError.textContent = "";
+      checkoutSecondnameError.textContent = "";
+      checkoutAddressError.textContent = "";
+      checkoutStateError.textContent = "";
+      checkoutCityError.textContent = "";
+      checkoutPincodeError.textContent = "";
+      checkoutPhonenumberError.textContent = "";
+
+      if (isEmpty(checkoutFirstnameValue)) {
+        checkoutFirstnameError.textContent = "First name can't be empty";
+        event.preventDefault();
+      }
+
+      if (isEmpty(checkoutSecondnameValue)) {
+        checkoutSecondnameError.textContent = "Second name can't be empty";
+        event.preventDefault();
+      }
+
+      if (isEmpty(checkoutAddressValue)) {
+        checkoutAddressError.textContent = "Address field can't be empty";
+        event.preventDefault();
+      }
+
+      if (isEmpty(checkoutStateValue)) {
+        checkoutStateError.textContent = "State field can't be be empty";
+        event.preventDefault();
+      }
+
+      if (isEmpty(checkoutCityValue)) {
+        checkoutCityError.textContent = "City field can't be empty";
+        event.preventDefault();
+      }
+
+      if (isEmpty(checkoutPincodeValue)) {
+        checkoutPincodeError.textContent = "Pincode field can't be empty";
+        event.preventDefault();
+      }
+
+      if (isEmpty(checkoutPhonenumberValue)) {
+        checkoutPhonenumberError.textContent = "Phone number field can't be empty";
+        event.preventDefault();
+      }
+
+      if (!validatePhone(checkoutPhonenumberValue)) {
+        checkoutPhonenumberError.textContent = "Phone number must contain 10 characters";
+        event.preventDefault();
+      }
+
+      if (!validatePinc(checkoutPincodeValue)) {
+        checkoutPincodeError.textContent = "Enter a valid pincode";
+        event.preventDefault();
+      }
+
+      if (!validateAddress(checkoutAddressValue)) {
+        checkoutAddressError.textContent = "Address should have at least 40 characters";
+        event.preventDefault();
+      }
+    });
+</script>
+
 
 
     <script>
+      function showSuccessMessage(message) {
+  // Set the success message in the modal
+  document.getElementById("successModalMessage").textContent = message;
+
+  // Show the modal
+  var successModal = new bootstrap.Modal(
+    document.getElementById("successModal")
+  );
+  successModal.show();
+}
 
 
      
@@ -620,14 +756,14 @@
         errorModal.show();
       }
 
-      document
-        .getElementById("closeErrorModal")
-        .addEventListener("click", function () {
-          var errorModal = new bootstrap.Modal(
-            document.getElementById("errorModal")
-          );
-          errorModal.hide();
-        });
+      
+
+        document.getElementById("closeSuccessModal").addEventListener("click", function () {
+  var successModal = new bootstrap.Modal(
+    document.getElementById("successModal")
+  );
+  successModal.hide();
+});
 
 
 
@@ -726,7 +862,7 @@
                                              body: JSON.stringify({ selectedAddressId ,selectedPaymentMethod}),
                                         }).then(response => response.json()).then((res) => {
                                             if (res.status) {
-                                              alert('order success alerttttttt')
+
                                                 window.location.href = "/ordermessage";
                                                 console.log('success vinovnaeirvnreoignorignerngqergrq')
                                             }
@@ -751,14 +887,8 @@
               notes: {
                 address: '',
               },
-              "checkout": {
-                "method": {
-                  "netbanking": true,
-                  "card": true,
-                  "upi": true,
-                  "wallet": true,
-                },
-              }
+            
+              
                     }
                     var rzp1 = new Razorpay(options);
                     rzp1.on('payment.failed', function (response) {
@@ -780,6 +910,7 @@
       
     }
   }
+
 //===============================================
          function applyCoupon() {
         const couponCode = document.getElementById("couponCode").value;
@@ -796,7 +927,7 @@
           .then((response) => response.json())
           .then((data) => {
             if (data.success) {
-              showErrorMessage("Coupon applied successfully");
+              showSuccessMessage("Coupon applied successfully");
               console.log("Coupon applied successfully");
               $("#grandTotal").text(data.grandTotal);
               $("#discount").text("- ₹" + data.coupon);
@@ -817,6 +948,9 @@
   document.getElementById('viewCouponsLink').addEventListener('click', function () {
     $('#couponModal').modal('show');
   });
+
+
+  
 </script>
 
      <div class="modal fade" id="errorModal" tabindex="-1">
@@ -867,6 +1001,34 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Success</h5>
+          <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+      </div>
+      <div class="modal-body">
+        <p id="successModalMessage" class="text-success"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"   data-dismiss="modal"
+              aria-label="Close">Close</button>
       </div>
     </div>
   </div>

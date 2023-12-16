@@ -25,80 +25,7 @@
     <section>
       <div class="container py-5">
         <div class="row">
-          <div class="col-lg-4">
-            <!-- <div class="card mb-4">
-              <div class="card-body text-center">
-                <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                  alt="avatar"
-                  class="rounded-circle img-fluid"
-                  style="width: 150px"
-                />
-                <h5 class="my-3">John Smith</h5>
-       <p class="text-muted mb-1">Full Stack Developer</p> -->
-            <!-- <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> -->
-            <!-- </div> -->
-            <!-- </div> -->
-            <div class="card mb-4 mb-lg-0">
-              <div class="card-body p-0">
-                <ul class="list-group list-group-flush rounded-3">
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fas fa-globe fa-lg text-warning"></i>
-                    <p class="mb-0">
-                      <a href="profile">My Account</a>
-                    </p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fas fa-globe fa-lg text-warning"></i>
-                    <p class="mb-0">
-                      <a href="accountdetails">Account Details</a>
-                    </p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fab fa-github fa-lg" style="color: #333333"></i>
-                    <p class="mb-0"><a href="myorder">My Order</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
-                    <p class="mb-0"><a href="cart">Shopping Cart</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i
-                      class="fab fa-instagram fa-lg"
-                      style="color: #000000"
-                    ></i>
-                    <p class="mb-0"><a href="wishlist">Wishlist</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i
-                      class="fab fa-facebook-f fa-lg"
-                      style="color: #000000"
-                    ></i>
-                    <p class="mb-0"><a href="address">Address</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-4">
-                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
-                    <p class="mb-0"><a href="wallet">Wallet</a></p>
-                  </li>
-                  <li class="list-group-item d-flex align-items-center p-3">
-                    <i class="fab fa-twitter fa-lg" style="color: #000000"></i>
-                    <p class="mb-0">
-                      <button
-                        type="button"
-                        class="btn"
-                        style="color: #000000"
-                        data-toggle="modal"
-                        data-target="#logoutModal"
-                      >
-                        Logout
-                      </button>
-                    </p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
+          <%-include('./partial/sidebar-profile')%>
           <div class="col-lg-8">
             <div class="card mb-4">
               <div class="card-body">
@@ -190,9 +117,25 @@
                                   </p>
                                 </div>
                                 <div
-                                  class="col-md-4 text-muted text-right mt-4"
+                                  class="col-md-5 text-muted text-right mt-4"
                                 >
-                                  &#8377;<%=item.Price%>
+                                  &#8377;<%=item.Price%> <% if(order.Status ===
+                                  "Delivered" ){%>
+                                  <button
+                                    class="btn btn-sm mr-0"
+                                    style="
+                                      border-color: #acacac;
+                                      border-radius: 12px;
+                                    "
+                                    id="returnOrderBtn"
+                                    data-item-id="<%=item._id%> "
+                                    data-order-id="<%=order._id%>"
+                                    data-toggle="modal"
+                                    data-target="#returnProductModal"
+                                  >
+                                    Return product
+                                  </button>
+                                  <%}%>
                                 </div>
                               </div>
                             </div>
@@ -256,23 +199,14 @@
                             class="btn btn-block"
                             style="border-color: #acacac"
                             id="cancelOrderBtn"
-                            data-order-id="<%= order._id %>"
+                            data-order-id="<%=order._id%>"
                           >
                             Cancel Order
                           </button>
-                          <% } %> <% if(order.Status === "Delivered" ){%>
+                          <% } %> <% if (order.Status==="Delivered" ){%>
                           <button
-                            class="btn btn-block"
+                            class="btn btn-block mt-0"
                             style="border-color: #acacac"
-                            id="returnOrderBtn"
-                            data-order-id="<%= order._id %>"
-                          >
-                            Return product
-                          </button>
-                          <%}%> <% if (order.Status==="Delivered" ){%>
-                          <button
-                            type="button"
-                            class="btn btn-dark m-2"
                             onclick="generateAndDownloadInvoice('<%-orderId%>')"
                           >
                             Download Invoice
@@ -298,7 +232,6 @@
       document.addEventListener("DOMContentLoaded", function () {
         const cancelOrderButtons = document.querySelectorAll("#cancelOrderBtn");
         const cancellationAlert = document.getElementById("cancellationAlert");
-
         cancelOrderButtons.forEach((button) => {
           button.addEventListener("click", () => {
             const orderId = button.getAttribute("data-order-id");
@@ -322,8 +255,8 @@
                     cancellationAlert.classList.remove("alert-danger");
                     cancellationAlert.classList.add("alert-success");
                     cancellationAlert.style.display = "block";
-
-                    // location.reload();
+                    location.reload();
+                    alert("Order has been canceled");
                   } else {
                     cancellationAlert.textContent = data.message;
                     cancellationAlert.classList.remove("alert-success");
@@ -348,15 +281,73 @@
             body: JSON.stringify({ orderId }),
           });
           if (response.ok) {
-            console.log("inside response");
-            // Redirect to a new page to display the invoice
-            window.location.href = `/viewinvoice/${orderId}`;
+            const blob = await response.blob();
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `Invoice_${orderId}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
           }
         } catch (error) {
           console.error("Error in downloading the invoice:", error);
         }
       }
+
+      //=============================================
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const returnOrderButtons = document.querySelectorAll("#returnOrderBtn");
+
+        console.log("..................", returnOrderButtons);
+        returnOrderButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const orderId = button.getAttribute("data-order-id");
+            const itemId = button.getAttribute("data-item-id");
+            $("#returnOrderModal").modal("show");
+
+            console.log("..................midal opened.");
+            document
+              .getElementById("confirmReturnBtn")
+              .addEventListener("click", () => {
+                const returnReason =
+                  document.getElementById("returnReason").value;
+                const returnDescription =
+                  document.getElementById("returnDescription").value;
+
+                fetch("/return-order", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    orderId,
+                    itemId,
+                    returnReason,
+                    returnDescription,
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.success) {
+                      alert(`Order has been returned successfully.`);
+                      $("#returnOrderModal").modal("hide");
+                      window.location.reload();
+                    } else {
+                      alert("alert in not sucess");
+                      alert(`Error: ${data.message}`);
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error returning the order:", error);
+                    alert("An error occurred while returning the order.");
+                  });
+              });
+          });
+        });
+      });
     </script>
+
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -403,6 +394,71 @@
               Cancel
             </button>
             <a href="/logout" class="btn btn-danger">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add this inside the body of your HTML document -->
+    <div
+      class="modal fade"
+      id="returnOrderModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="returnOrderModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="returnReason">Reason:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="returnReason"
+                placeholder="Enter reason"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="returnDescription">Description:</label>
+              <textarea
+                class="form-control"
+                id="returnDescription"
+                placeholder="Enter description"
+                required
+              ></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #000000; color: #eee"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn"
+              id="confirmReturnBtn"
+              style="background-color: #000000; color: #eee"
+            >
+              Confirm Return
+            </button>
           </div>
         </div>
       </div>
