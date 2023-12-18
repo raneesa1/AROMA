@@ -116,13 +116,6 @@ router.post('/topaymentpage', verifyuser, cartcontroller.placeOrder)
 router.post('/addnewaddress', verifyuser, addresscontroller.postcheckoutaddaddress)
 
 
-
-//order
-router.get('/orderdetails/:id', verifyuser, ordercontoller.getorderdetials)
-router.get('/ordermessage', verifyuser, cartcontroller.getordermessage)
-router.post('/cancel-order/:orderId', verifyuser, ordercontoller.postcancelorder)
-router.post('/return-order', verifyuser, ordercontoller.returnOrder)
-
 //razorpay
 router.post('/generateRazorpayPayment', verifyuser, cartcontroller.generateRazorpay)
 router.post("/verifyrazorpaypayment", verifyuser, cartcontroller.verifyRazorpayPayment)
@@ -130,6 +123,7 @@ router.post("/verifyrazorpaypayment", verifyuser, cartcontroller.verifyRazorpayP
 
 //coupon
 router.post('/apply-coupon', verifyuser, couponcontroller.useCoupon)
+router.post('/cancel-coupon', verifyuser, couponcontroller.cancelcoupon)
 
 
 //wallet
@@ -147,7 +141,38 @@ router.get('/wishlist', verifyuser, wishlistcontroller.getwishlist);
 router.post('/addToWishlist', verifyuser, wishlistcontroller.addToWishlist)
 router.delete('/remove-from-wishlist/:productId', verifyuser, wishlistcontroller.removeFromWishlist)
 
-
+//filter sort search pagination
 router.post('/api/updateProducts', verifyuser, productcontroller.updateProducts)
+
+
+
+
+
+
+const returnstorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+
+        cb(null, 'public/photos');
+    },
+    filename: function (req, file, cb) {
+        // Define the filename for your uploaded files
+        cb(null, Date.now() + '-' + file.originalname);
+    },
+})
+
+const uploadreturn = multer({ storage: storage });
+
+
+
+//order
+router.get('/orderdetails/:id', verifyuser, ordercontoller.getorderdetials)
+router.get('/ordermessage', verifyuser, cartcontroller.getordermessage)
+router.post('/cancel-order/:orderId', verifyuser, ordercontoller.postcancelorder)
+router.post('/return-order', uploadreturn.array('images', 3), verifyuser, ordercontoller.returnOrder)
+
+
+
+
+
 
 module.exports = router

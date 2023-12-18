@@ -72,4 +72,9 @@ router.get('/deletecoupon/:id', verifyadmin, couponcontroller.deletecoupon)
 
 
 
+router.get('/returns', verifyadmin, admincontroller.getreturns)
+router.post('/update-return-status/:returnId', admincontroller.postreturnstatus)
+
+
+
 module.exports = router;

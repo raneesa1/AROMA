@@ -45,9 +45,8 @@ const getcart = async (req, res) => {
                 username: email,
                 product: [],
                 subtotal: 0,
-                total: 0,
+                TotalPrice: 0,
                 coupon: 0,
-                grandTotal: undefined,
                 gstAmount: 0,
                 totalQuantity: 0,
                 User,
@@ -80,12 +79,12 @@ const getcart = async (req, res) => {
             username: email,
             product: products,
             newcart,
-            grandTotal: undefined,
+            // grandTotal: undefined,
             coupon: 0,
             subtotal: subtotal,
             gstAmount: gstAmount.toFixed(2),
             totalQuantity: totalQuantity,
-            total: total,
+            TotalPrice: total,
             User,
         });
 
@@ -116,7 +115,7 @@ const addTocart = async function (req, res) {
 
 
         // const existingCart = await cart.findOne({ userId: userId._id, 'products.productId': productId });
-        
+
 
 
         let cartData = await cart.findOne({ userId: userId });
@@ -128,6 +127,8 @@ const addTocart = async function (req, res) {
             } else {
                 cartData.products.push({ productId: productId, quantity: 1 });
             }
+
+
             await cart(cartData).save();
             req.session.userCart = cartData._id;
             res.json({ success: true, message: 'Product added to cart successfully' });
@@ -232,6 +233,7 @@ const updateQuantity = async (req, res) => {
         let subtotal = 0;
         let totalQuantity = 0;
 
+
         newcart.products.forEach(item => {
             const { quantity, productId } = item;
             const { price } = productId;
@@ -304,7 +306,6 @@ const placeOrder = async (req, res) => {
                 Price: productDetails.price,
                 productId: item.productId,
                 quantity: item.quantity,
-                grandTotal: undefined,
                 coupon: 0,
 
             };
@@ -313,15 +314,30 @@ const placeOrder = async (req, res) => {
 
         const item = await Promise.all(itemsPromises);
 
-        let amount = 0;
+        // let amount = 0;
 
-        if (req.session.grandTotal == undefined) {
-            amount = req.session.totalPrice;
+        // if (req.session.grandTotal == undefined) {
+        //     amount = req.session.totalPrice;
+        // } else {
+        //     amount = req.session.grandTotal;
+        // }
+
+
+        let price = 0
+
+        if (cartDetails.coupon) {
+            price = Math.floor(req.session.totalPrice - cartDetails.coupon)
+
         } else {
-            amount = req.session.grandTotal;
+            price = Math.floor(req.session.totalPrice)
+
         }
 
-        const totalPrice = Math.floor(amount)
+
+
+
+
+        const totalPrice = price
 
         if (paymentMethod === "wallet") {
             const userWallet = await wallet.findOne({ User_id: userId });
@@ -396,29 +412,9 @@ const placeOrder = async (req, res) => {
 
 
 
-        req.session.grandTotal = undefined
+        // req.session.grandTotal = undefined
 
-        // if (paymentMethod == "cod") {
-        //     res.json({
-        //         codSuccess: true,
-        //         message: "order Success"
-        //     });
-        // } else if (paymentMethod == "online") {
-        //     const order = {
-        //         amount: totalPrice * 100,
-        //         currency: "INR",
-        //         receipt: savedOrder._id,
-        //     };
-        //     await razorpay
-        //         .createRazorpayOrder(order)
-        //         .then((createdOrder) => {
-        //             res.json({ online: true, createdOrder, order });
-        //         })
-        //         .catch((err) => {
-        //             console.log('error from razorpay in backend function', err)
-        //         });
 
-        // }
 
     } catch (error) {
         console.log('error from place order ', error)
@@ -439,15 +435,17 @@ const generateRazorpay = async (req, res) => {
         const userId = userData._id;
 
 
-        let amount = 0;
+        // let amount = 0;
 
-        if (req.session.grandTotal == undefined) {
-            amount = req.session.totalPrice;
-        } else {
-            amount = req.session.grandTotal;
-        }
+        // if (req.session.grandTotal == undefined) {
+        //     amount = req.session.totalPrice;
+        // } else {
+        //     amount = req.session.grandTotal;
+        // }
 
-        const totalPrice = Math.floor(amount)
+
+
+        const totalPrice = Math.floor(req.session.totalPrice)
 
         // const amount = req.session.subtotal;
 
@@ -482,7 +480,7 @@ const generateRazorpay = async (req, res) => {
         const order = await createOrder(); // Wait for the order creation
 
 
-        req.session.grandTotal = undefined
+        // req.session.grandTotal = undefined
 
 
         console.log('order saved in razor pay payment methhodd function')

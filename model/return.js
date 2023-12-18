@@ -7,32 +7,19 @@ require('dotenv').config()
 
 const ReturnSchema = new mongoose.Schema({
     userId: {
-        type: ObjectId,
-        required: true,
+        type: ObjectId, required: true,
     },
-    orderId: {
-        type: ObjectId,
-    },
-    Status: {
-        type: String,
-        default: "not accepted"
-    },
-    product: {
-        type: ObjectId,
-    },
+    orderId: { type: ObjectId, },
+    Status: { type: String, default: "not accepted" },
+    image: { type: Array },
+    orderNumber:{type:String},
+    productname:{type:String},
+    product: { type: ObjectId, },
     quantity: { type: Number },
-    reason: {
-        type: String,
-    },
-    price: {
-        type: Number,
-    },
-    returnedDate: {
-        type: Date,
-    },
-    orderDate: {
-        type: Date,
-    },
+    reason: { type: String, },
+    price: { type: Number },
+    returnedDate: { type: Date },
+    orderDate: { type: Date, },
 });
 
 

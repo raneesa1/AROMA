@@ -4,6 +4,7 @@ const user = require('../model/users');
 const order = require('../model/order')
 const { ObjectId } = require('mongodb');
 const product = require('../model/product');
+const returns = require('../model/return');
 
 
 
@@ -412,4 +413,48 @@ const deleteImagess = async (req, res) => {
 }
 
 
-module.exports = { deleteImagess, getorderStatus, getmoredetails, postupdatecategory, getorder, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };
+const getreturns = async (req, res) => {
+
+  const returnorder = await returns.find({})
+  res.render('admin/return', { returnorder })
+}
+
+
+const postreturnstatus = async (req, res) => {
+
+  console.log('the function to update status of return started working')
+  console.log(req.params.returnId, "params from upating status or returns")
+  
+  console.log(req.body,"req.body -------- ")
+  const returnId = req.params.returnId;
+  const newStatus = req.body.status;
+
+  console.log(newStatus, "updated status")
+
+  try {
+    // Update the return status in the database
+    const updatedReturn = await returns.findByIdAndUpdate(
+      returnId,
+      { Status: newStatus },
+      { new: true }
+    );
+
+    console.log(updatedReturn, "return data afte updating")
+
+    if (!updatedReturn) {
+      return res.json({ success: false, message: 'Return not found' });
+    }
+
+    // Optionally, update the status in the corresponding order
+    // Add your code to update the Order model here if needed
+
+    return res.json({ success: true, message: 'Return status updated successfully' });
+  } catch (error) {
+    console.error('Error updating return status:', error);
+    return res.json({ success: false, message: 'Error updating return status' });
+  }
+}
+
+
+
+module.exports = { postreturnstatus, getreturns, deleteImagess, getorderStatus, getmoredetails, postupdatecategory, getorder, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };

@@ -476,17 +476,17 @@
               <p class="mb-2">Sub Total :</p>
               <p class="mb-2 text-success">&#8377;<%= subtotal %></p>
             </div>
-               <% if(coupon){%>
+               <% if(!coupon){%>
                       <div class="d-flex justify-content-between mb-4">
                         <p class="mb-2">Discount(coupon):</p>
-                        <p  class=""style="color: green" id="discount"></p>
+                        <p  class=""style="color: green" id="discount">-0</p>
                       </div>
                       <% }else{%>
 
                       <div class="d-flex justify-content-between mb-4">
                         <p class="">Discount(coupon):</p>
                         <p class="" style="color: green" id="discount">
-                          - &#8377;<%=coupon %>
+                          - &#8377;<%=coupon%>
                         </p>
                       </div>
                       <% }%>
@@ -499,17 +499,20 @@
               <p class="mb-2 text-danger">&#8377;0</p>
             </div>
             <hr />
+            
             <div class="d-flex justify-content-between">
               <p class="mb-2" style="font-weight: bold" ;>Total price:</p>
-               <% if(grandTotal===undefined){%>
-                        <p id="grandTotal" class="mb-2 fw-bold">
-                          &#8377;<%= total %>
+             
+                           <% if(!coupon){%>
+                        <p id="TotalPrice" class="mb-2 fw-bold">
+                          &#8377;<%= TotalPrice %>
                         </p>
-                        <% } else { %>
-                        <p id="grandTotal" class="mb-2 fw-bold">
-                          &#8377;<%= grandTotal %>
+                           <% }else{%>
+                             <p id="TotalPrice" class="mb-2 fw-bold">
+                          &#8377;<%= TotalPrice - coupon %>
                         </p>
-                        <% } %>
+                           <% }%>
+                  
             </div>
 
             <hr />
@@ -574,8 +577,13 @@
             
             </button>
               </form>
+
             <hr >
-               <h6 class="mt-4">Enter coupon code</h6>
+         
+
+         <%   if(!coupon){ %>
+
+            <h6 class="mt-4">Enter coupon code</h6>
                       <div class="input-group mt-3 mb-2">
                         <input
                           type="text"
@@ -584,17 +592,73 @@
                           placeholder="Coupon code"
                           id="couponCode"
                         />
-                        <button
+
+                     
+                        <button id="applybtn"
                           class="btn btn-light text-dark border " 
                           onclick="applyCoupon()"
-                        >
+                       style="display: block;" >
                           Apply
                         </button>
+                          
                       
+                              <button 
+                          class="btn btn-light text-dark border " 
+                          id="cancelCouponBtn" style="display: none;"
+
+                        > 
+                        Cancel
+                        </button>
+
+                              
                      
                       </div>
                         <p class="ml-5 pl-5 mt-0 pt-0 coupon-text"><a href="">view coupons and save extra!</a></p>
-                      <hr>
+         
+              
+
+         <%}else{%>
+            <h6 class="mt-4">Enter coupon code</h6>
+                      <div class="input-group mt-3 mb-2">
+                        <input
+                          type="text"
+                          class="form-control border"
+                          name=""
+                          placeholder="Coupon code"
+                          id="couponCode"
+                        />
+
+                     
+                        <button id="applybtn"
+                          class="btn btn-light text-dark border " 
+                          onclick="applyCoupon()"
+                       style="display: none;" >
+                          Apply
+                        </button>
+                          
+                      
+                              <button 
+                          class="btn btn-light text-dark border " 
+                          id="cancelCouponBtn" style="display: block;"
+
+                        > 
+                        Cancel
+                        </button>
+
+                              
+                     
+                      </div>
+                        <p class="ml-5 pl-5 mt-0 pt-0 coupon-text"><a href="">view coupons and save extra!</a></p>
+         
+              
+
+          
+
+          <%}%>
+             
+            
+                     
+                        <hr>
           </div>
         </div>
       </div>
@@ -618,6 +682,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
      <script>
+
+
+
 
     document.getElementById("addressForm").addEventListener("submit", function (event) {
       function isEmpty(value) {
@@ -929,8 +996,14 @@
             if (data.success) {
               showSuccessMessage("Coupon applied successfully");
               console.log("Coupon applied successfully");
-              $("#grandTotal").text(data.grandTotal);
+              $("#TotalPrice").text(data.TotalPrice);
               $("#discount").text("- ₹" + data.coupon);
+              const apply=document.getElementById('applybtn').style.display='none'
+  const cancelOrderBtn=document.getElementById('cancelCouponBtn').style.display='block'
+  
+
+
+
             } else {
               showErrorMessage(` ${data.message}`);
               console.error("Coupon application failed:", data.message);
@@ -951,7 +1024,69 @@
 
 
   
+
+  
 </script>
+ <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const cancelCouponButton = document.getElementById("cancelCouponBtn");
+
+        if (cancelCouponButton) {
+          cancelCouponButton.addEventListener("click", async () => {
+
+
+
+          //  const areyousure= alert("are you sure you want to cancel your coupon?")
+
+
+          alert("function started working")
+          //  if(areyousure){
+
+             const couponCode = document.getElementById("couponCode").value;
+
+
+            try {
+
+              alert("just before the fetch of cancel coupon working")
+              const response = await fetch("/cancel-coupon", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ couponCode }),
+              });
+
+              const data = await response.json();
+
+              if (data.success) {
+                alert("Coupon canceled successfully");
+                 $("#discount").text("- ₹" + 0);
+                  $("#TotalPrice").text(data.TotalPrice);
+                  alert(data)
+                  console.log(data)
+                  const apply=document.getElementById('applybtn').style.display='block'
+  const cancelOrderBtn=document.getElementById('cancelCouponBtn').style.display='none'
+  
+                    //  window.location.reload()
+
+                  // alert(data.TotalPrice)
+              } else {
+                alert(data.message);
+              }
+            } catch (error) {
+              console.error("Error canceling the coupon:", error);
+              // Display an error message
+              alert("Error canceling the coupon");
+
+            }
+          // }
+        });
+        
+        }
+      
+      });
+    
+    </script>
 
      <div class="modal fade" id="errorModal" tabindex="-1">
       <div class="modal-dialog">

@@ -128,10 +128,8 @@
                                       border-radius: 12px;
                                     "
                                     id="returnOrderBtn"
-                                    data-item-id="<%=item._id%> "
-                                    data-order-id="<%=order._id%>"
-                                    data-toggle="modal"
-                                    data-target="#returnProductModal"
+                                    data-item-id="<%= item._id %> "
+                                    data-order-id="<%=orderData[0]._id%>"
                                   >
                                     Return product
                                   </button>
@@ -140,11 +138,8 @@
                               </div>
                             </div>
                           </div>
-
                           <% }); %>
-
                           <hr />
-
                           <div>
                             <p class="pt-5" style="font-size: 16px">
                               Payment Details
@@ -158,27 +153,6 @@
                                 <%=order.paymentMethod%>
                               </p>
                             </div>
-                            <!-- <div
-                              class="d-flex justify-content-between mb-2"
-                              style="font-size: 13px"
-                            >
-                              <p class="text-muted">Sub total(Including tax)</p>
-                              <p class="text-muted">&#8377;12000</p>
-                            </div> -->
-                            <!-- <div
-                              class="d-flex justify-content-between mb-2"
-                              style="font-size: 13px"
-                            >
-                              <p class="text-muted">Discount</p>
-                              <p class="text-danger">&#8377;4</p>
-                            </div> -->
-                            <!-- <div
-                              class="d-flex justify-content-between mb-2"
-                              style="font-size: 13px"
-                            >
-                              <p class="text-muted">Shipping charge</p>
-                              <p class="text-muted">&#8377;0</p>
-                            </div> -->
                             <div
                               class="d-flex justify-content-between mb-2 ml-1"
                               style="font-size: 13px"
@@ -228,6 +202,63 @@
         </div>
       </div>
     </section>
+    <div
+      class="modal fade"
+      id="returnOrderModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="returnOrderModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="returnReason">Reason:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="returnReason"
+                placeholder="Enter reason"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="returnDescription">Description:</label>
+              <textarea
+                class="form-control"
+                id="returnDescription"
+                placeholder="Enter description"
+                required
+              ></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" id="confirmReturnBtn">
+              Confirm Return
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const cancelOrderButtons = document.querySelectorAll("#cancelOrderBtn");
@@ -293,20 +324,15 @@
           console.error("Error in downloading the invoice:", error);
         }
       }
-
-      //=============================================
-
+    </script>
+    <script>
       document.addEventListener("DOMContentLoaded", function () {
         const returnOrderButtons = document.querySelectorAll("#returnOrderBtn");
-
-        console.log("..................", returnOrderButtons);
         returnOrderButtons.forEach((button) => {
           button.addEventListener("click", () => {
             const orderId = button.getAttribute("data-order-id");
             const itemId = button.getAttribute("data-item-id");
             $("#returnOrderModal").modal("show");
-
-            console.log("..................midal opened.");
             document
               .getElementById("confirmReturnBtn")
               .addEventListener("click", () => {
@@ -334,7 +360,6 @@
                       $("#returnOrderModal").modal("hide");
                       window.location.reload();
                     } else {
-                      alert("alert in not sucess");
                       alert(`Error: ${data.message}`);
                     }
                   })
@@ -346,6 +371,53 @@
           });
         });
       });
+      // return order--------------------------------------------
+      // document.addEventListener("DOMContentLoaded", function () {
+      //   document
+      //     .getElementById("returnImages")
+      //     .addEventListener("change", handleFileUpload);
+
+      //   function handleFileUpload() {
+      //     const selectedImagesContainer = document.getElementById(
+      //       "selectedImagesContainer"
+      //     );
+      //     selectedImagesContainer.innerHTML = "";
+
+      //     const fileInput = document.getElementById("returnImages");
+      //     const files = fileInput.files;
+
+      //     for (let i = 0; i < files.length; i++) {
+      //       const file = files[i];
+
+      //       const imageContainer = document.createElement("div");
+      //       imageContainer.classList.add("selected-image-container");
+      //       imageContainer.style.display = "inline-block"; // Set display property
+
+      //       const image = document.createElement("img");
+      //       image.src = URL.createObjectURL(file);
+      //       image.alt = file.name;
+      //       image.style.maxWidth = "100px";
+      //       image.style.maxHeight = "100px";
+      //       image.classList.add("img-thumbnail");
+      //       const removeButton = document.createElement("button");
+      //       removeButton.className = "btn ";
+      //       removeButton.innerText = "Remove";
+      //       removeButton.addEventListener("click", function () {
+      //         imageContainer.remove();
+      //       });
+      //       const imageDiv = document.createElement("div");
+      //       imageDiv.appendChild(image);
+      //       imageDiv.appendChild(removeButton);
+
+      //       imageContainer.appendChild(imageDiv);
+      //       selectedImagesContainer.appendChild(imageContainer);
+
+      //       imageContainer.appendChild(image);
+      //       imageContainer.appendChild(removeButton);
+      //       selectedImagesContainer.appendChild(imageContainer);
+      //     }
+      //   }
+      // });
     </script>
 
     <script
@@ -400,9 +472,9 @@
     </div>
 
     <!-- Add this inside the body of your HTML document -->
-    <div
+    <!-- <div
       class="modal fade"
-      id="returnOrderModal"
+      id="returnOrderModal_"
       tabindex="-1"
       role="dialog"
       aria-labelledby="returnOrderModalLabel"
@@ -431,6 +503,7 @@
                 placeholder="Enter reason"
                 required
               />
+              <small class="text-danger" id="returnReasonError"></small>
             </div>
             <div class="form-group">
               <label for="returnDescription">Description:</label>
@@ -440,7 +513,21 @@
                 placeholder="Enter description"
                 required
               ></textarea>
+              <small class="text-danger" id="returnDescriptionError"></small>
             </div>
+            <div class="form-group">
+              <label for="returnImages">Upload Images:</label>
+              <input
+                type="file"
+                class="form-control-file"
+                id="returnImages"
+                accept="image/*"
+                multiple
+              />
+              <small class="text-danger" id="returnImagesError"></small>
+            </div>
+            <!-- Display selected images -->
+    <!-- <div id="selectedImagesContainer"></div>
           </div>
           <div class="modal-footer">
             <button
@@ -462,6 +549,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+    -->
   </body>
 </html>

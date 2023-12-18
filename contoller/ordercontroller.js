@@ -32,7 +32,7 @@ const getmyorder = async (req, res) => {
         const userData = await user.findOne({ email: req.session.email });
         const userId = userData._id;
 
-        console.log(userId,"user idd from")
+        console.log(userId, "user idd from")
         const orderData = await order.find({ UserID: userId }).populate('Items.productId').sort({ OrderDate: -1 });
 
 
@@ -51,10 +51,10 @@ const getorderdetials = async (req, res) => {
     try {
         const userData = await user.findOne({ email: req.session.email });
         const orderid = req.params.id
-        console.log(orderid.split(" "),"orderrereer000id))))))))))))))))))))))))))))))))))))))))))))))))")
+        console.log(orderid.split(" "), "orderid")
 
 
-        const orderData = await order.find({ _id:orderid.trim()}).populate('Items.productId');
+        const orderData = await order.find({ _id: orderid.trim() }).populate('Items.productId');
         // console.log(orderData, "orderdata))))000000000((((((((((((((((((")
 
         // console.log(orderData.TotalPrice, "tototaaaallll238202408204202")
@@ -117,23 +117,31 @@ const postcancelorder = async (req, res) => {
 
 
         if (orderData.paymentMethod !== "cod") {
-            const userWallet = await wallet.findOne({ User_id: userId });
+            let userWallet = await wallet.findOne({ User_id: userId });
 
-            if (userWallet) {
-
-                userWallet.Account_balance += refundedAmount;
-
-                // Add a transaction record to the wallet
-                userWallet.Transactions.push({
-                    Amount: refundedAmount,
-                    Date: new Date(),
-                    Description: `Refund for Order ${orderData.orderNumber}`,
-                    Transaction_type: 'Refund',
+            if (!userWallet) {
+                // If the user doesn't have a wallet, create one
+                userWallet = new wallet({
+                    User_id: userId,
+                    Account_balance: 0,
+                    Transactions: [],
                 });
-
-                await userWallet.save();
-                console.log('Refund amount added to the useres wallet');
             }
+
+
+            userWallet.Account_balance += refundedAmount;
+
+
+            userWallet.Transactions.push({
+                Amount: refundedAmount,
+                Date: new Date(),
+                Description: `Refund for Order ${orderData.orderNumber}`,
+                Transaction_type: 'Refund',
+            });
+
+            await userWallet.save();
+            console.log('Refund amount added to the useres wallet');
+
         }
 
         if (orderData.Status !== 'shipped') {
@@ -196,20 +204,20 @@ const postinvoice = async (req, res) => {
 
 
 
-
-
 const returnOrder = async (req, res) => {
     try {
         const { orderId, itemId, returnReason, returnDescription } = req.body;
 
-
-        console.log('orderId', orderId)
-        console.log(itemId, "item idd")
-        console.log(returnReason, "reason for return")
         const newitemId = itemId.trim()
-        console.log(newitemId, "item id after trim")
         const orderData = await order.findById(orderId);
+        const orderNumber = orderData.orderNumber
 
+
+
+        console.log(req.body, "req.body of return order")
+
+        console.log(newitemId, "consoling new item id")
+        console.log(orderData, "consoling orderdata")
 
         if (!orderData) {
             return res.status(404).json({ message: 'Order not found' });
@@ -239,22 +247,37 @@ const returnOrder = async (req, res) => {
         if (!products) {
             return res.status(404).json({ message: 'Product not found' });
         }
-        orderData.Items[itemIndex].status = 'return'
+        orderData.Items[itemIndex].status = 'Return Request'
         const returnQuantity = itemReturn.quantity
-        const price = products.DiscountAmount * returnQuantity;
+
+        const price = products.price * returnQuantity;
+        console.log(products.price, "total price directly from the database")
+        console.log(price, "defined price from te funciton")
 
         orderData.TotalPrice -= price
+
         await orderData.save();
+
+        // const images = req.files.map(file => file.filename);
 
         const users = await user.findOne({ email: req.session.email })
         const userId = users._id;
         const productId = products._id;
+
+        const productname= products.name
+
+
+        console.log(productname,"name of the product which is returned")
+        console.log(orderNumber,"order number of the returned product")
+
 
         const returnedDate = new Date();
         const orderDate = orderData.OrderDate;
         const returnData = new returns({
             userId,
             orderId,
+            orderNumber,
+            productname,
             product: productId,
             reason: returnReason,
             quantity: returnQuantity,
@@ -271,6 +294,11 @@ const returnOrder = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
+
+
+
+
+
 
 
 

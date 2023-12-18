@@ -159,11 +159,11 @@ const posteditcoupon = async (req, res) => {
 
             const updatedCoupon = await coupon.findByIdAndUpdate(
                 couponId,
-                { $set: {...updatedCouponData} },
+                { $set: { ...updatedCouponData } },
                 { new: true }
             );
             res.redirect('/admin/coupon');
-            console.log(updatedCoupon,"----------")
+            console.log(updatedCoupon, "----------")
         }
     } catch (error) {
         console.error('Error updating coupon', error);
@@ -181,11 +181,9 @@ const useCoupon = async (req, res) => {
         const userData = await user.findOne({ email: req.session.email })
 
         const cartData = await cart.findOne({ userId: userData._id })
-        // console.log(".................", cartData);
         const purchaseAmount = req.session.totalPrice
-        // console.log(purchaseAmount);
         const coupons = await coupon.findOne({ Coupon_code: couponCode });
-        // console.log(",,,,,,", coupons)
+
         if (!coupons) {
             return res.json({ success: false, message: 'Coupon not found' });
         }
@@ -195,13 +193,13 @@ const useCoupon = async (req, res) => {
 
         }
 
-        // const isCouponUsed = userData.usedCoupons.some(usedCoupon => usedCoupon.Coupon_code === couponCode);
-        // console.log(isCouponUsed);
-        // if (isCouponUsed) {
+        const isCouponUsed = userData.usedCoupons.some(usedCoupon => usedCoupon.Coupon_code === couponCode);
+        console.log(isCouponUsed);
+        if (isCouponUsed) {
 
-        //     console.log('going to if condition of is coupon used')
-        //     // return res.json({ success: false, message: 'Coupon already used' });
-        // }
+            console.log('going to if condition of is coupon used')
+            // return res.json({ success: false, message: 'Coupon already used' });
+        }
 
         if (purchaseAmount < coupons.Min_amount) {
             console.log('going to if case of purchase is lesser than the coupon min amount')
@@ -224,15 +222,20 @@ const useCoupon = async (req, res) => {
 
         const discountedAmount = Math.min(purchaseAmount, coupons.DiscountAmount);
         const totalAfterDiscount = Math.floor(purchaseAmount - discountedAmount);
-        req.session.grandTotal = totalAfterDiscount
-        // console.log(totalAfterDiscount, "***********", "totall after the discount");
-        // userData.usedCoupons.push({
-        //     Coupon_code: couponCode,
-        //     discountedAmount: discountedAmount,
-        //     usedDate: new Date(),
-        // });
-        // await userData.save();
-        // console.log(userData, "//////////////////////////////////////////////////////");
+        req.session.TotalPrice = totalAfterDiscount
+
+        cartData.coupon = discountedAmount;
+
+        await cartData.save();
+
+        console.log(totalAfterDiscount, "***********", "totall after the discount");
+        userData.usedCoupons.push({
+            Coupon_code: couponCode,
+            discountedAmount: discountedAmount,
+            usedDate: new Date(),
+        });
+        await userData.save();
+        console.log(userData, "//////////////////////////////////////////////////////");
 
 
 
@@ -243,7 +246,7 @@ const useCoupon = async (req, res) => {
             message: 'Coupon applied successfully',
             coupon: discountedAmount,
             discountedAmount: discountedAmount,
-            grandTotal: totalAfterDiscount
+            TotalPrice: totalAfterDiscount
         });
 
 
@@ -255,9 +258,51 @@ const useCoupon = async (req, res) => {
 
 
 
+const cancelcoupon = async (req, res) => {
+    try {
+
+        console.log("function for cancel coupon started working")
+        const userData = await user.findOne({ email: req.session.email });
+        const cartData = await cart.findOne({ userId: userData._id });
+        const purchaseAmount = req.session.totalPrice
+
+
+        console.log(userData, "data of user from cancel coupon")
+        // Check if there's a coupon applied
+        if (!cartData.coupon || cartData.coupon === 0) {
+
+            console.log("no coupon found")
+            return res.json({ success: false, message: 'No coupon applied to cancel.' });
+
+        }
+
+        console.log(cartData, "before saving to 0 for canceling the coupon")
+
+        cartData.coupon = 0;
+        await cartData.save();
+
+        console.log(cartData, "after changing to 0 for canlling the coupon")
+
+        // Remove the used coupon from the user's data
+        const { couponCode } = req.body;
+        userData.usedCoupons = userData.usedCoupons.filter(usedCoupon => usedCoupon.Coupon_code !== couponCode);
+        await userData.save();
 
 
 
-module.exports = { geteditcoupon, useCoupon, deletecoupon, deletecoupon, getcoupon, addcoupon, postaddcoupon, posteditcoupon }
+
+        return res.json({
+            success: true, message: 'Coupon canceled successfully.', coupon: 0,
+            TotalPrice: purchaseAmount
+        });
+    } catch (error) {
+        console.error(error);
+        return res.json({ success: false, message: 'Error canceling the coupon.' });
+    }
+}
+
+
+
+module.exports = { cancelcoupon, geteditcoupon, useCoupon, deletecoupon, deletecoupon, getcoupon, addcoupon, postaddcoupon, posteditcoupon }
 
 

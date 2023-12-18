@@ -106,22 +106,7 @@
     </div>
 
     <div class="d-flex">
-      <div class="menu-section text-decoration-none">
-        <a href="/admin/"><div class="menu-item">DASHBOARD</div></a>
-        <a href="/admin/product"><div class="menu-item">PRODUCTS</div></a>
-        <a href="/admin/category"><div class="menu-item">CATEGORY</div></a>
-        <a href="/admin/order"><div class="menu-item">ORDERS</div></a>
-        <a href="/admin/coupon"><div class="menu-item">COUPON</div></a>
-        <a href=""><div class="menu-item">BANNER</div></a>
-        <a href=""> <div class="menu-item">TRANSACTION</div></a>
-        <a href="/admin/user"> <div class="menu-item">MANAGE USER</div></a>
-        <a href=""> <div class="menu-item">MANAGE ADMIN</div></a>
-        <a
-          href="/logout"
-          onclick="return confirm('are you sure you want to logout?')"
-          ><div class="menu-item">LOGOUT</div></a
-        >
-      </div>
+      <%- include('./partial/section') %>
 
       <section class="h-100 gradient-custom">
         <!-- <div class="container py-5 h-100"> -->
@@ -172,9 +157,7 @@
                     <div
                       class="col-md-3 text-center d-flex justify-content-center align-items-center"
                     >
-                      <p class="text-muted mb-0 small">
-                        ₹ <%= x.Price %>
-                      </p>
+                      <p class="text-muted mb-0 small">₹ <%= x.Price %></p>
                     </div>
                     <div
                       class="col-md-2 text-center d-flex justify-content-center align-items-center"

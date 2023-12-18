@@ -299,7 +299,7 @@ const getresetpassword = (req, res) => {
 }
 const postresetpassword = async (req, res) => {
     try {
-        
+
         const newPassword = req.body.newPassword;
         const confirmPassword = req.body.confirmPassword;
         console.log(newPassword, confirmPassword, "----------");
@@ -439,6 +439,8 @@ const getselectaddress = async (req, res) => {
     // console.log(req.params.id, "session")
     // console.log(serId, "user id")
 
+
+
     const walletBalance = await wallet.findOne({ User_id: users._id })
     const formattedWalletBalance = walletBalance ? walletBalance.Account_balance : 0;
 
@@ -446,15 +448,17 @@ const getselectaddress = async (req, res) => {
 
     const newcart = await cart.findOne({ userId: userId }).populate("products.productId")
 
+    const coupon = newcart.coupon
+    console.log(coupon, "coupon from select adress page")
+
     if (!newcart || newcart.products.length === 0) {
         return res.render('user/cart', {
             title: "cart",
             username: email,
             product: [],
             subtotal: 0,
-            total: 0,
-            grandTotal: undefined,
-            coupon: 0,
+            TotalPrice: 0,
+            coupon: coupon,
             gstAmount: 0,
             totalQuantity: 0,
             User,
@@ -490,12 +494,11 @@ const getselectaddress = async (req, res) => {
         username: email,
         product: products,
         newcart,
-        grandTotal: undefined,
-        coupon: 0,
+        coupon: coupon,
         subtotal: subtotal,
         gstAmount: gstAmount.toFixed(2),
         totalQuantity: totalQuantity,
-        total: total,
+        TotalPrice: total,
         User,
         walletBalance: formattedWalletBalance,
 
@@ -508,5 +511,5 @@ const getproductlist = async (req, res) => {
 
 
 
-module.exports = {  getproductlist, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
+module.exports = { getproductlist, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
 
