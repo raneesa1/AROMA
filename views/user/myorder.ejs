@@ -22,7 +22,7 @@
   <body style="background-color: #eee">
     <%- include('./partial/header') %>
     <section>
-      <div class="container py-5">
+      <div class="container pt-5 ">
         <div class="row">
           <%-include('./partial/sidebar-profile')%>
 
@@ -35,8 +35,10 @@
                   >
                     <h3 class="ml-3 mt-3" style="color: #000000">My Orders</h3>
                   </div>
-                  <% if (orderData.length> 0) { %> <% orderData.forEach(order =>
-                  { %>
+
+                  <% if (orderData.docs.length> 0) { %> <%
+                  orderData.docs.forEach(order => { %>
+
                   <section class="h-100 gradient-custom">
                     <div class="card-body p-4">
                       <div class="card shadow-0 border mb-4">
@@ -100,45 +102,6 @@
                     </div>
                   </section>
                   <% }); %>
-
-                  <!-- <section class="h-100 gradient-custom">
-                    <div class="card-body p-4">
-                      <div class="card shadow-0 border mb-4">
-                        <div class="card-body">
-                          <div class="d-flex">
-                            <div>
-                              <p class="text-uppercase" style="font-size: 11px">
-                                order number
-                              </p>
-                              <p class="text-muted">NYK-161243913-5127596</p>
-                            </div>
-                            <div style="margin-left: 283px">
-                              <button class="btn btn-dark order-details-btn">
-                                <a href="orderdetials" class="text-light"
-                                  >order Details</a
-                                >
-                              </button>
-                            </div>
-                          </div>
-                          <p class="pt-4">1 item(s)Delivered</p>
-                          <p class="text-muted" style="font-size: 14px">
-                            Package Delivered On Thu, 20 Jul
-                          </p>
-                          <div class="row">
-                            <div class="col-md-2">
-                              <img
-                                src="/photos/1699505498730-bluedechannel.webp"
-                                class="img-fluid"
-                                alt="Phone"
-                              />
-                            </div>
-                          </div>
-
-                          <div class="row d-flex align-items-center"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </section> -->
                 </div>
               </div>
             </div>
@@ -149,6 +112,38 @@
     <% } else { %>
     <h3 class="text-danger m-5">You haven't placed any orders yet</h3>
     <!-- <a href="home"></a> -->
+    <% } %> <% if (orderData.totalPages > 1) { %>
+    <nav aria-label="Page navigation" class="d-flex justify-content-center ">
+      <ul class="pagination">
+        <% if (orderData.hasPrevPage) { %>
+        <li class="page-item">
+          <a
+            class="page-link text-black"
+              style="color: #000000;"
+            href="?page=<%= orderData.prevPage %>"
+            aria-label="Previous"
+          >
+            <span aria-hidden="true" >&laquo;</span>
+          </a>
+        </li>
+        <% } %> <% for (let i = 1; i <= orderData.totalPages; i++) { %>
+        <li  class="page-item <%= i === orderData.page ? 'active' : '' %>">
+          <a class="page-link text-black"   style="color: #000000;" href="?page=<%= i %>"><%= i %></a>
+        </li>
+        <% } %> <% if (orderData.hasNextPage) { %>
+        <li class="page-item">
+          <a
+            class="page-link text-black"
+            style="color: #000000;"
+            href="?page=<%= orderData.nextPage %>"
+            aria-label="Next"
+          >
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
     <% } %>
 
     <script

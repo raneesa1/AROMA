@@ -241,6 +241,12 @@
             return value <= 0;
           }
 
+          function isValidCouponCode(code) {
+            // At least one uppercase letter, one number, and one alphabet
+            const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[a-zA-Z]).*$/;
+            return regex.test(code);
+          }
+
           const name = document.getElementById("name");
           const nameValue = name.value;
           const nameError = document.getElementById("nameError");
@@ -282,7 +288,13 @@
           if (isEmpty(codeValue)) {
             codeError.textContent = "coupon code field can't be empty";
             event.preventDefault();
+          } else if (!isValidCouponCode(codeValue)) {
+            codeError.textContent =
+              "coupon code must contain at least one uppercase letter, one number, and one alphabet";
+            event.preventDefault();
           }
+          
+
           if (isEmpty(Min_purchase_amountValue)) {
             minError.textContent = "minimum purchase amount can't be empty";
             event.preventDefault();

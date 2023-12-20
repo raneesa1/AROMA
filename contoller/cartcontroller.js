@@ -12,7 +12,8 @@ const order = require("../model/order");
 const { ObjectId } = mongoose.Types;
 const razorpay = require('razorpay');
 const wallet = require("../model/wallet");
-
+require("dotenv").config()
+const { RAZORPAY_KEYID, RAZORPAY_KEY_SECRET } = process.env
 
 
 
@@ -94,75 +95,77 @@ const getcart = async (req, res) => {
     }
 }
 
-
-
-
-//adding product to cart
+// adding product to cart
 const addTocart = async function (req, res) {
+
+    console.log('this function for verifying razor pay payment is working')
+    console.log('Razorpay Key ID:', RAZORPAY_KEYID);
+    console.log('Razorpay Key Secret:', RAZORPAY_KEY_SECRET);
+
     try {
-
-
-        // console.log('add to cart api called');
-        const useremail = req.session.email
-        const userId = await user.findOne({ email: useremail })
-        // console.log(userId)
-        // console.log(JSON.stringify(req.query) ,"querrrrrrrrryyyyyyyyyyyyyyyyyy from cart ")
+        const useremail = req.session.email;
+        const userId = await user.findOne({ email: useremail });
 
         const productId = req.query.productId;
-        const price = productId.price
-        // console.log(price,"price of each productttttttt from cart funcitonnnnnnnnnnnnnnnn")
-        // const productDetails = await product.findOne({ _id: productId });
 
+        const productDetails = await product.findById(productId);
+        if (!productDetails) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
 
-        // const existingCart = await cart.findOne({ userId: userId._id, 'products.productId': productId });
-
-
+        const stock = productDetails.stock;
 
         let cartData = await cart.findOne({ userId: userId });
-        // console.log(cartData, 'cartdataaaaaaaa')
+
         if (cartData !== null) {
             const productIndex = cartData.products.findIndex(item => item.productId.toString() === productId.toString());
             if (productIndex !== -1) {
-                cartData.products[productIndex].quantity += 1;
+                const currentQuantity = cartData.products[productIndex].quantity;
+                if (currentQuantity < stock && currentQuantity < 10) {
+                    cartData.products[productIndex].quantity += 1;
+                    await cart(cartData).save();
+                    req.session.userCart = cartData._id;
+                    return res.json({ success: true, message: 'Product added to cart successfully' });
+                } else {
+                    if (currentQuantity >= 10) {
+                        return res.json({ success: false, message: 'Cannot add more items. Maximum quantity reached (10).' });
+                    } else {
+                        return res.json({ success: false, message: 'Not enough stock to increase quantity' });
+                    }
+                }
             } else {
-                cartData.products.push({ productId: productId, quantity: 1 });
+                if (stock > 0 && cartData.products.length < 10) {
+                    cartData.products.push({ productId: productId, quantity: 1 });
+                    await cart(cartData).save();
+                    req.session.userCart = cartData._id;
+                    return res.json({ success: true, message: 'Product added to cart successfully' });
+                } else {
+                    if (cartData.products.length >= 10) {
+                        return res.json({ success: false, message: 'Cannot add more items. Maximum quantity reached (10).' });
+                    } else {
+                        return res.json({ success: false, message: 'Not enough stock to add product to cart' });
+                    }
+                }
             }
-
-
-            await cart(cartData).save();
-            req.session.userCart = cartData._id;
-            res.json({ success: true, message: 'Product added to cart successfully' });
-
-            // console.log(req.session.userCart, "session of usercarrrrttttttttttrtrtrrtrtr")
         } else {
-            console.log('going to else case')
-            const cartData = await cart.create([{
-                userId: userId,
-                products: [{ productId: productId, quantity: 1 }],
-            }]);
-            await cart(cartData).save();
-            req.session.userCart = cartData._id;
-            res.json({ success: true, message: 'Product added to cart successfully' });
-
-            // console.log(cartData, "cartdatttaaaaa")
-            // console.log(req.session.userCart, "session of usercart")
-
-
+            console.log('going to else case');
+            if (stock > 0) {
+                const cartData = await cart.create([{
+                    userId: userId,
+                    products: [{ productId: productId, quantity: 1 }],
+                }]);
+                await cart(cartData).save();
+                req.session.userCart = cartData._id;
+                return res.json({ success: true, message: 'Product added to cart successfully' });
+            } else {
+                return res.status(400).json({ success: false, message: 'Not enough stock to add product to cart' });
+            }
         }
-
-
-
     } catch (error) {
         console.log("Error while adding to cart: ", error);
-
+        return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-
-    // await new cart(cartitems).save()
-    // console.log(cartitems)
-    // res.json({ status: true })
-
-}
-
+};
 
 
 const removeCart = async (req, res) => {
@@ -276,6 +279,9 @@ const generateRandomString = (length) => {
 };
 
 const placeOrder = async (req, res) => {
+
+
+
     try {
 
 
@@ -314,13 +320,6 @@ const placeOrder = async (req, res) => {
 
         const item = await Promise.all(itemsPromises);
 
-        // let amount = 0;
-
-        // if (req.session.grandTotal == undefined) {
-        //     amount = req.session.totalPrice;
-        // } else {
-        //     amount = req.session.grandTotal;
-        // }
 
 
         let price = 0

@@ -372,8 +372,8 @@
                 </span>
               </div>
 
-              <% if (defaultaddress.Address.length >0) { %> <%
-              defaultaddress.Address.forEach((address, index)=> { %>
+            <% if (defaultaddress && defaultaddress.Address && defaultaddress.Address.length > 0) { %>
+  <% defaultaddress.Address.forEach((address, index) => { %>
               <div
                 id="address"
                 class="address-card addaddress pl-5"
@@ -413,7 +413,7 @@
               </div>
                  <% }); %>
  <% } else { %>
-                <div class=" pl-5 address  w-75" >
+                
 </div>
               <!-- <p>No address found for the user.</p> -->
               <% } %>
@@ -860,34 +860,20 @@
               body: JSON.stringify({ selectedAddressId ,selectedPaymentMethod}),
             });
            
-            // alert('cod alert one')
+
             if (response.ok) {
-                // alert('alert for success in cod')
                         console.log("Order successful");
                         window.location.href = "/ordermessage";
-              // console.log("Selected address sent successfully!");
             } else {
-              // alert('alert in else case cod')
               console.error("Failed to send selected address");
             }
              const result = await response.json();
-                    // if (result.codSuccess) {
-                    //   alert('alert for success in cod')
-                    //     console.log("Order successful");
-                    //     window.location.href = "/ordermessage";
-                    // } 
-                    // else {
-                    //   alert('alert for order faild in cod')
-                    //     console.error("Order not successful:", result.message);
-                    // }
-                    
-
           } catch (error) {
             console.error("Error during fetch:", error);
           }
         } else if(selectedPaymentMethod === "online"){
 
-          // alert(selectedPaymentMethod,"selected payment method")
+
            var paymentId;
             fetch('/generateRazorpayPayment',{
                 method:"POST",
@@ -920,7 +906,6 @@
                                     if(res.status){
 
                                         window.location.href = "/ordermessage";
-                                      alert('alert for res.status just above the fetch function to payment page')
                                         fetch('/topaymentpage', {
                                             method: "POST",
                                             headers: {
@@ -931,7 +916,7 @@
                                             if (res.status) {
 
                                                 window.location.href = "/ordermessage";
-                                                console.log('success vinovnaeirvnreoignorignerngqergrq')
+                                                console.log('success')
                                             }
                                         });
                                         

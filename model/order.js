@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2');
 require('../config/dbconfig')
 require('dotenv').config()
 
@@ -18,7 +19,7 @@ const OrderSchema = new mongoose.Schema({
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
         quantity: { type: Number },
     }],
-    UserID: { type: mongoose.Schema.Types.ObjectId, },
+    UserID: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
     orderNumber: { type: String },
     TotalPrice: { type: Number },
     Address: {
@@ -39,6 +40,9 @@ const OrderSchema = new mongoose.Schema({
     OrderDate: { type: Date },
     PaymentId: { type: Number },
 });
+
+
+OrderSchema.plugin(mongoosePaginate);
 
 const order = mongoose.model(process.env.ORDER_COLLECTION, OrderSchema)
 module.exports = order

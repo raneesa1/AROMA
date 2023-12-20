@@ -2,6 +2,7 @@
 
 const wishlist = require('../model/wishlist')
 const user = require('../model/users')
+const cart = require('../model/cart')
 
 
 
@@ -12,8 +13,9 @@ const user = require('../model/users')
 const getwishlist = async (req, res) => {
     const users = await user.findOne({ email: req.session.email });
     const userId = users._id;
+    const cartDetails = await cart.findOne({ userId :userId})
     const wishListData = await wishlist.find({ userId: userId }).populate("Product.Product_id")
-    res.render('user/wishlist', { wishListData, user: users })
+    res.render('user/wishlist', { wishListData, user: users, cartDetails })
 }
 
 
@@ -105,7 +107,9 @@ const removeFromWishlist = async (req, res, next) => {
 
         wishlists.Product = updatedProductList;
         await wishlists.save();
+        
 
+        
         return res.status(200).json({ message: 'Product removed from wishlist successfully.' });
     } catch (error) {
         console.error('Error removing product from wishlist:', error);

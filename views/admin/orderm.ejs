@@ -132,8 +132,9 @@
             <thead>
               <tr>
                 <th scope="col">No</th>
-                <th scope="col">Order Id</th>
+                <th scope="col">OrderNo</th>
                 <th scope="col">User Id</th>
+                <th scope="col">User name</th>
                 <th scope="col">Date </th>
                 <th scope="col">Time </th>
                 <th scope="col">PaymentM</th>
@@ -148,7 +149,8 @@
         <tr>
           <th scope="row"><%= index + 1 %></th>
           <td class="text-uppercase">ARO-<%- x.orderNumber%> %></td>
-          <td><%= x.UserID %></td>
+          <td><%= x.UserID._id %></td>
+          <td><%= x.UserID.name %></td>
            <td>
             <% const orderDate = new Date(x.OrderDate); %>
             <%= orderDate.toLocaleString('default', { month: 'short' }) %>

@@ -376,3 +376,9 @@ form {
     word-wrap: break-word; /* Break words to prevent overflow */
   }
 }
+.separator-line {
+  height: 1px;
+  width: 50px; /* Adjust the width as needed */
+  background-color: #ccc; /* Color of the line */
+  margin: 0 10px; /* Adjust the margin as needed */
+}

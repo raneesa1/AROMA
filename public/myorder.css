@@ -203,3 +203,39 @@ a:hover {
   /* width: 25%; You can adjust the percentage as needed */
   padding: 0;
 }
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+}
+
+.pagination li {
+  margin: 0 5px;
+  display: inline-block;
+}
+
+.pagination a {
+  color: #333;
+  text-decoration: none;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.pagination a:hover {
+  background-color: #ddd;
+}
+
+/* Updated style for the active page */
+.pagination .active a {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important; /* Add this line to set the border color */
+}
+
+/* Additional styles for the active page */
+.pagination .active a:hover {
+  background-color: #000000; /* Change the background color on hover if needed */
+}

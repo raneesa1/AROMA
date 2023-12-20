@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2');
 require('dotenv').config()
 
 const addresschema = new mongoose.Schema({
@@ -18,6 +19,7 @@ const addresschema = new mongoose.Schema({
     }]
 
 });
+addresschema.plugin(mongoosePaginate);
 
 const address = mongoose.model(process.env.ADDRESS_COLLECTION, addresschema)
 module.exports = address

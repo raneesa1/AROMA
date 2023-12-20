@@ -198,7 +198,7 @@ const useCoupon = async (req, res) => {
         if (isCouponUsed) {
 
             console.log('going to if condition of is coupon used')
-            // return res.json({ success: false, message: 'Coupon already used' });
+            return res.json({ success: false, message: 'Coupon already used' });
         }
 
         if (purchaseAmount < coupons.Min_amount) {

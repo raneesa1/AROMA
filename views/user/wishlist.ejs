@@ -86,7 +86,7 @@
                     class="delete-btn btn"
                     onclick="remove('<%=product.Product_id._id%>')"
                   >
-                    Delete
+                    Remove
                   </button>
                 </div>
               </div>
@@ -120,6 +120,7 @@
       src="https://cdn.jsdelivr.net/npm/toastify-js"
     ></script>
     <script>
+      //same function of adding product from product detail page
       function addtocart(productId) {
         event.preventDefault();
         var requestData = {
@@ -133,8 +134,8 @@
               title: "",
               text: "Product added to cart!",
               icon: "success",
-              timer: 2000, // Set the duration in milliseconds (e.g., 2000ms = 2 seconds)
-              showConfirmButton: false, // Hide the "OK" button
+              timer: 2000,
+              showConfirmButton: false,
             });
           })
           .catch((error) => {
@@ -158,18 +159,8 @@
             .then((response) => response.json())
             .then((data) => {
               if (data.message) {
-                Toastify({
-                  text: data.message,
-                  className: "info",
-                  close: true,
-                  // position: "top-right",
-                  style: {
-                    background: "#000",
-                    color: "#fff",
-                  },
-                }).showToast();
+                console.log("product removed from wishlist");
               } else {
-                // Handle error, e.g., show an error message
                 console.error(
                   "Error removing product from wishlist:",
                   data.error

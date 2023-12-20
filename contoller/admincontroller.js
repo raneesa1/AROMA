@@ -5,6 +5,7 @@ const order = require('../model/order')
 const { ObjectId } = require('mongodb');
 const product = require('../model/product');
 const returns = require('../model/return');
+const wallet = require('../model/wallet');
 
 
 
@@ -320,12 +321,25 @@ const postupdatecategory = async (req, res) => {
 };
 
 
-
 const getorder = async (req, res) => {
-  const orderData = await order.find({}).sort({ OrderDate: -1 })
-  console.log(orderData, ' order data')
-  res.render('admin/orderm', { orderData })
-}
+  try {
+    const orderData = await order.find({})
+      .sort({ OrderDate: -1 })
+      .populate('UserID', 'name'); // Populate the 'UserID' field with 'name' property
+
+    const userData = orderData.map(order => ({
+      userId: order.UserID._id,
+      userName: order.UserID.name,
+    }));
+
+
+
+    res.render('admin/orderm', { orderData, userData });
+  } catch (error) {
+    console.error('Error fetching order data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 // const getmoredetails=async(req,res)=>{
 //   try {
@@ -424,12 +438,21 @@ const postreturnstatus = async (req, res) => {
 
   console.log('the function to update status of return started working')
   console.log(req.params.returnId, "params from upating status or returns")
-  
-  console.log(req.body,"req.body -------- ")
+
+  console.log(req.body, "req.body -------- ")
   const returnId = req.params.returnId;
   const newStatus = req.body.status;
 
+
+
   console.log(newStatus, "updated status")
+
+  const returndetails = await returns.findById(returnId)
+  const userId = returndetails.userId
+  const refundamount = returndetails.price
+  const orderNumber = returndetails.orderNumber
+  const returnedproduct = returndetails.productname
+  console.log(userId)
 
   try {
     // Update the return status in the database
@@ -439,14 +462,55 @@ const postreturnstatus = async (req, res) => {
       { new: true }
     );
 
+    if (newStatus === 'Accepted') {
+      let userWallet = await wallet.findOne({ User_id: userId });
+
+      if (!userWallet) {
+        // If the user doesn't have a wallet, create one
+        userWallet = new wallet({
+          User_id: userId,
+          Account_balance: 0,
+          Transactions: [],
+        });
+      }
+
+
+      userWallet.Account_balance += refundamount;
+
+
+      userWallet.Transactions.push({
+        Amount: refundamount,
+        Date: new Date(),
+        Description: `Refund for return of ${returnedproduct}`,
+        Transaction_type: 'Refund',
+      });
+
+      await userWallet.save();
+      console.log('Refund amount added to the useres wallet');
+
+    }
+
+
     console.log(updatedReturn, "return data afte updating")
 
     if (!updatedReturn) {
       return res.json({ success: false, message: 'Return not found' });
     }
 
-    // Optionally, update the status in the corresponding order
-    // Add your code to update the Order model here if needed
+    const orders = await order.findOne({ orderNumber: orderNumber });
+
+    if (!orders) {
+      return res.json({ success: false, message: 'Order not found' });
+    }
+
+    orders.Items.forEach(item => {
+      // Find the item in the order corresponding to the return
+      if (item.productId.toString() === returndetails.product.toString()) {
+        item.status = newStatus;
+      }
+    });
+
+    await orders.save();
 
     return res.json({ success: true, message: 'Return status updated successfully' });
   } catch (error) {

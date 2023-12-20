@@ -104,6 +104,9 @@
             class="fav-btn btn"
             style="margin-left: 279px"
             onclick="wishlist('<%=products.id%>')"
+            <% if (products.stock <= 0) { %>
+    disabled
+  <% } %>
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -286,31 +289,24 @@
       document
         .getElementById("addToCartButton")
         .addEventListener("click", function (event) {
-          event.preventDefault(); // Prevent the default form submission behavior
+          event.preventDefault();
           swal({
             title: "",
             text: "product added to cart !",
             icon: "success",
           });
-          // alert("product added to cart");
 
-          // Fetch product ID and other necessary data
-          var productId = "<%-products._id %>"; // Update with the correct way to get product ID
+          var productId = "<%-products._id %>";
 
           console.log(productId, "productid");
-          // Create an object to send in the request
           var requestData = {
             key: productId,
           };
           fetch(`/add-to-cart?productId=${requestData.key}`)
             .then((response) => response.json())
-            .then((data) => {
-              // Handle the success response
-              // You can replace this with a more user-friendly notification like SweetAlert
-            })
+            .then((data) => {})
             .catch((error) => {
               console.error(error);
-              // Handle the error (e.g., show an error message)
               Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -348,7 +344,7 @@
                 // position: "top-right",
                 style: {
                   background: "#000",
-                  color:'#fff'
+                  color: "#fff",
                 },
               }).showToast();
             } else {

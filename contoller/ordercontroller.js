@@ -5,6 +5,7 @@ const user = require("../model/users");
 const cart = require("../model/cart");
 const easyinvoice = require('easyinvoice')
 const returns = require('../model/return')
+const mongoosePaginate = require('mongoose-paginate-v2');
 const wallet = require('../model/wallet')
 
 const { ObjectId } = require('mongodb');
@@ -33,16 +34,39 @@ const getmyorder = async (req, res) => {
         const userId = userData._id;
 
         console.log(userId, "user idd from")
-        const orderData = await order.find({ UserID: userId }).populate('Items.productId').sort({ OrderDate: -1 });
 
+
+        const options = {
+            page: req.query.page || 1,
+            limit: 2,
+            sort: { OrderDate: -1 },
+        };
+
+        const orderData = await order
+            .paginate({ UserID: userId }, options)
+            .then(async (result) => {
+                console.log(result);
+                const populatedOrders = await order.populate(result.docs, { path: 'Items.productId' });
+                result.docs = populatedOrders;
+                return result;
+            });
 
         console.log(orderData, "order dataaaaaaaaaaaaaaaaaaaa")
 
-        res.render('user/myorder', { title: 'Orders', orderData, user: userData });
-    } catch (error) {
-        console.error(error);
-    }
+        res.render('user/myorder', { title: 'Orders', orderData:{
+            docs: orderData.docs,
+            totalPages: orderData.totalPages,
+            page: orderData.page,
+            hasPrevPage: orderData.hasPrevPage,
+            hasNextPage: orderData.hasNextPage,
+            prevPage: orderData.prevPage,
+            nextPage: orderData.nextPage
+        }, userData });
+} catch (error) {
+    console.error(error);
 }
+}
+
 
 
 
@@ -135,7 +159,7 @@ const postcancelorder = async (req, res) => {
             userWallet.Transactions.push({
                 Amount: refundedAmount,
                 Date: new Date(),
-                Description: `Refund for Order ${orderData.orderNumber}`,
+                Description: `Refund for Cancel Order ${orderData.orderNumber}`,
                 Transaction_type: 'Refund',
             });
 
@@ -247,7 +271,7 @@ const returnOrder = async (req, res) => {
         if (!products) {
             return res.status(404).json({ message: 'Product not found' });
         }
-        orderData.Items[itemIndex].status = 'Return Request'
+        orderData.Items[itemIndex].status = 'Requested'
         const returnQuantity = itemReturn.quantity
 
         const price = products.price * returnQuantity;
@@ -264,11 +288,11 @@ const returnOrder = async (req, res) => {
         const userId = users._id;
         const productId = products._id;
 
-        const productname= products.name
+        const productname = products.name
 
 
-        console.log(productname,"name of the product which is returned")
-        console.log(orderNumber,"order number of the returned product")
+        console.log(productname, "name of the product which is returned")
+        console.log(orderNumber, "order number of the returned product")
 
 
         const returnedDate = new Date();

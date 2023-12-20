@@ -1,19 +1,34 @@
 const category = require('../model/category');
 const product = require('../model/product');
 const { ObjectId } = require('mongodb')
-
+const user = require('../model/users')
 const mongoose = require('mongoose')
 
 const getproduct = async (req, res) => {
-    // console.log('this function is working for product one')  
-    // console.log("reached")
     const productId = req.query.id
     const products = await product.findOne({ _id: productId });
+
+
+    // const useremail = req.session.email;
+    // const userId = await user.findOne({ email: useremail });
+    // if (!userId) {
+    //     return res.status(404).render('error', { message: 'User not found' });
+    // }
+
+    // Fetch user's cart
+    // const cartData = await cart.findOne({ userId: userId });
+    // let cartQuantity = 0;
+
+    // // Calculate cartQuantity for the specified product
+    // if (cartData) {
+    //     const productIndex = cartData.products.findIndex(item => item.productId.toString() === productId.toString());
+    //     cartQuantity = (productIndex !== -1) ? cartData.products[productIndex].quantity : 0;
+    // }
+
+
+
     const related = await product.find({ status: false }).sort({ date: -1 }).limit(3);
     const categorydata = await category.find()
-
-    // console.log(products, 'produt')
-
     res.render('user/product1', { products, related, categorydata })
 }
 
