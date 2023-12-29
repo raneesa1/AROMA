@@ -36,9 +36,12 @@
           <% if(wishListData && wishListData.length > 0) { %> <%
           wishListData.forEach((wishlistItem) => { %> <%
           wishlistItem.Product.forEach((product) => { %>
-          <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+          <div
+            class="col-lg-3 col-md-4 col-sm-6 mb-4"
+            id="<%-product.Product_id._id%>"
+          >
             <a
-              href="/products?id=<%= product.Product_id._id %>"
+              onclick="window.location.href='/products?id=<%= product.Product_id._id %>'"
               class="text-decoration-none"
             >
               <div class="product-box">
@@ -54,9 +57,25 @@
                 <p class="product-description text-uppercase">
                   <%= product.Product_id.description %>
                 </p>
+                <% if (product.Product_id.discountexpiryDate &&
+                product.Product_id.discountexpiryDate > new Date()) { %>
+                <!-- Display the discounted price -->
+                <p class="product-discounted-price product-price">
+                  &#8377;<%= product.Product_id.price -
+                  product.Product_id.discountprice %>
+                </p>
+                <p
+                  class="original-price m-0 p-0 text-muted"
+                  style="font-size: 14px; text-decoration: line-through"
+                >
+                  &#8377;<%= product.Product_id.price %>
+                </p>
+                <% } else { %>
+                <!-- Display the regular price when there is no active offer -->
                 <p class="product-price">
                   &#8377;<%= product.Product_id.price %>
                 </p>
+                <% } %>
                 <!-- <a class="add-to-cart">View details</a> -->
                 <% if (product.Product_id.stock <= 0) { %>
                 <p class="out-of-stock-message text-danger">Out of Stock</p>
@@ -76,7 +95,7 @@
                   <button
                     class="add-to-cart-btn btn"
                     id="addToCartButton"
-                    onclick="addtocart('<%=product.Product_id._id%>')"
+                    onclick="addtocart('<%=product.Product_id._id%>',event)"
                   >
                     Add to Cart
                   </button>
@@ -84,7 +103,7 @@
 
                   <button
                     class="delete-btn btn"
-                    onclick="remove('<%=product.Product_id._id%>')"
+                    onclick="remove('<%=product.Product_id._id%>',event)"
                   >
                     Remove
                   </button>
@@ -121,8 +140,8 @@
     ></script>
     <script>
       //same function of adding product from product detail page
-      function addtocart(productId) {
-        event.preventDefault();
+      function addtocart(productId, event) {
+        event.stopPropagation();
         var requestData = {
           key: productId,
         };
@@ -149,7 +168,8 @@
           });
       }
 
-      function remove(productId) {
+      function remove(productId, event) {
+        event.stopPropagation();
         if (
           confirm("Are you sure you want to remove this item from whishlist?")
         ) {
@@ -159,6 +179,7 @@
             .then((response) => response.json())
             .then((data) => {
               if (data.message) {
+                document.getElementById(productId).style.display = "none";
                 console.log("product removed from wishlist");
               } else {
                 console.error(

@@ -16,7 +16,9 @@ const ProductSchema = new mongoose.Schema({
   stock: { type: Number },
   price: { type: Number },
   specification: { type: String },
-  status: { type: Boolean, default: false }
+  status: { type: Boolean, default: false },
+  discountprice: { type: Number, default: 0 }, 
+  discountexpiryDate: { type: Date }, 
 });
 
 

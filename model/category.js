@@ -9,8 +9,9 @@ const categorySchema = new mongoose.Schema({
 
     name: { type: String,  unique: true, },
     description: { type: String },
-
     date: { type: Date },
+    categorydiscountprice: { type: Number, default: 0 },
+    categorydiscountexpiryDate: { type: Date }, 
 
 });
 

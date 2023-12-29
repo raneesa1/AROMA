@@ -96,13 +96,29 @@
             view more detials
           </p></a
         >
-        <div class="d-flex">
-          <p class="product-price" id="productPrice">
-            &#8377;<%= products.price %>
-          </p>
+        <div class="">
+          <% if (products.discountexpiryDate && products.discountexpiryDate >
+              new Date()) { %>
+              <!-- Display the price with an overline -->
+
+              
+              <!-- Display the discounted price -->
+              <p class="product-discounted-price product-price"  style="font-size: 18px;">
+                &#8377;<%= products.price - products.discountprice %>
+              </p>
+              <p
+                class="original-price m-0 p-0 text-muted ml-1"
+                style="font-size: 16px; text-decoration: line-through"
+              >
+                &#8377;<%= products.price %>
+              </p>
+              <% } else { %>
+              <!-- Display the regular price when there is no active offer -->
+              <p class="product-price"  style="font-size: 18px;">&#8377;<%= products.price %></p>
+              <% } %>
           <button
             class="fav-btn btn"
-            style="margin-left: 279px"
+            style="margin-left: 330px"
             onclick="wishlist('<%=products.id%>')"
             <% if (products.stock <= 0) { %>
     disabled
@@ -178,7 +194,25 @@
                 </h4>
 
                 <p class="product-description"><%= product.description %></p>
-                <p class="product-price">&#8377;<%= product.price %></p>
+                 <% if (product.discountexpiryDate && product.discountexpiryDate >
+              new Date()) { %>
+              <!-- Display the price with an overline -->
+
+              
+              <!-- Display the discounted price -->
+              <p class="product-discounted-price product-price">
+                &#8377;<%= product.price - product.discountprice %>
+              </p>
+              <p
+                class="original-price m-0 p-0 text-muted"
+                style="font-size: 14px; text-decoration: line-through"
+              >
+                &#8377;<%= product.price %>
+              </p>
+              <% } else { %>
+              <!-- Display the regular price when there is no active offer -->
+              <p class="product-price">&#8377;<%= product.price %></p>
+              <% } %>
                 <a class="add-to-cart">View details</a>
               </div>
             </div>

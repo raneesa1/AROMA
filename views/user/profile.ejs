@@ -15,6 +15,19 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+      integrity="sha512-rGvJ5lczbaFoKILqW+GoJ4u3uqnn+8UEIzzVfTOY+TH+kYYkujWxlX+J+BRDpnLMOzTgKGhoEGqF1UzK7TU5fg=="
+      crossorigin="anonymous"
+    />
+
+    <!-- Cropper.js JavaScript -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"
+      integrity="sha512-FJ1dO8RVYTbj+8V0I7Kv6A/l5epg9GYptxFrHKqY4IjMmI/DtZDyLPQwSGx5fF2iU8oEzhZZDD6T0VotzafHHQ=="
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="/profile.css" />
 
     <title>profile</title>
@@ -61,7 +74,7 @@
                 </div>
                 <div class="row mt-0">
                   <div class="col-sm-3">
-                    <p class="mb-1 mt-0">Full Name</p>
+                    <p class="mb-1 mt-0">Full Name:</p>
                   </div>
                   <div class="col-sm-9">
                     <p class="text-muted mb-1">
@@ -72,7 +85,7 @@
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
-                    <p class="mb-1">Email</p>
+                    <p class="mb-1">Email:</p>
                   </div>
                   <div class="col-sm-9">
                     <p class="text-muted mb-1"><%=userdata.email%></p>
@@ -81,7 +94,7 @@
                 <hr />
                 <div class="row">
                   <div class="col-sm-3">
-                    <p class="mb-1">Phone number</p>
+                    <p class="mb-1">Phone number:</p>
                   </div>
                   <div class="col-sm-9">
                     <p class="text-muted mb-1">
@@ -91,14 +104,40 @@
                 </div>
                 <div class="row"></div>
                 <hr />
-                <!-- <div class="row">
+
+                <div class="row">
                   <div class="col-sm-3">
-                    <p class="mb-1">Address</p>
+                    <p class="mb-0">Referal link:</p>
                   </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-1"></p> -->
-                <!-- </div> -->
-                <!-- </div> -->
+                  <div class="col-sm-9 d-flex">
+                    <p class="text-primary" id="referralCode">
+                      http://localhost:3000/login?id=<%=userdata.Referalcode%>
+                    </p>
+                    <div style="margin-left: 120px">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        onclick="copyReferralCode()"
+                        class="mt-1"
+                        fill="currentColor"
+                        class="bi bi-copy"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div style="margin-left: 150px; font-size: 11px">
+                    <p class="text-muted mt-0 ml-5 mb-0">
+                      ask your friend to signup with this link and earn rewards!
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -179,6 +218,14 @@
                   id="editProfilePhoto"
                   name="editProfilePhoto"
                   accept="image/*"
+                />
+                <img
+                  class="mt-3"
+                  id="profileImage"
+                  src="<%=userdata.profileImage%>"
+                  alt="avatar"
+                  class="rounded-circle img-fluid"
+                  style="width: 150px"
                 />
               </div>
 
@@ -283,6 +330,28 @@
 
         // If everything is valid, return true to submit the form
         return true;
+      }
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const profileImage = document.getElementById("profileImage");
+        const cropper = new Cropper(profileImage, {
+          zoomable: true,
+          scalable: true,
+          aspectRatio: 1, // You can adjust this to your desired aspect ratio
+          viewMode: 1, // You can change this to 0, 1, 2 as per your requirement
+        });
+      });
+      function copyReferralCode() {
+        const referralCodeElement = document.getElementById("referralCode");
+        const referralCode = referralCodeElement.innerText;
+        const tempInput = document.createElement("input");
+        tempInput.value = referralCode;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("Referral code copied to clipboard!");
       }
     </script>
   </body>

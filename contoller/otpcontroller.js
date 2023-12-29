@@ -2,7 +2,7 @@ const user = require('../model/users')
 const { default: mongoose } = require('mongoose')
 const nodemailer = require('nodemailer')
 const OTP = require('../model/otp')
-
+const wallet = require('../model/wallet')
 require("dotenv").config()
 
 
@@ -17,8 +17,8 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-
 const verifyOtp = async function (req, res) {
+    console.log(req.session, "session data from verify otp")
     if (req.session.forgotOtp) {
         const email = req.session.data.email;
         let enteredOtp = req.body.otp;
@@ -51,9 +51,11 @@ const verifyOtp = async function (req, res) {
     } else {
 
 
+        console.log(req.session)
         const email = req.session.data.email;
         let enteredOtp = req.body.otp;
         const data = req.session.data;
+        console.log(data, "data of new user")
         let { otp1, otp2, otp3, otp4, otp5, otp6 } = req.body;
         enteredOtp = `${otp1}${otp2}${otp3}${otp4}${otp5}${otp6}`
         console.log(enteredOtp, 'combined otp')
@@ -62,8 +64,55 @@ const verifyOtp = async function (req, res) {
 
             if (storedOtp && storedOtp.otp === enteredOtp) {
 
+
                 // OTP is correct, you can proceed with signup
                 await new user(data).save();
+                const enteredReferralCode = req.session.EnteredReferalcode;
+                const referringUser = await user.findOne({ Referalcode: enteredReferralCode });
+
+                if (referringUser) {
+
+                    console.log('inside the if condition of referring user')
+                    const referralBonus = 100; // Set your desired bonus amount
+
+                    console.log(referralBonus,"bonus amount")
+                    console.log(referringUser._id,"id for adding money to wallet")
+                    const referringUserWallet = await wallet.findOne({ User_id: referringUser._id });
+
+                    if (!referringUserWallet) {
+                        // If the user doesn't have a wallet, create a new one
+                        const newWallet = new wallet({
+                            User_id: referringUser._id,
+                            Account_balance: 0, 
+                            Transactions: [],
+                        });
+
+                        await newWallet.save();
+                    }
+
+                    await wallet.updateOne(
+                        { User_id: referringUser._id },
+                        {
+                            $inc: { Account_balance: referralBonus },
+                            $push: {
+                                Transactions: {
+                                    Amount: referralBonus,
+                                    Date: new Date(),
+                                    Description: 'Referral Bonus',
+                                    Transaction_type: 'credit',
+                                },
+                            },
+                        }
+                    );
+
+
+                    console.log('updated the wallet - bonus')
+
+                    console.log('Referral bonus added to the wallet');
+                } else {
+                    console.log('Referring user not found');
+                }
+
                 req.session.isauth = true;
                 const userExists = await user.findOne({ email: email });
                 req.session.email = userExists.email

@@ -5,6 +5,8 @@ const userrouter = require('./router/userrouter')
 const productrouter = require('./router/productrouter')
 const session = require('express-session')
 const bcrypt = require('bcrypt')
+
+const flash = require('express-flash');
 const multer = require('multer')
 const nodemailer = require('nodemailer');
 const razorpay = require('razorpay')
@@ -40,9 +42,9 @@ app.use('/', userrouter)
 app.use('/admin', adminrouter)
 app.use('/products', productrouter)
 // const cartRoutes = require('./routes/cartRoutes');
+app.use(flash());
 
 const cartRoutes = require('./contoller/cartcontroller')
-
 
 
 

@@ -62,15 +62,38 @@ const getcart = async (req, res) => {
 
         newcart.products.forEach(item => {
             if (item.productId && item.productId.price !== undefined) {
-                subtotal += Math.floor(item.quantity * item.productId.price);
-                totalQuantity += item.quantity;
+                const { quantity, productId } = item;
+                const { price, discountprice, discountexpiryDate } = productId;
+
+                // Check if the product has an active offer
+                if (discountexpiryDate && discountexpiryDate > new Date()) {
+                    const discountedPrice = discountprice || 0;
+                    subtotal += quantity * (price - discountedPrice);
+                } else {
+                    subtotal += quantity * price;
+                }
+
+                totalQuantity += quantity;
             } else {
                 console.log("Skipping item due to missing or undefined DiscountAmount:", item.productId);
             }
-        })
+        });
+
+        const totalDiscount = newcart.products.reduce((acc, item) => {
+            const { quantity, productId } = item;
+            const { discountprice, discountexpiryDate } = productId;
+
+            if (discountexpiryDate && discountexpiryDate > new Date()) {
+                const discountedPrice = discountprice || 0;
+                acc += discountedPrice * quantity;
+            }
+
+            return acc;
+        }, 0);
+
         const gstRate = 0.18;
         const gstAmount = Math.floor(subtotal * gstRate);
-        const total = Math.floor(subtotal + gstAmount);
+        const total = Math.floor(subtotal + gstAmount - totalDiscount);
 
         // console.log(total,"totaaaaall priceeee")
 
@@ -313,6 +336,8 @@ const placeOrder = async (req, res) => {
                 productId: item.productId,
                 quantity: item.quantity,
                 coupon: 0,
+                discountprice: productDetails.discountprice || 0,
+                discountexpiryDate: productDetails.discountexpiryDate
 
             };
         });
@@ -320,6 +345,16 @@ const placeOrder = async (req, res) => {
 
         const item = await Promise.all(itemsPromises);
 
+        let totalDiscount = 0;
+
+        item.forEach(items => {
+            const { quantity, discountprice, discountexpiryDate } = items;
+
+            // Check if the product has an active offer
+            if (discountexpiryDate && discountexpiryDate > new Date()) {
+                totalDiscount += discountprice * quantity;
+            }
+        });
 
 
         let price = 0
@@ -332,11 +367,17 @@ const placeOrder = async (req, res) => {
 
         }
 
+          const totalPrice = price - totalDiscount;
+
+          req.session.totalPrice = totalPrice
+          req.session.totalDiscount = totalDiscount;
+          console.log(req.session.totalPrice,"session total price")
+          console.log(totalPrice,"total price from place order function")
 
 
 
 
-        const totalPrice = price
+
 
         if (paymentMethod === "wallet") {
             const userWallet = await wallet.findOne({ User_id: userId });
@@ -433,19 +474,23 @@ const generateRazorpay = async (req, res) => {
         const userData = await user.findOne({ email: req.session.email });
         const userId = userData._id;
 
+        const cartData = await cart.findOne({ userId }).populate('products.productId');
+        if (!cartData) {
+            return res.status(404).json({ error: 'Cart not found' });
+        }
 
-        // let amount = 0;
+        const totalPrice = Math.floor(req.session.totalPrice);
+        const totalDiscount = Math.floor(req.session.totalDiscount || 0);
 
-        // if (req.session.grandTotal == undefined) {
-        //     amount = req.session.totalPrice;
-        // } else {
-        //     amount = req.session.grandTotal;
-        // }
+        // Applying coupon discount
+        const couponDiscount = cartData.coupon || 0;
+        const totalPriceAfterCoupon = totalPrice - couponDiscount;
 
+        // Applying product offer discount
+        const productOfferDiscount = calculateProductOfferDiscount(cartData.products);
+        const totalPriceAfterProductOffer = totalPriceAfterCoupon - productOfferDiscount;
 
-
-        const totalPrice = Math.floor(req.session.totalPrice)
-
+        console.log(totalPrice,"total price from razorpay function")
         // const amount = req.session.subtotal;
 
         const razorpayInstance = new razorpay({
@@ -455,7 +500,7 @@ const generateRazorpay = async (req, res) => {
 
         console.log('================================================')
         const options = {
-            amount: totalPrice * 100, // Amount should be in paise
+            amount: totalPriceAfterProductOffer * 100,
             currency: "INR",
             receipt: userId,
             payment_capture: 1,
@@ -463,7 +508,7 @@ const generateRazorpay = async (req, res) => {
 
         console.log('creating an order , console just above creating the order function')
 
-        // Creating a Promise wrapper for razorpay.orders.create
+      
         const createOrder = () => {
             return new Promise((resolve, reject) => {
                 razorpayInstance.orders.create(options, (error, order) => {
@@ -476,12 +521,7 @@ const generateRazorpay = async (req, res) => {
             });
         };
 
-        const order = await createOrder(); // Wait for the order creation
-
-
-        // req.session.grandTotal = undefined
-
-
+        const order = await createOrder();
         console.log('order saved in razor pay payment methhodd function')
 
         res.json({ order });
@@ -491,6 +531,16 @@ const generateRazorpay = async (req, res) => {
     }
 };
 
+const calculateProductOfferDiscount = (products) => {
+    let productOfferDiscount = 0;
+    products.forEach((product) => {
+        if (product.productId && product.productId.discountexpiryDate && product.productId.discountexpiryDate > new Date()) {
+            // If there is an active product offer, subtract the discount
+            productOfferDiscount += product.productId.discountprice * product.quantity;
+        }
+    });
+    return productOfferDiscount;
+};
 
 
 

@@ -322,14 +322,27 @@
               </div>
 
               <div class="form-group">
-                <label for="Country">Country:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="Country"
-                  name="Country"
-
-                />
+                <label for="exampleSelect1">Country</label>
+                    <select
+                      class="form-control"
+                      id="exampleSelect1"
+                      name="Country"
+                    >
+                      <option>India</option>
+                      <option>Africa</option>
+                      <option>America</option>
+                      <option>Pakistan</option>
+                      <option>China</option>
+                      <option>Mexico</option>
+                      <option>Italy</option>
+                      <option>Spain</option>
+                      <option>Russia</option>
+                      <option>Argentina</option>
+                      <option>Switzerland</option>
+                      <option>Singapore</option>
+                      <option>Sweden</option>
+                      <option>New Zealand</option>
+                    </select>
                  <small id="secondNameError" class="text-danger"></small>
               </div>
 
@@ -413,8 +426,9 @@
               </div>
                  <% }); %>
  <% } else { %>
-                
 </div>
+<div></div>
+
               <!-- <p>No address found for the user.</p> -->
               <% } %>
             </div>
@@ -476,8 +490,16 @@
               <p class="mb-2">Sub Total :</p>
               <p class="mb-2 text-success">&#8377;<%= subtotal %></p>
             </div>
+            <% if(totalProductDiscount > 0){ %>
+    <div class="d-flex justify-content-between">
+      <p class="mb-2">Discount (product offer):</p>
+      <p class="" style="color: green" id="discount">
+        - &#8377;<%= totalProductDiscount %>
+      </p>
+    </div>
+  <% } %>
                <% if(!coupon){%>
-                      <div class="d-flex justify-content-between mb-4">
+                      <div class="d-flex justify-content-between ">
                         <p class="mb-2">Discount(coupon):</p>
                         <p  class=""style="color: green" id="discount">-0</p>
                       </div>
@@ -503,18 +525,12 @@
             <div class="d-flex justify-content-between">
               <p class="mb-2" style="font-weight: bold" ;>Total price:</p>
              
-                           <% if(!coupon){%>
-                        <p id="TotalPrice" class="mb-2 fw-bold">
-                          &#8377;<%= TotalPrice %>
-                        </p>
-                           <% }else{%>
-                             <p id="TotalPrice" class="mb-2 fw-bold">
-                          &#8377;<%= TotalPrice - coupon %>
-                        </p>
-                           <% }%>
-                  
+                          <% if (!coupon) { %>
+    <p id="TotalPrice" class="mb-2 fw-bold">&#8377;<%= totalWithDiscount %></p>
+  <% } else { %>
+    <p id="TotalPrice" class="mb-2 fw-bold">&#8377;<%= totalWithDiscount - coupon %></p>
+  <% } %>
             </div>
-
             <hr />
             <h6 class="text-dark my-4">Items in cart</h6>
 
@@ -544,8 +560,22 @@
                     <%= item.productId.description %></span
                   >
                 </a>
-                <div class="price text-muted ml-3"  id="productPrice">
-                   &#8377;<%= item.productId.price %>
+                <div class="price text-muted "  id="productPrice">
+                  <% if (item.productId.discountexpiryDate && item.productId.discountexpiryDate > new Date()) { %>
+        <!-- Display the discounted price when there is an active offer -->
+        <div class="price text-muted ml-3">
+          <span>&#8377;<%= item.productId.price - item.productId.discountprice %></span>
+          <!-- Display the original price with a strikethrough -->
+          <span class="text-danger" style="text-decoration: line-through; font-size: 80%;">
+            &#8377;<%= item.productId.price %>
+          </span>
+        </div>
+      <% } else { %>
+        <!-- Display the regular price when there is no active offer -->
+        <div class="price text-muted ml-3">
+          &#8377;<%= item.productId.price %>
+        </div>
+      <% } %>
                 </div>
               </div>
             </div>
@@ -691,6 +721,12 @@
         const trimmedValue = value.trim();
         return trimmedValue === "";
       }
+        function validateAddress(address) {
+    const minLength = 40;
+    const maxLength = 200; // Change this to your desired maximum length
+    const trimmedAddress = address.trim();
+    return trimmedAddress.length >= minLength && trimmedAddress.length <= maxLength;
+  }
 
       
       function validateAddress(address) {
@@ -707,6 +743,7 @@
         const pinRegex = /^\d{6}$/;
         return pinRegex.test(pincode);
       }
+
 
       const checkoutFirstname = document.getElementById("checkoutFirstname");
       const checkoutFirstnameValue = checkoutFirstname.value;
@@ -743,6 +780,22 @@
       checkoutCityError.textContent = "";
       checkoutPincodeError.textContent = "";
       checkoutPhonenumberError.textContent = "";
+
+       if (checkoutFirstnameValue.length > maxFieldLength) {
+    checkoutFirstnameError.textContent = "First name is too long";
+    event.preventDefault();
+  }
+
+  if (checkoutSecondnameValue.length > maxFieldLength) {
+    checkoutSecondnameError.textContent = "Second name is too long";
+    event.preventDefault();
+  }
+
+
+  if (!validateAddress(checkoutAddressValue)) {
+    checkoutAddressError.textContent = "Address should have between 40 and 200 characters";
+    event.preventDefault();
+  }
 
       if (isEmpty(checkoutFirstnameValue)) {
         checkoutFirstnameError.textContent = "First name can't be empty";
@@ -873,7 +926,6 @@
           }
         } else if(selectedPaymentMethod === "online"){
 
-
            var paymentId;
             fetch('/generateRazorpayPayment',{
                 method:"POST",
@@ -882,12 +934,11 @@
               
             }).then(response=>response.json()).then(res=>{
                 if(res.order){
-                  // alert("reached in res.order")
-                  // alert(res.order.amount,"amount of order")
+
                     // const orderTotalPaise=orderTotal*100
                     var options = {
                         "key": "rzp_test_sFW0lvsM9VcWEf", 
-                        "amount": res.order.amount, //showing error here why
+                        "amount":req.session.TotalPrice * 100,
                         "currency": "INR",
                         "name": "AROMA",
                         "description": "Test Transaction",
@@ -984,7 +1035,7 @@
               $("#TotalPrice").text(data.TotalPrice);
               $("#discount").text("- ₹" + data.coupon);
               const apply=document.getElementById('applybtn').style.display='none'
-  const cancelOrderBtn=document.getElementById('cancelCouponBtn').style.display='block'
+             const cancelOrderBtn=document.getElementById('cancelCouponBtn').style.display='block'
   
 
 
@@ -1007,9 +1058,6 @@
     $('#couponModal').modal('show');
   });
 
-
-  
-
   
 </script>
  <script>
@@ -1019,20 +1067,11 @@
         if (cancelCouponButton) {
           cancelCouponButton.addEventListener("click", async () => {
 
-
-
-          //  const areyousure= alert("are you sure you want to cancel your coupon?")
-
-
-          alert("function started working")
-          //  if(areyousure){
-
              const couponCode = document.getElementById("couponCode").value;
 
 
             try {
 
-              alert("just before the fetch of cancel coupon working")
               const response = await fetch("/cancel-coupon", {
                 method: "POST",
                 headers: {
@@ -1050,7 +1089,7 @@
                   alert(data)
                   console.log(data)
                   const apply=document.getElementById('applybtn').style.display='block'
-  const cancelOrderBtn=document.getElementById('cancelCouponBtn').style.display='none'
+                 const cancelOrderBtn=document.getElementById('cancelCouponBtn').style.display='none'
   
                     //  window.location.reload()
 

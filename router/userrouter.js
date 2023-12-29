@@ -33,6 +33,8 @@ router.post('/signup', userExist, usercontroller.signuppost);
 router.get('/home', verifyuser, usercontroller.gethome)
 
 
+
+
 //products
 router.get('/product', verifyuser, productcontroller.getproduct);
 router.get('/productlist', verifyuser, usercontroller.getproductlist)

@@ -148,9 +148,29 @@
                             </svg>
                           </button>
                         </div>
-                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                        <div class="col-md-4 col-lg-2 col-xl-2 offset-lg-1">
                           <h6 class="mb-0">
-                            &#8377;<%= item.productId.price %>
+                            <% if (item.productId.discountexpiryDate &&
+                            item.productId.discountexpiryDate > new Date()) { %>
+                            <h6 class="mb-0 ">
+                            <span >&#8377;<%= item.productId.price -
+                              item.productId.discountprice %></span>  
+                              <!-- Display the original price with a strikethrough -->
+                              <span class="text-danger"
+                                style="
+                                  text-decoration: line-through;
+                                  font-size: 80%;
+                                "
+                              >
+                                &#8377;<%= item.productId.price %>
+                              </span>
+                            </h6>
+                            <% } else { %>
+                            <!-- Display the regular price when there is no active offer -->
+                            <h6 class="mb-0">
+                              &#8377;<%= item.productId.price %>
+                            </h6>
+                            <% } %>
                           </h6>
                         </div>
                         <div class="col-md-1 col-lg-1 col-xl-1 text-end">
@@ -188,11 +208,25 @@
                         <p style="color: grey">Shipping</p>
                         <p>Free</p>
                       </div>
+                   <%
+  let totalDiscount = 0;
 
-                      <!-- <div class="d-flex justify-content-between mb-4">
+  product.forEach((item) => {
+    // Check if the product has an active offer
+    if (item.productId.discountexpiryDate && item.productId.discountexpiryDate > new Date()) {
+      // Use the discountprice from the product database if available, otherwise fallback to 0
+      const discountPrice = item.productId.discountprice || 0;
+
+      // Accumulate the discount for each product
+      totalDiscount += discountPrice * item.quantity;
+    }
+  });
+%>
+
+                      <div class="d-flex justify-content-between mb-4">
                         <p style="color: grey">Discount</p>
-                        <p>&#8377;</h5>
-                      </div> -->
+                        <p class="text-success">&#8377;<%= totalDiscount %></h5>
+                      </div>
 
                       <div class="d-flex justify-content-between mb-4">
                         <p style="color: grey">Tax</p>

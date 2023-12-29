@@ -234,7 +234,7 @@
                   />
                   <small id="edited-priceError" class="text-danger"></small>
                 </div>
-                <div class="mb-3">
+                <div class="mb-5">
                   <label for="price">Stock</label>
                   <input
                     type="number"
@@ -244,6 +244,36 @@
                     value="<%=products.stock%>"
                   />
                   <small id="edited-stockError" class="text-danger"></small>
+                </div>
+                <hr />
+                <h6 class="text-muted">
+                  If your product have any discounts you can edit it here
+                </h6>
+                <div class="mb-5 mt-3">
+                  <label for="offerDiscount">offer amount:(optional)</label>
+                  <input
+                    type="number"
+                    name="discountprice"
+                    id="editedofferDiscount"
+                    class="form-control form-control-lg"
+                    value="<%-products.discountprice%>"
+                  />
+                  <small
+                    id="editedofferDiscountError"
+                    class="text-danger"
+                  ></small>
+                </div>
+                <div class="mb-5">
+                  <label for="offerDate">Offer Expiry Date:(optional)</label>
+                  <input
+                    type="date"
+                    name="discountexpiryDate"
+                    id="offerDate"
+                    class="form-control form-control-lg"
+                    value="<%-products.discountexpiryDate ? products.discountexpiryDate.toISOString().split('T')[0] : ''%>"
+                  />
+
+                  <small id="offerDateError" class="text-danger"></small>
                 </div>
 
                 <hr />
@@ -323,12 +353,37 @@
             "input[name='existingImages[]']"
           );
 
+          const editedOfferDiscount = document.getElementById(
+            "editedofferDiscount"
+          );
+          const editedOfferDiscountValue = parseFloat(
+            editedOfferDiscount.value
+          );
+          const editedOfferDiscountError = document.getElementById(
+            "editedofferDiscountError"
+          );
+
+          const offerDate = document.getElementById("offerDate");
+          const offerDateValue = offerDate.value;
+          const offerDateError = document.getElementById("offerDateError");
+
+          editedOfferDiscountError.textContent = "";
+          offerDateError.textContent = "";
           editedNameError.textContent = "";
           editedDesciptionError.textContent = "";
           editedAdditionalinfoError.textContent = "";
           editedPriceError.textContent = "";
           editedStockError.textContent = "";
           editedImagesError.textContent = "";
+
+          if (
+            !isNaN(editedOfferDiscountValue) &&
+            editedOfferDiscountValue > 0 &&
+            isEmpty(offerDateValue)
+          ) {
+            offerDateError.textContent = "Please provide the offer expiry date";
+            event.preventDefault();
+          }
 
           if (existingImages.length === 0 && editedImages.files.length === 0) {
             editedImagesError.textContent = "Please upload at least one image";
@@ -367,6 +422,13 @@
           if (editedAdditionalinfoValue.length < 60) {
             editedAdditionalinfoError.textContent =
               "Additional information must be at least 60 characters";
+            event.preventDefault();
+          }
+          if (
+            editedOfferDiscountValue <= 0
+          ) {
+            editedOfferDiscountError.textContent =
+              "Discount amount must be a valid number";
             event.preventDefault();
           }
         });
@@ -426,11 +488,6 @@
     </script>
     <script>
       function deleteImage(index, productId) {
-        // alert(index);,
-
-        // const productId = document.getElementById("productId").value;
-        alert(productId);
-        alert(index);
         fetch(`/admin/deleteimage/${productId}/${index}`, {
           method: "DELETE",
         })

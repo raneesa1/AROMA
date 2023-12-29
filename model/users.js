@@ -43,6 +43,7 @@ const userSchema = new mongoose.Schema({
             usedDate: { type: Date }
         }
     ],
+    Referalcode: { type: String },
 })
 const user = mongoose.model(process.env.USER_COLLECTION, userSchema)
 module.exports = user

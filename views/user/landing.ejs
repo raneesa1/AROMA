@@ -144,7 +144,25 @@
                 <%= product.name%>
               </h4>
               <p class="product-description"><%= product.description %></p>
+             <% if (product.discountexpiryDate && product.discountexpiryDate >
+              new Date()) { %>
+              <!-- Display the price with an overline -->
+
+              
+              <!-- Display the discounted price -->
+              <p class="product-discounted-price product-price">
+                &#8377;<%= product.price - product.discountprice %>
+              </p>
+              <p
+                class="original-price m-0 p-0 text-muted"
+                style="font-size: 14px; text-decoration: line-through"
+              >
+                &#8377;<%= product.price %>
+              </p>
+              <% } else { %>
+              <!-- Display the regular price when there is no active offer -->
               <p class="product-price">&#8377;<%= product.price %></p>
+              <% } %>
               <a class="add-to-cart">View details</a>
             </div>
           </div>

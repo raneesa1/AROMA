@@ -12,6 +12,7 @@ const category = require('../model/category')
 const user = require('../model/users')
 const cart = require('../model/cart')
 const { render } = require('ejs')
+const crypto = require('crypto');
 require("dotenv").config()
 
 
@@ -23,6 +24,8 @@ const getlanding = async (req, res) => {
     res.render('user/landing', { products })
 }
 const login = (req, res) => {
+    console.log(req.query, "query data ")
+    req.session.EnteredReferalcode = req.query.id
     res.render('user/login', { err: '' });
 }
 
@@ -39,6 +42,7 @@ const securepassword = async (password) => {
 const loginpost = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
+
 
     try {
 
@@ -84,6 +88,10 @@ const signupget = (req, res) => {
     res.render('user/login', { err: '' });
 }
 
+
+const generateRandomString = (length) => {
+    return crypto.randomBytes(length).toString('hex');
+};
 const signuppost = async (req, res) => {
     try {
 
@@ -124,8 +132,9 @@ const signuppost = async (req, res) => {
             res.render('user/login', { err: 'email already exists' })
 
         } else {
+            
 
-
+          
 
             const data = {
                 name: req.body.name,
@@ -134,15 +143,13 @@ const signuppost = async (req, res) => {
                 phonenumber: req.body.phonenumber,
                 status: req.body.status,
                 date: Date.now(),
-                profileImage: "/photos/default-profile.jpeg"
+                profileImage: "/photos/default-profile.jpeg",
+                Referalcode: generateRandomString(8)
 
             }
 
 
             req.session.data = data
-            // console.log(data);
-
-            // console.log("redirecting to otp")
             res.redirect('/otp');
 
         }
@@ -155,7 +162,9 @@ const signuppost = async (req, res) => {
 
 const gethome = async (req, res) => {
     if (req.session.isauth) {
+        console.log(req.query, "query from get home function")
         const userId = req.query.id
+        console.log(userId)
         const products = await product.find({ status: false }).sort({ date: -1 }).limit(8)
         const userdata = await user.findOne({ id: userId })
         // const categorydata=await category.find()
@@ -335,7 +344,7 @@ const getchangepassword = (req, res) => {
 const postchangepassword = async (req, res) => {
     try {
 
-        const userId = req.session.email; // Assuming you are using email as a unique identifier
+        const userId = req.session.email; 
 
         const { currentPassword, newPassword, confirmPassword } = req.body;
         const users = await user.findOne({ email: userId });
@@ -425,85 +434,94 @@ const posteditprofile = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 }
-
-
 const getselectaddress = async (req, res) => {
-    const users = await user.findOne({ email: req.session.email });
-    const userid = users._id
-    const defaultaddress = await address.findOne({ userId: userid })
-    // console.log(defaultaddress._id);
-    const email = req.session.email;
-    // const username = req.session.email;
-    const User = await user.findOne({ email: email })
+    try {
+        const users = await user.findOne({ email: req.session.email });
+        const userid = users._id;
+        let totalProductDiscount = 0;
+        const defaultaddress = await address.findOne({ userId: userid });
+        const email = req.session.email;
+        const User = await user.findOne({ email: email });
 
-    // console.log(req.params.id, "session")
-    // console.log(serId, "user id")
+        const walletBalance = await wallet.findOne({ User_id: users._id });
+        const formattedWalletBalance = walletBalance ? walletBalance.Account_balance : 0;
 
+        const userId = User._id;
 
+        const newcart = await cart.findOne({ userId: userId }).populate("products.productId");
 
-    const walletBalance = await wallet.findOne({ User_id: users._id })
-    const formattedWalletBalance = walletBalance ? walletBalance.Account_balance : 0;
+        const coupon = newcart.coupon;
+        console.log(coupon, "coupon from select address page");
 
-    const userId = User._id;
+        let total = 0;
 
-    const newcart = await cart.findOne({ userId: userId }).populate("products.productId")
+        if (!newcart || newcart.products.length === 0) {
+            return res.render('user/cart', {
+                title: "cart",
+                username: email,
+                product: [],
+                subtotal: 0,
+                TotalPrice: 0,
+                coupon: coupon,
+                gstAmount: 0,
+                totalQuantity: 0,
+                User,
+                totalProductDiscount,
+                totalWithDiscount: total - totalProductDiscount,
+                walletBalance: formattedWalletBalance,
+            });
+        }
 
-    const coupon = newcart.coupon
-    console.log(coupon, "coupon from select adress page")
+        const products = newcart.products;
+        let subtotal = 0;
+        let totalQuantity = 0;
 
-    if (!newcart || newcart.products.length === 0) {
-        return res.render('user/cart', {
+        newcart.products.forEach(item => {
+            if (item.productId && item.productId.price !== undefined) {
+                subtotal += item.quantity * item.productId.price;
+                totalQuantity += item.quantity;
+            } else {
+                console.log("Skipping item due to missing or undefined DiscountAmount:", item.productId);
+            }
+        });
+
+        const gstRate = 0.18;
+        const gstAmount = subtotal * gstRate;
+        total = subtotal + gstAmount;
+
+        newcart.products.forEach(item => {
+            const { discountprice, discountexpiryDate } = item.productId;
+            if (discountexpiryDate && discountexpiryDate > new Date()) {
+                totalProductDiscount += discountprice * item.quantity;
+            }
+        });
+
+        req.session.totalPrice = total;
+
+        res.render('user/selectaddress', {
+            defaultaddress,
             title: "cart",
             username: email,
-            product: [],
-            subtotal: 0,
-            TotalPrice: 0,
+            product: products,
+            newcart,
             coupon: coupon,
-            gstAmount: 0,
-            totalQuantity: 0,
+            subtotal: subtotal,
+            gstAmount: gstAmount.toFixed(2),
+            totalQuantity: totalQuantity,
+            TotalPrice: total,
             User,
+            totalProductDiscount,
+            totalWithDiscount: total - totalProductDiscount,
             walletBalance: formattedWalletBalance,
-
         });
+    } catch (error) {
+        console.log('Error from getselectaddress:', error);
+        // Handle the error appropriately
+        res.status(500).send('Internal Server Error');
     }
-
-    const products = newcart.products;
-    let subtotal = 0;
-    let totalQuantity = 0;
+};
 
 
-    newcart.products.forEach(item => {
-        if (item.productId && item.productId.price !== undefined) {
-            subtotal += item.quantity * item.productId.price;
-            totalQuantity += item.quantity;
-        } else {
-            console.log("Skipping item due to missing or undefined DiscountAmount:", item.productId);
-        }
-    })
-    const gstRate = 0.18;
-    const gstAmount = subtotal * gstRate;
-    const total = subtotal + gstAmount;
-
-
-    req.session.totalPrice = total;
-
-
-    res.render('user/selectaddress', {
-        defaultaddress,
-        title: "cart",
-        username: email,
-        product: products,
-        newcart,
-        coupon: coupon,
-        subtotal: subtotal,
-        gstAmount: gstAmount.toFixed(2),
-        totalQuantity: totalQuantity,
-        TotalPrice: total,
-        User,
-        walletBalance: formattedWalletBalance,
-
-    })
-}
 const getproductlist = async (req, res) => {
     const products = await product.find({ status: false })
     res.render('user/productlist', { products })

@@ -7,37 +7,18 @@ const mongoose = require('mongoose')
 const getproduct = async (req, res) => {
     const productId = req.query.id
     const products = await product.findOne({ _id: productId });
-
-
-    // const useremail = req.session.email;
-    // const userId = await user.findOne({ email: useremail });
-    // if (!userId) {
-    //     return res.status(404).render('error', { message: 'User not found' });
-    // }
-
-    // Fetch user's cart
-    // const cartData = await cart.findOne({ userId: userId });
-    // let cartQuantity = 0;
-
-    // // Calculate cartQuantity for the specified product
-    // if (cartData) {
-    //     const productIndex = cartData.products.findIndex(item => item.productId.toString() === productId.toString());
-    //     cartQuantity = (productIndex !== -1) ? cartData.products[productIndex].quantity : 0;
-    // }
-
-
-
     const related = await product.find({ status: false }).sort({ date: -1 }).limit(3);
     const categorydata = await category.find()
     res.render('user/product1', { products, related, categorydata })
 }
 
-
 const updateProducts = async (req, res) => {
     try {
         const { categories, search, sortOrder, page } = req.body;
 
-        let filterQuery = {};
+        let filterQuery = {
+            status: false, // Add this line to filter by status
+        };
 
         if (categories && categories.length > 0) {
             const categoryDocs = await category.find({ name: { $in: categories } });
@@ -75,7 +56,6 @@ const updateProducts = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
 
 
 module.exports = { getproduct, updateProducts }

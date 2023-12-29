@@ -257,6 +257,31 @@
                         />
                         <small id="stockError" class="text-danger"></small>
                       </div>
+                <h6 class=" text-muted">If your product have any discounts you can add it here:</h4>
+
+                      <div class="mb-5">
+                        <label for="offerDiscount">offer amount:</label>
+                        <input
+                          type="number"
+                          name="discountprice"
+                          id="offerDiscount"
+                          class="form-control form-control-lg"
+                          placeholder="Enter the offer discount amount"
+                        />
+                        <small id="offerDiscountError" class="text-danger"></small>
+                      </div>
+                      <div class="mb-5">
+                        <label for="offerDate">Offer Expiry Date:</label>
+                        <input
+                          type="date"
+                          name="discountexpiryDate"
+                          id="offerDate"
+                          class="form-control form-control-lg"
+                          placeholder="Enter the Offer Expiry Date"
+                        />
+                        <small id="offerDateError" class="text-danger"></small>
+                      </div>
+
                       <input
                         style="
                           background-color: rgb(0, 0, 0);
@@ -315,16 +340,41 @@
           const images = document.getElementById("displayinput");
           const imagesError = document.getElementById("imagesError");
 
+          const offerDiscount = document.getElementById('offerDiscount')
+          const offerDiscountValue =offerDiscount.value
+          const offerDiscountError = document.getElementById('offerDiscountError')
+
+          const offerDate = document.getElementById('offerDate')
+          const offerDateValue = offerDate.value
+          const offerDateError = document.getElementById('offerDateError')
+
+
           nameError.textContent = "";
           desciptionError.textContent = "";
           additionalinfoError.textContent = "";
           priceError.textContent = "";
           stockError.textContent = "";
           imagesError.textContent = "";
+          offerDiscountError.textContent = ""
+          offerDateError.textContent = ""
+
+
 
           if (images.files.length === 0) {
             imagesError.textContent = "Please select at least one image";
             event.preventDefault();
+          } else {
+            const allowedExtensions = ["jpg", "jpeg", "png", "gif","webp"];
+            const invalidFiles = Array.from(images.files).filter((file) => {
+              const extension = file.name.split(".").pop().toLowerCase();
+              return !allowedExtensions.includes(extension);
+            });
+
+            if (invalidFiles.length > 0) {
+              imagesError.textContent =
+                "Please select only image files (jpg, jpeg, png, gif)";
+              event.preventDefault();
+            }
           }
 
           if (isEmpty(namenameValue)) {
@@ -361,6 +411,22 @@
               "Additional information must be at least 60 characters";
             event.preventDefault();
           }
+
+          if (
+            offerDiscountValue < 0
+          ) {
+            offerDiscountError.textContent =
+              "Discount amount must be a valid number";
+            event.preventDefault();
+          }
+
+           if (offerDiscountValue > 0 &&
+            isEmpty(offerDateValue)) {
+      offerDateError.textContent = "Please provide the offer expiry date";
+      event.preventDefault();
+    }
+
+
         });
     </script>
     <script>

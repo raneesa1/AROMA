@@ -104,7 +104,9 @@ const postaddproduct = async (req, res) => {
         price: req.body.price,
         stock: req.body.stock,
         image: req.files.map((file) => '/photos/' + file.filename),
-        date: Date.now()
+        date: Date.now(),
+        discountprice: req.body.discountprice || 0,
+        discountexpiryDate: req.body.discountexpiryDate || null,
 
       }
       console.log(products)
@@ -150,26 +152,26 @@ const getaddcategory = (req, res) => {
 const postaddcategory = async (req, res) => {
   try {
 
+    const id = req.params.id
 
     const { name, description } = req.body;
+    console.log(id,"id from the category - edit")
 
 
-    const existingCategory = await category.findOne({ name: { $regex: new RegExp(`^${name}$`, "i") } });
+    const existingCategory = await category.findOne({ _id: { $ne: id }, name: { $regex: new RegExp(`^${name}$`, "i") } });
     if (existingCategory) {
       const categorydata = await category.find({})
       // Category with the same name already exists
       res.render('admin/addcategory', { err: 'Category already exists', categorydata: categorydata })
 
 
-
-
     } else {
-
-
       const categories = {
         name: req.body.name,
         description: req.body.description,
-        date: Date.now()
+        date: Date.now(),
+        categorydiscountprice: req.body.categorydiscountprice || 0 ,
+        categorydiscountexpiryDate: req.body.categorydiscountexpiryDate || null , 
 
       }
       await new category(categories).save()
@@ -211,13 +213,8 @@ const geteditproduct = async (req, res) => {
 const postupdateproduct = async (req, res) => {
 
   try {
-    // console.log(req.body, 'body of update')
 
     let id = req.params.id;
-
-
-    // console.log(req.file);
-    // Check if files are present in the request
     if (req.files && req.files.length > 0) {
       const productsdetails = {
         name: req.body.name,
@@ -226,7 +223,9 @@ const postupdateproduct = async (req, res) => {
         stock: req.body.stock,
         price: req.body.price,
         specification: req.body.specification,
-        // Assuming images is an array of files
+        discountprice: req.body.discountprice ,
+        discountexpiryDate: req.body.discountexpiryDate ,
+
         image: req.files.map((file) => '/photos/' + file.filename)
 
 
@@ -244,6 +243,8 @@ const postupdateproduct = async (req, res) => {
         category: new ObjectId(req.body.category),
         price: req.body.price,
         stock: req.body.stock,
+        discountprice: req.body.discountprice || 0,
+        discountexpiryDate: req.body.discountexpiryDate || null,
         specification: req.body.specification,
 
 
@@ -298,15 +299,20 @@ const postupdatecategory = async (req, res) => {
 
     const { name, description } = req.body;
 
+    console.log(id,"id from update category")
+
     const categorydetails = {
       name: req.body.name,
       description: req.body.description,
+      categorydiscountprice: req.body.categorydiscountprice || 0,
+      categorydiscountexpiryDate: req.body.categorydiscountexpiryDate || null, 
+
     };
 
 
     const categories = await category.find({})
 
-    const existingCategory = await category.findOne({ name: { $regex: new RegExp(`^${name}$`, "i") } });
+    const existingCategory = await category.findOne({ _id: { $ne: id }, name: { $regex: new RegExp(`^${name}$`, "i") } });
     if (existingCategory) {
       res.render('admin/editcategory', { err: 'Category already exists', categories: categories })
     } else {
@@ -404,8 +410,6 @@ const deleteImagess = async (req, res) => {
     // console.log("product iddddddddd", productId);
     const imageIndex = req.params.index;
     // console.log("image indexx0x0x0x00xx00x0x0x0x0x00xx00x0x00x0x0x00x0x0x0x0x0x0x0x00x0xx0x0x0x0x0x0x0x0", imageIndex);
-
-
     const products = await product.findById(productId);
     // console.log("Product after findingggngngngngngngngn", products);
     if (!products) {
@@ -429,7 +433,7 @@ const deleteImagess = async (req, res) => {
 
 const getreturns = async (req, res) => {
 
-  const returnorder = await returns.find({})
+  const returnorder = await returns.find({}).sort({ returnedDate: -1 })
   res.render('admin/return', { returnorder })
 }
 

@@ -72,6 +72,9 @@
     </div>
     <div class="d-flex">
       <div>
+        <button class="ml-3 mr-5 mb-2 btn text-muted" id="clear-all-btn">
+          Clear All
+        </button>
         <h4 class="ml-5 mr-5">Sort items:</h4>
         <div class="ml-5" style="width: 120px; padding: 0 2px 0 1px">
           <h6>By Price:</h6>
@@ -139,7 +142,20 @@
                   <p class="product-description text-uppercase">
                     <%= product.description %>
                   </p>
+                  <% if (product.discountexpiryDate &&
+                  product.discountexpiryDate > new Date()) { %>
+                  <p class="product-discounted-price product-price">
+                    &#8377;<%= product.price - product.discountprice %>
+                  </p>
+                  <p
+                    class="original-price m-0 p-0 text-muted"
+                    style="font-size: 14px; text-decoration: line-through"
+                  >
+                    &#8377;<%= product.price %>
+                  </p>
+                  <% } else { %>
                   <p class="product-price">&#8377;<%= product.price %></p>
+                  <% } %>
                   <a class="add-to-cart">View details</a>
                 </div>
               </a>
@@ -190,7 +206,48 @@
           .querySelector(".search-input")
           .addEventListener("input", updateProducts);
 
-        function updateProducts(page = 1) {
+        // Add event listener for "Clear All" button
+        document
+          .getElementById("clear-all-btn")
+          .addEventListener("click", function () {
+            // Clear checkboxes
+            document
+              .querySelectorAll(".categoryCheckbox:checked")
+              .forEach(function (checkbox) {
+                checkbox.checked = false;
+              });
+
+            // Clear radio buttons
+            document
+              .querySelectorAll(".sortRadio:checked")
+              .forEach(function (radio) {
+                radio.checked = false;
+              });
+
+            // Clear search input
+            document.querySelector(".search-input").value = "";
+
+            // Update products with default settings
+            updateProducts(1, true); // Pass true to indicate a clear operation
+          });
+
+        function updateProducts(page = 1, clearFilters = false) {
+          if (clearFilters) {
+            // Clear radio buttons
+            document
+              .querySelectorAll(".sortRadio:checked")
+              .forEach(function (radio) {
+                radio.checked = false;
+              });
+
+            // Clear checkboxes
+            document
+              .querySelectorAll(".categoryCheckbox:checked")
+              .forEach(function (checkbox) {
+                checkbox.checked = false;
+              });
+          }
+
           const selectedCategories = Array.from(
             document.querySelectorAll(".categoryCheckbox:checked")
           ).map(function (checkbox) {
@@ -242,31 +299,50 @@
           );
           updatedProductsContainer.innerHTML = "";
 
-          console.log(products);
-          products.forEach(function (product) {
-            const productHtml = `
-
-            <div class="row"
-                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                  <a href="/products?id=${product._id}" class="text-decoration-none">
-                    <div class="product-box">
-                      <img src="${product.image[0]}" alt="${product.name}" width="160" height="160">
-                      <h2 class="product-title">${product.name}</h2>
-                      <p class="product-description">${product.description}</p>
-                      <p class="product-price">&#8377;${product.price}</p>
-                      <a class="add-to-cart">View details</a>
-                    </div>
-                  </a>
-                </div>
-                </div>
-
-
-                    `;
+          if (products.length === 0) {
+            const noResultsMessage = `<div class="col-12 text-center">No results found</div>`;
             updatedProductsContainer.insertAdjacentHTML(
               "beforeend",
-              productHtml
+              noResultsMessage
             );
-          });
+          } else {
+            products.forEach(function (currentProduct) {
+              // Use the correct variable name
+              console.log("Product:", currentProduct); // Log the product data for debugging
+
+              const productHtml = `  <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+    <a href="/products?id=${currentProduct._id}" class="text-decoration-none">
+      <div class="product-box">
+        <img src="${currentProduct.image[0]}" alt="${
+                currentProduct.name
+              }" width="160" height="160">
+        <h2 class="product-title">${currentProduct.name}</h2>
+        <p class="product-description">${currentProduct.description}</p>
+
+        ${
+          currentProduct.discountexpiryDate &&
+          new Date(currentProduct.discountexpiryDate) > new Date()
+            ? `<p class="product-discounted-price product-price" style="font-size: 18px;">&#8377;${
+                currentProduct.price - currentProduct.discountprice
+              }</p>
+               <p class="original-price m-0 p-0 text-muted ml-1" style="font-size: 16px; text-decoration: line-through;">&#8377;${
+                 currentProduct.price
+               }</p>`
+            : `<p class="product-price" style="font-size: 18px;">&#8377;${currentProduct.price}</p>`
+        }
+
+        <a class="add-to-cart">View details</a>
+      </div>
+    </a>
+  </div>
+        `;
+
+              updatedProductsContainer.insertAdjacentHTML(
+                "beforeend",
+                productHtml
+              );
+            });
+          }
         }
 
         function generatePaginationLinks(currentPage, totalPages) {

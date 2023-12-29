@@ -164,7 +164,26 @@
                 <td><%= data.categoryDetails[0].name %></td>
                 <td><%-data.stock%></td>
 
-                <td><%-data.price%></td>
+                <td>
+                  <% if (data.discountexpiryDate && data.discountexpiryDate >
+                  new Date()) { %>
+                  <!-- Display the price with an overline -->
+                   <p class="product-discounted-price product-price">
+                    &#8377;<%= data.price - data.discountprice %>
+                  </p>
+                  <p
+                    class="product-price original-price"
+                    style="font-size: 14px; text-decoration: line-through"
+                  >
+                    &#8377;<%= data.price %>
+                  </p>
+                  <!-- Display the discounted price -->
+                 
+                  <% } else { %>
+                  <!-- Display the regular price when there is no active offer -->
+                  <p class="product-price">&#8377;<%= data.price %></p>
+                  <% } %>
+                </td>
                 <td>
                   <%let date1=new Date(data.date)%>
                   <%-date1.getDate()%>-<%-date1.getMonth()+1%>-<%-date1.getFullYear()%>
