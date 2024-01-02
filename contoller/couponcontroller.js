@@ -208,7 +208,7 @@ const useCoupon = async (req, res) => {
         console.log("--------", purchaseAmount, coupons.Min_amount);
         if (purchaseAmount < coupons.DiscountAmount) {
 
-            console.log('going to if conditon of purchase is lesser than the coupon dicsount amount')
+
             return res.json({ success: false, message: 'Purchase Amount must Greater Than Discount amount' });
         }
 

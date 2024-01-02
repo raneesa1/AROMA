@@ -90,7 +90,7 @@ const verifyOtp = async function (req, res) {
                                     Amount: referralBonus,
                                     Date: new Date(),
                                     Description: 'Referral Bonus',
-                                    Transaction_type: 'credit',
+                                    Transaction_type: 'credited',
                                 },
                             },
                         }

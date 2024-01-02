@@ -98,7 +98,7 @@ const storage = multer.diskStorage({
 const uploadprofile = multer({ storage: storage });
 
 
-//userprofilex
+//userprofile
 router.get('/profile', verifyuser, usercontroller.getprofile);
 router.get('/editprofile', verifyuser, usercontroller.geteditprofile)
 router.post('/editprofile', uploadprofile.single('editProfilePhoto'), verifyuser, usercontroller.posteditprofile)

@@ -75,7 +75,8 @@
                   </button>
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    style="background-color: black; color: #eee;"
+                    class="btn btn"
                     onclick="addMoney()"
                     data-dismiss="modal"
                   >
@@ -299,7 +300,7 @@
         })
           .then((response) => response.json())
           .then((order) => {
-            alert(amount);
+            // alert(amount);
             const options = {
               key: "rzp_test_sFW0lvsM9VcWEf",
               amount: amount * 100,

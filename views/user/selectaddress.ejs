@@ -392,8 +392,6 @@
                 class="address-card addaddress pl-5"
                 style="font-size: 17px"
               >
-                <!-- <img src="/user/images/add.png" alt="" /> -->
-
                 <span class="font3 w-75">
                   <h3 class="text-lowercase"><%= address.Addressname %></h3>
                   <span class="text-muted">
@@ -499,13 +497,13 @@
     </div>
   <% } %>
                <% if(!coupon){%>
-                      <div class="d-flex justify-content-between ">
+                      <div style="display: none;" class="d-flex justify-content-between ">
                         <p class="mb-2">Discount(coupon):</p>
                         <p  class=""style="color: green" id="discount">-0</p>
                       </div>
                       <% }else{%>
 
-                      <div class="d-flex justify-content-between mb-4">
+                      <div style="display: block;" class="d-flex justify-content-between mb-4">
                         <p class="">Discount(coupon):</p>
                         <p class="" style="color: green" id="discount">
                           - &#8377;<%=coupon%>
@@ -643,7 +641,7 @@
                               
                      
                       </div>
-                        <p class="ml-5 pl-5 mt-0 pt-0 coupon-text"><a href="">view coupons and save extra!</a></p>
+<p class="ml-5 pl-5 mt-0 pt-0 coupon-text" data-toggle="modal" data-target="#couponModal">View coupons and save extra!</p>
          
               
 
@@ -656,6 +654,8 @@
                           name=""
                           placeholder="Coupon code"
                           id="couponCode"
+
+
                         />
 
                      
@@ -678,9 +678,7 @@
                               
                      
                       </div>
-                        <p class="ml-5 pl-5 mt-0 pt-0 coupon-text"><a href="">view coupons and save extra!</a></p>
-         
-              
+                       <p class="ml-5 pl-5 mt-0 pt-0 coupon-text" data-toggle="modal" data-target="#couponModal">View coupons and save extra!</p>
 
           
 
@@ -697,7 +695,29 @@
 </div>
 </div>
     <section class="py-5"></section>
-
+<div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="couponModalLabel">Available Coupons</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Content of your modal goes here -->
+        <p>Here are some available coupons:</p>
+       <% availableCoupons.forEach(coupon => { %>
+            <li><%= coupon.Coupon_code %></li>
+          <% }); %>
+        <!-- Add more coupons or customize as needed -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -1086,12 +1106,11 @@
                 alert("Coupon canceled successfully");
                  $("#discount").text("- ₹" + 0);
                   $("#TotalPrice").text(data.TotalPrice);
-                  alert(data)
+                  // alert(data)
                   console.log(data)
                   const apply=document.getElementById('applybtn').style.display='block'
                  const cancelOrderBtn=document.getElementById('cancelCouponBtn').style.display='none'
   
-                    //  window.location.reload()
 
                   // alert(data.TotalPrice)
               } else {
@@ -1143,30 +1162,7 @@
         </div>
       </div>
     </div>
-    <!-- Coupon Modal -->
-<div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="couponModalLabel">Available Coupons</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Example Coupon 1: SAVE10 - 10% off</p>
-        <p>Example Coupon 2: FREEDEL - Free delivery</p>
-        <!-- Add more coupons as needed -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
+   
 <!-- Success Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

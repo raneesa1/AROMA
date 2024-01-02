@@ -13,6 +13,7 @@ const user = require('../model/users')
 const cart = require('../model/cart')
 const { render } = require('ejs')
 const crypto = require('crypto');
+const Coupon = require('../model/coupon')
 require("dotenv").config()
 
 
@@ -132,9 +133,9 @@ const signuppost = async (req, res) => {
             res.render('user/login', { err: 'email already exists' })
 
         } else {
-            
 
-          
+
+
 
             const data = {
                 name: req.body.name,
@@ -334,7 +335,7 @@ const getchangepassword = (req, res) => {
 const postchangepassword = async (req, res) => {
     try {
 
-        const userId = req.session.email; 
+        const userId = req.session.email;
 
         const { currentPassword, newPassword, confirmPassword } = req.body;
         const users = await user.findOne({ email: userId });
@@ -437,9 +438,19 @@ const getselectaddress = async (req, res) => {
         const formattedWalletBalance = walletBalance ? walletBalance.Account_balance : 0;
 
         const userId = User._id;
+        const currentDate = new Date();
+      
 
         const newcart = await cart.findOne({ userId: userId }).populate("products.productId");
 
+        const usedCoupons = users.usedCoupons.map(coupon => coupon.Coupon_code);
+
+        const availableCoupons = await Coupon.find({
+            Coupon_code: { $nin: usedCoupons },
+            Expirey_date: { $gte: currentDate },
+        });
+
+        console.log(availableCoupons, "available coupons for user")
         const coupon = newcart.coupon;
         console.log(coupon, "coupon from select address page");
 
@@ -454,6 +465,7 @@ const getselectaddress = async (req, res) => {
                 TotalPrice: 0,
                 coupon: coupon,
                 gstAmount: 0,
+                availableCoupons: availableCoupons,
                 totalQuantity: 0,
                 User,
                 totalProductDiscount,
@@ -499,6 +511,7 @@ const getselectaddress = async (req, res) => {
             gstAmount: gstAmount.toFixed(2),
             totalQuantity: totalQuantity,
             TotalPrice: total,
+            availableCoupons: availableCoupons,
             User,
             totalProductDiscount,
             totalWithDiscount: total - totalProductDiscount,
