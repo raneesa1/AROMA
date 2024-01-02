@@ -162,7 +162,7 @@ const signuppost = async (req, res) => {
 
 const gethome = async (req, res) => {
     if (req.session.isauth) {
-        console.log(req.query, "query from get home function")
+
         const userId = req.query.id
         console.log(userId)
         const products = await product.find({ status: false }).sort({ date: -1 }).limit(8)
@@ -171,7 +171,7 @@ const gethome = async (req, res) => {
         res.render('user/home', { products, userdata })
 
     }
-    // console.log("reached home");
+
 
 
 }
@@ -186,19 +186,14 @@ const getprofile = async (req, res) => {
     try {
         const userId = req.session.email;
 
-        // Assuming you fetch user data here
-        const userdata = await user.findOne({ email: userId });
 
-        // If user data is not found, throw an error
+        const userdata = await user.findOne({ email: userId });
         if (!userdata) {
             throw new Error('User not found');
         }
-
-        // Render the profile view with user data
         res.render('user/profile', { userdata, err: null });
     } catch (error) {
         console.error(error.message);
-        // Render the profile view with an error message
         res.status(500).render('user/profile', { userdata: null, err: error.message });
     }
 }
@@ -215,11 +210,7 @@ const getcheckout = async (req, res) => {
     const userid = users._id
     const defaultaddress = await address.findOne({ userId: userid })
     const email = req.session.email;
-    // const username = req.session.email;
     const User = await user.findOne({ email: email })
-
-    // console.log(req.params.id, "session")
-    // console.log(serId, "user id")
 
 
     const userId = User._id;
@@ -323,7 +314,6 @@ const postresetpassword = async (req, res) => {
         const updated = await user.updateOne({ email: email }, { $set: { password: passwordhash } });
 
         if (updated) {
-            // console.log(updated);
             req.session.forgotOtp = false;
 
             req.session.isauth = true;
@@ -516,7 +506,6 @@ const getselectaddress = async (req, res) => {
         });
     } catch (error) {
         console.log('Error from getselectaddress:', error);
-        // Handle the error appropriately
         res.status(500).send('Internal Server Error');
     }
 };

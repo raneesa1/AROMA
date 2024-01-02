@@ -110,12 +110,17 @@
     </div>
 
     <div class="d-flex">
+
       <%- include('./partial/section') %>
       <div style="margin: 22px">
+      
         <div class="table-edit">
           <h5 class="text-center m-3 p-2" style="font-weight: bold">
             ORDER MANAGEMENT
           </h5>
+            <div><button     id="downloadSalesReportBtn" style="border-radius: 12px; background: #000; color: aliceblue;" class="btn float-right mb-3">Sales Report<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+</svg></button></div>
           <!-- <div class="button-container">
             <a href="/admin/addproduct" class="text-light">
               <button
@@ -127,6 +132,42 @@
               </button>
             </a>
           </div> -->
+          <div class="modal fade" id="salesReportModal" tabindex="-1" role="dialog" aria-labelledby="salesReportModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="salesReportModalLabel">Download Sales Report</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="salesReportForm">
+          <div class="form-group">
+            <label for="startDate">Start Date:</label>
+            <input type="date" class="form-control" id="startDate" required>
+          </div>
+          <div class="form-group">
+            <label for="endDate">End Date:</label>
+            <input type="date" class="form-control" id="endDate" required>
+          </div>
+          <div class="form-group">
+            <label for="format">Format:</label>
+            <select class="form-control" id="format" required>
+              <option value="pdf">PDF</option>
+              <option value="Excel">Excel</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn " id="downloadBtn" style="background-color: #000; color: #fff;">Download</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
           <table class="table " id="orderTable">
             <thead>
@@ -245,6 +286,76 @@
         console.error('Error:', error);
       });
   }
+
+
+  document.getElementById("downloadSalesReportBtn").addEventListener("click", function () {
+  // Show the modal
+  $("#salesReportModal").modal("show");
+});
+
+document.getElementById("downloadBtn").addEventListener("click", function () {
+  // Get the selected options
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+  const format = document.getElementById("format").value;
+
+  console.log(startDate)
+  console.log(endDate)
+  console.log(format)
+
+  if (startDate && endDate) {
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
+
+    if (startDateObj > endDateObj) {
+      alert("End date should be after the start date");
+      return; 
+    }
+  } else {
+    alert("Please provide both start date and end date");
+    return; 
+  }
+  alert(startDate)
+  alert(endDate)
+  alert(format)
+   fetch('/admin/download-sales-report', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        startDate: startDate,
+        endDate: endDate,
+        downloadFormat: format,
+    }),
+})
+    .then(response => {
+        if (!response.ok) {
+          
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `sales_report_${startDate}_${endDate}.${format}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    })
+    .catch(error => {
+        console.error('Error during fetch:', error);
+        alert(`An error occurred while downloading the sales report: ${error.message}`);
+    })
+    .finally(() => {
+        $("#salesReportModal").modal("hide");
+    });
+
+ 
+  $("#salesReportModal").modal("hide");
+});
+
 </script>
   </body>
 </html>

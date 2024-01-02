@@ -5,7 +5,7 @@ const admincontroller = require('../contoller/admincontroller');
 const { adminExist, verifyadmin } = require('../middleware/adminauth');
 const couponcontroller = require('../contoller/couponcontroller');
 const bannercontroller = require('../contoller/bannercontroller');
-
+const ordercontroller = require('../contoller/ordercontroller')
 
 
 
@@ -66,6 +66,8 @@ router.delete('/deleteimage/:productId/:index', verifyadmin, admincontroller.del
 router.post('/update/:id', upload.array('images', 5), admincontroller.postupdateproduct)
 
 router.get('/', verifyadmin, admincontroller.getdash)
+router.get('/dashboard', verifyadmin, admincontroller.getfilterdash)
+router.post('/download-sales-report',verifyadmin,ordercontroller.genereatesalesReport)
 
 
 router.get('/order', verifyadmin, admincontroller.getorder)

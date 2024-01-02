@@ -6,7 +6,7 @@ const { ObjectId } = require('mongodb');
 const product = require('../model/product');
 const returns = require('../model/return');
 const wallet = require('../model/wallet');
-
+const moment = require('moment');
 
 
 const getusermanagement = (async (req, res) => {
@@ -17,7 +17,7 @@ const getusermanagement = (async (req, res) => {
 })
 
 
-//delete user
+//delete userf
 const getdeleteuser = async (req, res) => {
   let id = req.params.id
 
@@ -155,7 +155,7 @@ const postaddcategory = async (req, res) => {
     const id = req.params.id
 
     const { name, description } = req.body;
-    console.log(id,"id from the category - edit")
+    console.log(id, "id from the category - edit")
 
 
     const existingCategory = await category.findOne({ _id: { $ne: id }, name: { $regex: new RegExp(`^${name}$`, "i") } });
@@ -170,8 +170,8 @@ const postaddcategory = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         date: Date.now(),
-        categorydiscountprice: req.body.categorydiscountprice || 0 ,
-        categorydiscountexpiryDate: req.body.categorydiscountexpiryDate || null , 
+        categorydiscountprice: req.body.categorydiscountprice || 0,
+        categorydiscountexpiryDate: req.body.categorydiscountexpiryDate || null,
 
       }
       await new category(categories).save()
@@ -223,8 +223,8 @@ const postupdateproduct = async (req, res) => {
         stock: req.body.stock,
         price: req.body.price,
         specification: req.body.specification,
-        discountprice: req.body.discountprice ,
-        discountexpiryDate: req.body.discountexpiryDate ,
+        discountprice: req.body.discountprice,
+        discountexpiryDate: req.body.discountexpiryDate,
 
         image: req.files.map((file) => '/photos/' + file.filename)
 
@@ -260,13 +260,203 @@ const postupdateproduct = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+const getdash = async (req, res) => {
+  try {
+    if (req.session.isAdmin) {
+      const { days } = req.query;
+      console.log(days, "daysss");
 
-const getdash = (req, res) => {
-  if (req.session.isAdmin) {
-    res.render('admin/dashboard')
+      // Calculate the filter start date
+      const filterStartDate = moment().subtract(days || 7, 'days').startOf('day').toDate();
+
+      console.log(filterStartDate, "start  dateee")
+      // Sales count query with date filter
+      const sales = await order.find({
+        Status: "Delivered",
+        OrderDate: { $gte: filterStartDate }
+      }).count();
+
+      const numOfUsers = await user.find().count();
+
+      const totalRevenueResult = await order.aggregate([
+        {
+          $match: {
+            Status: "Delivered",
+            OrderDate: { $gte: filterStartDate }
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            totalRevenue: { $sum: "$TotalPrice" },
+          },
+        },
+      ]);
+
+      const totalRevenue = totalRevenueResult.length > 0 ? totalRevenueResult[0].totalRevenue : 0;
+
+
+
+      // Find top-selling products
+      // Find top-selling products
+      const topSellingProducts = await order.aggregate([
+        {
+          $match: {
+            Status: "Delivered",
+            OrderDate: { $gte: filterStartDate }
+          },
+        },
+        {
+          $unwind: "$Items",
+        },
+        {
+          $group: {
+            _id: "$Items.productId",
+            totalOrders: { $sum: "$Items.quantity" },
+          },
+        },
+        {
+          $sort: { totalOrders: -1 },
+        },
+        {
+          $limit: 5,
+        },
+      ]).exec();
+
+
+      // Populate details for top-selling products
+      const populatedProducts = await product.populate(topSellingProducts, { path: "_id", select: "name image" });
+
+      // Extract necessary details for rendering
+      const productsForRender = populatedProducts.map(product => ({
+        name: product._id.name,
+        image: product._id.image.length > 0 ? product._id.image[0] : '', // First image in the array
+        totalOrders: product.totalOrders,
+      }));
+
+
+      const responseData = {
+        sales,
+        revenue: totalRevenue,
+        users: numOfUsers,
+        topSellingProducts: productsForRender,
+      };
+
+      console.log(responseData, '==============latest data=============='); // Log the response data
+
+
+      // res.send({ data: responseData });
+      // console.log(productsForRender);
+      console.log(numOfUsers, "num of user");
+      console.log(totalRevenue, "revenue");
+      console.log(sales, "number of sales");
+      res.render('admin/dashboard', { sales: sales, revenue: totalRevenue, users: numOfUsers, topSellingProducts: productsForRender });
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).send('Internal Server Error');
   }
-
 }
+
+const getfilterdash = async (req, res) => {
+  try {
+    const { days } = req.query;
+    console.log(days, "daysss");
+
+    // Calculate the filter start date
+    const filterStartDate = moment().subtract(days || 7, 'days').startOf('day').toDate();
+
+    console.log(filterStartDate, "start  dateee")
+    // Sales count query with date filter
+    const sales = await order.find({
+      Status: "Delivered",
+      OrderDate: { $gte: filterStartDate }
+    }).count();
+
+    const numOfUsers = await user.find().count();
+
+    const totalRevenueResult = await order.aggregate([
+      {
+        $match: {
+          Status: "Delivered",
+          OrderDate: { $gte: filterStartDate }
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$TotalPrice" },
+        },
+      },
+    ]);
+
+    const totalRevenue = totalRevenueResult.length > 0 ? totalRevenueResult[0].totalRevenue : 0;
+
+
+
+    // Find top-selling products
+    // Find top-selling products
+    const topSellingProducts = await order.aggregate([
+      {
+        $match: {
+          Status: "Delivered",
+          OrderDate: { $gte: filterStartDate }
+        },
+      },
+      {
+        $unwind: "$Items",
+      },
+      {
+        $group: {
+          _id: "$Items.productId",
+          totalOrders: { $sum: "$Items.quantity" },
+        },
+      },
+      {
+        $sort: { totalOrders: -1 },
+      },
+      {
+        $limit: 5,
+      },
+    ]).exec();
+
+
+    // Populate details for top-selling products
+    const populatedProducts = await product.populate(topSellingProducts, { path: "_id", select: "name image" });
+
+    // Extract necessary details for rendering
+    const productsForRender = populatedProducts.map(product => ({
+      name: product._id.name,
+      image: product._id.image.length > 0 ? product._id.image[0] : '', // First image in the array
+      totalOrders: product.totalOrders,
+    }));
+
+
+    const responseData = {
+      sales: sales,
+      revenue: totalRevenue,
+      users: numOfUsers,
+      topSellingProducts: productsForRender,
+    };
+
+    console.log(responseData, '==============latest data=============='); // Log the response data
+
+
+    res.send({ data: responseData });
+    // console.log(productsForRender);
+    console.log(numOfUsers, "num of user");
+    console.log(totalRevenue, "revenue");
+    console.log(sales, "number of sales");
+    // res.render('admin/dashboard', { data: responseData });
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+
+
+
 const getlogout = (req, res) => {
   req.session.isAdmin = false
   // req.session.destory()
@@ -299,13 +489,13 @@ const postupdatecategory = async (req, res) => {
 
     const { name, description } = req.body;
 
-    console.log(id,"id from update category")
+    console.log(id, "id from update category")
 
     const categorydetails = {
       name: req.body.name,
       description: req.body.description,
       categorydiscountprice: req.body.categorydiscountprice || 0,
-      categorydiscountexpiryDate: req.body.categorydiscountexpiryDate || null, 
+      categorydiscountexpiryDate: req.body.categorydiscountexpiryDate || null,
 
     };
 
@@ -338,36 +528,17 @@ const getorder = async (req, res) => {
       userName: order.UserID.name,
     }));
 
-
-
     res.render('admin/orderm', { orderData, userData });
   } catch (error) {
     console.error('Error fetching order data:', error);
     res.status(500).send('Internal Server Error');
   }
 };
-
-// const getmoredetails=async(req,res)=>{
-//   try {
-//     const orders = await order
-//       .findOne({ _id: req.query.orderid })
-//       .populate('Items.productId')
-
-//     res.render('admin/orderdetails', { orderid: order._id });
-//   } catch (error) {
-//     console.error(error);
-
-//     res.status(500).send('Internal Server Error');
-//   }
-
-// }
 const getmoredetails = async (req, res) => {
   try {
     const orderId = req.params.id;
     console.log(orderId);
     const orderData = await order.findOne({ _id: orderId }).populate('Items.productId');
-    console.log(">>>>>>>>>>>>>", orderData);
-
     res.render('admin/moredetials', { orderData });
 
   } catch (error) {
@@ -380,12 +551,8 @@ const getmoredetails = async (req, res) => {
 const getorderStatus = async (req, res) => {
   try {
     const orderId = req.params.orderId;
-    console.log('mmmmmmmmm', orderId);
     const newStatus = req.body.status;
-    //   console.log('>>>>>>>>>>>>>',newStatus);  
     const orders = await order.findByIdAndUpdate(orderId, { Status: newStatus });
-
-    console.log('...............56566556656565', orders);
     if (order) {
       res.json({ success: true });
     } else {
@@ -525,4 +692,4 @@ const postreturnstatus = async (req, res) => {
 
 
 
-module.exports = { postreturnstatus, getreturns, deleteImagess, getorderStatus, getmoredetails, postupdatecategory, getorder, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };
+module.exports = { getfilterdash, postreturnstatus, getreturns, deleteImagess, getorderStatus, getmoredetails, postupdatecategory, getorder, geteditcategory, getlogout, getproductmanagement, getdash, getusermanagement, getcategory, getdeleteuser, unblockUser, getdeleteproduct, blockUser, postaddproduct, getaddproduct, getaddcategory, postaddcategory, getdelecategory, geteditproduct, postupdateproduct };

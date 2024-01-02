@@ -8,6 +8,9 @@ const returns = require('../model/return')
 const mongoosePaginate = require('mongoose-paginate-v2');
 const wallet = require('../model/wallet')
 
+const PDFDocument = require('pdfkit');
+const exceljs = require('exceljs');
+
 const { ObjectId } = require('mongodb');
 
 
@@ -53,18 +56,20 @@ const getmyorder = async (req, res) => {
 
         console.log(orderData, "order dataaaaaaaaaaaaaaaaaaaa")
 
-        res.render('user/myorder', { title: 'Orders', orderData:{
-            docs: orderData.docs,
-            totalPages: orderData.totalPages,
-            page: orderData.page,
-            hasPrevPage: orderData.hasPrevPage,
-            hasNextPage: orderData.hasNextPage,
-            prevPage: orderData.prevPage,
-            nextPage: orderData.nextPage
-        }, userData });
-} catch (error) {
-    console.error(error);
-}
+        res.render('user/myorder', {
+            title: 'Orders', orderData: {
+                docs: orderData.docs,
+                totalPages: orderData.totalPages,
+                page: orderData.page,
+                hasPrevPage: orderData.hasPrevPage,
+                hasNextPage: orderData.hasNextPage,
+                prevPage: orderData.prevPage,
+                nextPage: orderData.nextPage
+            }, userData
+        });
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 
@@ -319,13 +324,141 @@ const returnOrder = async (req, res) => {
     }
 };
 
+const genereatesalesReport = async (req, res) => {
+    try {
+        const startDate = new Date(req.body.startDate);
+        const format = req.body.downloadFormat;
+        const endDate = new Date(req.body.endDate);
 
 
+        console.log(startDate, endDate, format, '==========')
 
 
+        const orders = await order.find({
+            Status: {
+                $nin: ["returned", "Cancelled", "Rejected"]
+            },
+            OrderDate: {
+                $gte: startDate,
+                $lte: endDate,
+            },
+        }).populate("Items.productId");
+
+        let totalSales = 0;
+
+        orders.forEach((order) => {
+            totalSales += order.TotalPrice || 0;
+        });
+
+        if (format.toLowerCase() === 'pdf') {
+            const editedstartdate = startDate.toDateString()
+            const editedenddate = endDate.toDateString()
+            const browser = await puppeteer.launch({ headless: 'new' });
+            const page = await browser.newPage();
+
+            // Your HTML template for the sales report
+            const htmlContent = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+      <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+                    <title>Sales Report</title>
+                </head>
+                <body>
+                <h1 class="text-center" style="margin-top:34px;">Sales Report </h1>
+                    <h4 class="text-center">from ${editedstartdate} to ${editedenddate}</h4>
+                    <p class="mt-5">Total Sales: ${totalSales.toFixed(2)}</p>
+
+                    <table class="table-bordered align-content-center text-center p-3 ">
+                        <thead >
+                            <tr>
+                                <th>Order Number</th>
+                                <th>User Id</th>
+                                <th>Date</th>
+                                <th>Payment Method</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${orders.map(order => `
+                                <tr>
+                                    <td>${order.orderNumber}</td>
+                                    <td>${order.UserID}</td>
+                                    <td>${order.OrderDate ? order.OrderDate.toISOString().split('T')[0] : ''}</td>
+                                    <td>${order.paymentMethod}</td>
+                                    <td>${order.TotalPrice.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+                 <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+            `;
 
 
+            await page.setContent(htmlContent);
+
+            // Generate PDF
+            const pdfBuffer = await page.pdf();
+
+            // Set response headers
+            res.setHeader('Content-Disposition', `attachment; filename="sales_report_${startDate}_${endDate}.pdf"`);
+            res.setHeader('Content-Type', 'application/pdf');
+
+            // Send the PDF buffer as the response
+            res.send(pdfBuffer);
+
+            // Close the browser
+            await browser.close();
+        } else if (format.toLowerCase() === 'excel') {
+            // Handle Excel logic using exceljs
+            const workbook = new exceljs.Workbook();
+            const worksheet = workbook.addWorksheet('Sales Report');
+
+            // Add headers
+            worksheet.addRow(['Order Number', 'User Id', 'Date', 'Payment Method', 'TotalPrice']);
 
 
+            orders.forEach((order) => {
+                worksheet.addRow([order.orderNumber, order.UserID, order.OrderDate, order.paymentMethod, order.TotalPrice]);
+            });
 
-module.exports = { returnOrder, postinvoice, postcancelorder, getmyorder, getorderdetials }
+
+            res.setHeader('Content-Disposition', `attachment; filename="sales_report_${startDate}_${endDate}.xlsx"`);
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+            await workbook.xlsx.write(res);
+            res.end();
+        } else {
+            res.status(400).send('Unsupported format');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+module.exports = { genereatesalesReport, returnOrder, postinvoice, postcancelorder, getmyorder, getorderdetials }

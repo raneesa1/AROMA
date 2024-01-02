@@ -425,6 +425,11 @@
       offerDateError.textContent = "Please provide the offer expiry date";
       event.preventDefault();
     }
+    if (offerDiscountValue >= priceValue) {
+      offerDiscountError.textContent =
+        "Discount amount cannot be greater than or equal to the product price";
+      event.preventDefault();
+    }
 
 
         });

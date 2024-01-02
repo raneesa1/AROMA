@@ -8,6 +8,11 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -22,7 +27,6 @@
       crossorigin="anonymous"
     />
 
-    <!-- Cropper.js JavaScript -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"
       integrity="sha512-FJ1dO8RVYTbj+8V0I7Kv6A/l5epg9GYptxFrHKqY4IjMmI/DtZDyLPQwSGx5fF2iU8oEzhZZDD6T0VotzafHHQ=="
@@ -110,33 +114,16 @@
                     <p class="mb-0">Referal link:</p>
                   </div>
                   <div class="col-sm-9 d-flex">
-                    <p class="text-primary" id="referralCode">
-                      http://localhost:3000/login?id=<%=userdata.Referalcode%>
+                    <p
+                      class="text-primary"
+                      id="openModalLink"
+                      style="cursor: pointer; text-decoration: underline"
+                    >
+                      Referralcode
                     </p>
-                    <div style="margin-left: 120px">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        onclick="copyReferralCode()"
-                        class="mt-1"
-                        fill="currentColor"
-                        class="bi bi-copy"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
-                        />
-                      </svg>
-                    </div>
                   </div>
 
-                  <div style="margin-left: 150px; font-size: 11px">
-                    <p class="text-muted mt-0 ml-5 mb-0">
-                      ask your friend to signup with this link and earn rewards!
-                    </p>
-                  </div>
+                  <div style="margin-left: 150px; font-size: 11px"></div>
                 </div>
               </div>
             </div>
@@ -144,6 +131,65 @@
         </div>
       </div>
     </section>
+    <div
+      class="modal fade"
+      id="referralModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Referral Code</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="text-primary mb-0" id="referralCode">
+              http://localhost:3000/login?id=<%=userdata.Referalcode%>
+            </p>
+            <p class="text-muted mt-0 mb-0" style="font-size: 12px">
+              ask your friend to signup with this link and earn rewards!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              style="
+                background-color: #a70f0f;
+                color: #eee;
+                border-color: #853a3a;
+              "
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              data-dismiss="modal"
+              class="btn btn-primary"
+              style="
+                background-color: #000000;
+                color: #eee;
+                border-color: #000000;
+              "
+              onclick="copyReferralCode()"
+            >
+              Copy Code
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div
       class="modal fade"
@@ -285,10 +331,15 @@
       </div>
     </div>
     <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
       crossorigin="anonymous"
     ></script>
+
     <script
       src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -297,6 +348,15 @@
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
       crossorigin="anonymous"
     ></script>
     <script>
@@ -323,12 +383,8 @@
             "Invalid name. Only letters and spaces are allowed.";
           return false;
         } else {
-          nameError.textContent = ""; // Clear the error message if valid
+          nameError.textContent = "";
         }
-
-        // Add more custom validation if needed
-
-        // If everything is valid, return true to submit the form
         return true;
       }
     </script>
@@ -338,8 +394,8 @@
         const cropper = new Cropper(profileImage, {
           zoomable: true,
           scalable: true,
-          aspectRatio: 1, // You can adjust this to your desired aspect ratio
-          viewMode: 1, // You can change this to 0, 1, 2 as per your requirement
+          aspectRatio: 1,
+          viewMode: 1,
         });
       });
       function copyReferralCode() {
@@ -351,8 +407,24 @@
         tempInput.select();
         document.execCommand("copy");
         document.body.removeChild(tempInput);
-        alert("Referral code copied to clipboard!");
+        Toastify({
+          text: "Referral code copied to clipboard!",
+          className: "info",
+          close: true,
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        }).showToast();
       }
+    </script>
+    <script>
+      // JavaScript function to open the modal
+      document
+        .getElementById("openModalLink")
+        .addEventListener("click", function () {
+          $("#referralModal").modal("show");
+        });
     </script>
   </body>
 </html>

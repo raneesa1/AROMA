@@ -864,7 +864,6 @@
 }
 
 
-     
       function showErrorMessage(message) {
         // Set the error message in the modal
         document.getElementById("errorModalMessage").textContent = message;
@@ -935,10 +934,11 @@
             }).then(response=>response.json()).then(res=>{
                 if(res.order){
 
+                   let amount=12
                     // const orderTotalPaise=orderTotal*100
                     var options = {
                         "key": "rzp_test_sFW0lvsM9VcWEf", 
-                        "amount":req.session.TotalPrice * 100,
+                        "amount":amount * 100,
                         "currency": "INR",
                         "name": "AROMA",
                         "description": "Test Transaction",
@@ -948,6 +948,7 @@
                             // alert(paymentId,"payment idd")
                             if(paymentId){
                               // alert("inside payment id")
+                             
                               // alert('just above the veryfy paymentt in razorlay')
                                 fetch('/verifyrazorpaypayment',{
                                     method:"post",
@@ -1037,7 +1038,6 @@
               const apply=document.getElementById('applybtn').style.display='none'
              const cancelOrderBtn=document.getElementById('cancelCouponBtn').style.display='block'
   
-
 
 
             } else {

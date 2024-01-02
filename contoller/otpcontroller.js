@@ -30,17 +30,10 @@ const verifyOtp = async function (req, res) {
             const storedOtp = await OTP.findOne({ email: email });
 
             if (storedOtp && storedOtp.otp === enteredOtp) {
-
-                // OTP is correct, you can proceed with signup
-                // const userExists = await user.findOne({ email: email });
-                // req.session.email = userExists.email
-
-                // const userdata=await user.findOne()
-
                 res.redirect('/resetpassword');
 
             } else {
-                // Incorrect OTP, render the OTP page with an error message
+
                 res.render('user/otp', { err: 'OTP is incorrect' });
             }
         } catch (err) {
@@ -64,8 +57,6 @@ const verifyOtp = async function (req, res) {
 
             if (storedOtp && storedOtp.otp === enteredOtp) {
 
-
-                // OTP is correct, you can proceed with signup
                 await new user(data).save();
                 const enteredReferralCode = req.session.EnteredReferalcode;
                 const referringUser = await user.findOne({ Referalcode: enteredReferralCode });
@@ -73,14 +64,14 @@ const verifyOtp = async function (req, res) {
                 if (referringUser) {
 
                     console.log('inside the if condition of referring user')
-                    const referralBonus = 100; // Set your desired bonus amount
+                    const referralBonus = 100; 
 
                     console.log(referralBonus,"bonus amount")
                     console.log(referringUser._id,"id for adding money to wallet")
                     const referringUserWallet = await wallet.findOne({ User_id: referringUser._id });
 
                     if (!referringUserWallet) {
-                        // If the user doesn't have a wallet, create a new one
+
                         const newWallet = new wallet({
                             User_id: referringUser._id,
                             Account_balance: 0, 
@@ -120,7 +111,7 @@ const verifyOtp = async function (req, res) {
 
                 res.redirect('/home');
             } else {
-                // Incorrect OTP, render the OTP page with an error message
+               
                 res.render('user/otp', { err: 'OTP is incorrect' });
 
             }
@@ -133,7 +124,7 @@ const verifyOtp = async function (req, res) {
 // Function to resend OTP
 const resendOtp = function (req, res) {
     const email = req.session.data.email
-    // Resend OTP via email
+
 
     var mailOptions = {
         to: email,
@@ -148,7 +139,6 @@ const resendOtp = function (req, res) {
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
-        // Render the OTP page with a success message
         res.render('user/otp', { err: "OTP has been sent" });
     });
 };
