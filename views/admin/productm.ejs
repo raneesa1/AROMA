@@ -167,7 +167,6 @@
                 <td>
                   <% if (data.discountexpiryDate && data.discountexpiryDate >
                   new Date()) { %>
-                  <!-- Display the price with an overline -->
                    <p class="product-discounted-price product-price">
                     &#8377;<%= data.price - data.discountprice %>
                   </p>
@@ -177,10 +176,8 @@
                   >
                     &#8377;<%= data.price %>
                   </p>
-                  <!-- Display the discounted price -->
                  
                   <% } else { %>
-                  <!-- Display the regular price when there is no active offer -->
                   <p class="product-price">&#8377;<%= data.price %></p>
                   <% } %>
                 </td>

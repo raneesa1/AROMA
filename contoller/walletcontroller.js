@@ -13,9 +13,12 @@ const getwalletpage = async (req, res) => {
         console.log("reached wallet");
         const users = await user.findOne({ email: req.session.email });
         const userId = users._id;
+
         const walletinfo = await wallet.findOne({
             User_id: userId
-        }).sort({ Date: -1 })
+        })
+
+        walletinfo.Transactions.sort((a, b) => b.Date - a.Date);
         res.render('user/wallet', { walletinfo })
     } catch (error) {
         console.log('error', error)

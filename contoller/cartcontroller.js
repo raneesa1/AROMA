@@ -68,7 +68,7 @@ const getcart = async (req, res) => {
                 // Check if the product has an active offer
                 if (discountexpiryDate && discountexpiryDate > new Date()) {
                     const discountedPrice = discountprice || 0;
-                    subtotal += quantity * (price - discountedPrice);
+                    subtotal += quantity * (price);
                 } else {
                     subtotal += quantity * price;
                 }

@@ -239,14 +239,14 @@
                         <h5>Total price</h5>
                         <p>&#8377;<%= TotalPrice %></p>
                       </div>
-
+  <a href="selectaddress" style="color: azure">
                       <button
                         type="button"
                         class="btn btn-dark btn-block btn-lg"
                         style="width: 274px; font-size: 16px"
                         data-mdb-ripple-color="dark"
                       >
-                        <a href="selectaddress" style="color: azure">
+                      
                           PROCEED
                           <svg
                             style="color: #ffffff"
@@ -263,8 +263,9 @@
                               d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
                             />
                           </svg>
-                        </a>
+
                       </button>
+                      </a>
                       <!-- <h6 class="mt-4">Enter promo code</h6>
                       <div class="input-group mt-3 mb-4">
                         <input
@@ -289,9 +290,9 @@
                 </div>
               </div>
               <% } else { %>
-              <div class="card-body cart">
+              <!-- <div class="card-body cart"> -->
                 <div
-                  class="col-sm-12 empty-cart-cls text-center"
+                  class="col-sm-12 empty-cart-cls text-center mt-0"
                   style="margin-left: 200px"
                 >
                   <svg
@@ -378,7 +379,7 @@
                     >continue shopping</a
                   >
                 </div>
-              </div>
+              <!-- </div> -->
               <% } %>
             </div>
           </div>

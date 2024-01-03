@@ -144,18 +144,23 @@
                   <small id="desciptionError" class="text-danger"></small>
                 </div>
                 <div class="mb-3">
-                  <label for="categorydiscountprice">Offer amount:</label>
+                  <label for="categorydiscountprice">Offer Percentage %:</label>
                   <input
                     type="number"
-                    name="categorydiscountprice"
+                    name="categorydiscountper"
                     id="categoryofferDiscount"
                     class="form-control form-control-lg"
                     placeholder="Enter the offer discount amount"
                   />
-                  <small id="categoryofferDiscountError" class="text-danger"></small>
+                  <small
+                    id="categoryofferDiscountError"
+                    class="text-danger"
+                  ></small>
                 </div>
                 <div class="mb-3">
-                  <label for="categorydiscountexpiryDate">Offer Expiry Date:</label>
+                  <label for="categorydiscountexpiryDate"
+                    >Offer Expiry Date:</label
+                  >
                   <input
                     type="date"
                     name="categorydiscountexpiryDate"
@@ -163,7 +168,10 @@
                     class="form-control form-control-lg"
                     placeholder="Enter the Offer Expiry Date"
                   />
-                  <small id="categoryofferDateError" class="text-danger"></small>
+                  <small
+                    id="categoryofferDateError"
+                    class="text-danger"
+                  ></small>
                 </div>
 
                 <input
@@ -194,6 +202,8 @@
             return trimmedValue === "";
           }
 
+          const currentdate = new Date();
+
           const name = document.getElementById("name");
           const namenameValue = name.value;
           const nameError = document.getElementById("nameError");
@@ -202,8 +212,21 @@
           const desciptionValue = desciption.value;
           const desciptionError = document.getElementById("desciptionError");
 
+          const discount = document.getElementById("categoryofferDiscount");
+          const discountValue = discount.value;
+          const discountError = document.getElementById(
+            "categoryofferDiscountError"
+          );
+          const expiryDate = document.getElementById("categoryofferDate");
+          const expiryDateValue = expiryDate.value;
+          const expiryDateError = document.getElementById(
+            "categoryofferDateError"
+          );
+
           nameError.textContent = "";
           desciptionError.textContent = "";
+          discountError.textContent = "";
+          expiryDateError.textContent = "";
 
           if (isEmpty(namenameValue)) {
             nameError.textContent = "Name can't be empty";
@@ -216,6 +239,24 @@
 
           if (isEmpty(desciptionValue)) {
             desciptionError.textContent = "Desciption can't be empty";
+            event.preventDefault();
+          }
+          if (discountValue >= 100) {
+            discountError.textContent =
+              "discount percentage should not be more than or equal to 100%";
+            event.preventDefault();
+          }
+          if (discountValue !== "" && isEmpty(expiryDateValue)) {
+            expiryDateError.textContent =
+              "Expiry date is required when discount amount is entered";
+            event.preventDefault();
+          }
+          if (
+            !isEmpty(expiryDateValue) &&
+            new Date(expiryDateValue) <= currentdate
+          ) {
+            expiryDateError.textContent =
+              "Expiry date should be after the current date";
             event.preventDefault();
           }
         });
@@ -260,7 +301,6 @@
             const data = await response.json();
 
             if (response.ok) {
-              // Handle success, e.g., redirect to another page
               window.location.href = "/admin/category";
             } else {
               // Display error message

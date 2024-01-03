@@ -148,16 +148,20 @@
                   >
                   <small id="editeddesciptionError" class="text-danger"></small>
                 </div>
-                 <div class="mb-3">
-                  <label for="">Offer amount:</label>
+                <div class="mb-3">
+                  <label for="">Offer Percentage%:</label>
                   <input
                     type="number"
-                    name="categorydiscountprice"
+                    name="categorydiscountper"
                     id="categoryediteddiscountprice"
                     class="form-control form-control-lg"
-                    placeholder="Enter the offer discount amount"
+                    value="<%-categories.categorydiscountper%>"
+                    
                   />
-                  <small id="categoryeditedofferDiscountError" class="text-danger"></small>
+                  <small
+                    id="categoryeditedofferDiscountError"
+                    class="text-danger"
+                  ></small>
                 </div>
                 <div class="mb-3">
                   <label for="">Offer Expiry Date:</label>
@@ -166,9 +170,12 @@
                     name="categorydiscountexpiryDate"
                     id="categoryeditedofferDate"
                     class="form-control form-control-lg"
-                    placeholder="Enter the Offer Expiry Date"
+                    value="<%-categories.categorydiscountexpiryDate ? categories.categorydiscountexpiryDate.toISOString().split('T')[0] : ''%>"
                   />
-                  <small id="categoryeditedofferDateError" class="text-danger"></small>
+                  <small
+                    id="categoryeditedofferDateError"
+                    class="text-danger"
+                  ></small>
                 </div>
 
                 <input
@@ -197,6 +204,8 @@
             return trimmedValue === "";
           }
 
+          const currentdate = new Date();
+
           const name = document.getElementById("editedname");
           const namenameValue = name.value;
           const nameError = document.getElementById("editednameError");
@@ -207,8 +216,26 @@
             "editeddesciptionError"
           );
 
+          const editedDiscount = document.getElementById(
+            "categoryediteddiscountprice"
+          );
+          const editedDiscountValue = editedDiscount.value;
+          const editedDiscountError = document.getElementById(
+            "categoryeditedofferDiscountError"
+          );
+
+          const editedExpiryDate = document.getElementById(
+            "categoryeditedofferDate"
+          );
+          const editedExpiryDateValue = editedExpiryDate.value;
+          const editedExpiryDateError = document.getElementById(
+            "categoryeditedofferDateError"
+          );
+
           nameError.textContent = "";
           desciptionError.textContent = "";
+          editedDiscountError.textContent = "";
+          editedExpiryDateError.textContent = "";
 
           if (isEmpty(namenameValue)) {
             nameError.textContent = "name can't be empty";
@@ -217,6 +244,25 @@
 
           if (isEmpty(desciptionValue)) {
             desciptionError.textContent = "Desciption can't be empty";
+            event.preventDefault();
+          }
+
+          if (editedDiscountValue >= 100) {
+            editedDiscountError.textContent =
+              "discount percentage should not be more than or equal to 100%";
+            event.preventDefault();
+          }
+          if (editedDiscountValue !== "" && isEmpty(editedExpiryDateValue)) {
+            editedExpiryDateError.textContent =
+              "Expiry date is required when discount amount is entered";
+            event.preventDefault();
+          }
+          if (
+            !isEmpty(editedExpiryDateValue) &&
+            new Date(editedExpiryDateValue) < currentdate
+          ) {
+            editedExpiryDateError.textContent =
+              "Expiry date should be after the current date";
             event.preventDefault();
           }
         });

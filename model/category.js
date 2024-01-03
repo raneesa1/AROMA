@@ -7,14 +7,24 @@ require('dotenv').config()
 
 const categorySchema = new mongoose.Schema({
 
-    name: { type: String,  unique: true, },
+    name: { type: String, unique: true, },
     description: { type: String },
     date: { type: Date },
-    categorydiscountprice: { type: Number, default: 0 },
-    categorydiscountexpiryDate: { type: Date }, 
+    categorydiscountper: { type: Number, default: 0 },
+    categorydiscountexpiryDate: { type: Date },
 
 });
 
+categorySchema.pre('save', function (next) {
+    const currentDate = new Date();
+
+    if (this.categorydiscountexpiryDate && this.categorydiscountexpiryDate <= currentDate) {
+        this.categorydiscountper = 0;
+        this.categorydiscountexpiryDate = null;
+    }
+
+    next();
+});
 
 
 const category = mongoose.model(process.env.CATEGORY_COLLECTION, categorySchema)

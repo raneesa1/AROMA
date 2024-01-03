@@ -93,6 +93,13 @@ const postaddproduct = async (req, res) => {
       res.render('admin/addproduct', { categorydata, err: "Product with this name already exist" })
     } else {
 
+      const categoryId = new ObjectId(req.body.category);
+      const categoryDetails = await category.findById(categoryId);
+
+      console.log(categoryId, "id of category when adding a product")
+      console.log(categoryDetails, "details of the category selected while adding a new product")
+
+
 
 
 
@@ -107,10 +114,23 @@ const postaddproduct = async (req, res) => {
         date: Date.now(),
         discountprice: req.body.discountprice || 0,
         discountexpiryDate: req.body.discountexpiryDate || null,
+        // discount_type: discountType
 
       }
-      console.log(products)
+
+      console.log(categoryDetails.categorydiscountper, "category offer percentage from the selected category while adding a new product")
+      if (!req.body.discountprice && categoryDetails && categoryDetails.categorydiscountper > 0) {
+        const discountedPrice = Math.floor((1 - categoryDetails.categorydiscountper / 100) * products.price);
+
+        console.log(discountedPrice, "discount amount after converting from percentage")
+        products.discountprice = discountedPrice;
+        // products.discount_type = 'CategoryOffer'
+        products.discountexpiryDate = categoryDetails.categorydiscountexpiryDate || null;
+      }
+
+      console.log(products, "detial of the added product")
       await new product(products).save()
+      console.log('saved the added product in db')
       res.redirect('/admin/product')
     }
   } catch (error) {
@@ -155,7 +175,9 @@ const postaddcategory = async (req, res) => {
     const id = req.params.id
 
     const { name, description } = req.body;
-    console.log(id, "id from the category - edit")
+    const disocunt = req.body.categorydiscountper
+    console.log(disocunt, "discount amount from category")
+    console.log(req.body, "req.body from add category")
 
 
     const existingCategory = await category.findOne({ _id: { $ne: id }, name: { $regex: new RegExp(`^${name}$`, "i") } });
@@ -170,11 +192,19 @@ const postaddcategory = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         date: Date.now(),
-        categorydiscountprice: req.body.categorydiscountprice || 0,
+        categorydiscountper: req.body.categorydiscountper || 0,
         categorydiscountexpiryDate: req.body.categorydiscountexpiryDate || null,
 
       }
-      await new category(categories).save()
+
+
+      const newCategory = await new category(categories).save();
+
+
+
+
+
+
       res.redirect('/admin/category')
     }
   } catch (error) {
@@ -213,8 +243,11 @@ const geteditproduct = async (req, res) => {
 const postupdateproduct = async (req, res) => {
 
   try {
-
+    console.log(req.body)
     let id = req.params.id;
+
+
+
     if (req.files && req.files.length > 0) {
       const productsdetails = {
         name: req.body.name,
@@ -226,6 +259,7 @@ const postupdateproduct = async (req, res) => {
         discountprice: req.body.discountprice,
         discountexpiryDate: req.body.discountexpiryDate,
 
+
         image: req.files.map((file) => '/photos/' + file.filename)
 
 
@@ -233,7 +267,7 @@ const postupdateproduct = async (req, res) => {
       };
 
       // Update the product using findOneAndUpdate
-      await product.findOneAndUpdate({ _id: id }, { $set: productsdetails });
+      await updateProduct(id, productsdetails, req)
     } else {
       // No files were uploaded, update only non-file fields
 
@@ -248,10 +282,12 @@ const postupdateproduct = async (req, res) => {
         specification: req.body.specification,
 
 
+
       };
 
       // Update the product using findOneAndUpdate
-      await product.findOneAndUpdate({ _id: id }, { $set: productsdetails });
+      await updateProduct(id, productsdetails, req)
+
     }
 
     res.redirect('/admin/product');
@@ -260,6 +296,41 @@ const postupdateproduct = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+
+const updateProduct = async (id, productsdetails, req) => {
+  const productafterupdating = await product.findOneAndUpdate({ _id: id }, { $set: productsdetails });
+  console.log(productafterupdating, "product after updating from helper functioin")
+
+  const productToUpdate = await product.findById(id);
+
+  console.log(productsdetails.category, "category of product from the helper funciton")
+
+  console.log(productToUpdate.discountprice, "product discount amount - product offer")
+
+  // Apply category offer only if the product doesn't have a discount amount and discountprice is not provided during edit
+  if (!productToUpdate.discountprice && !req.body.discountprice) {
+    console.log('inside if condition of no prodyct discount price and also no edited discount amount ')
+    const categoryDetails = await category.findById(productsdetails.category);
+
+    console.log(categoryDetails, "detials of the category of the product edited")
+    console.log(categoryDetails.categorydiscountper, "disocunt percentage of the category selected from the edited product")
+    console.log('inside the if conditon of no discount amount for the product and also while editing the product')
+    if (categoryDetails && categoryDetails.categorydiscountper > 0) {
+      console.log('inside the if condition of - category offer exists')
+
+      const discountedPrice = Math.floor((1 - categoryDetails.categorydiscountper / 100) * productToUpdate.price);
+
+      console.log(discountedPrice, "disocunt amount after converting from percentage")
+      const updatedvalue = await product.findByIdAndUpdate(id, {
+        discountprice: discountedPrice,
+        // discount_type : 'CategoryOffer',
+        discountexpiryDate: categoryDetails.categorydiscountexpiryDate || null,
+      });
+      console.log(updatedvalue, 'after updating')
+    }
+  }
+};
+
 const getdash = async (req, res) => {
   try {
     if (req.session.isAdmin) {
@@ -486,19 +557,20 @@ const geteditcategory = async (req, res) => {
 const postupdatecategory = async (req, res) => {
   try {
     let id = req.params.id;
+    console.log(req.body)
 
-    const { name, description } = req.body;
+    const { name, description, categorydiscountper, categorydiscountexpiryDate } = req.body;
+
 
     console.log(id, "id from update category")
 
     const categorydetails = {
       name: req.body.name,
       description: req.body.description,
-      categorydiscountprice: req.body.categorydiscountprice || 0,
+      categorydiscountper: req.body.categorydiscountper || 0,
       categorydiscountexpiryDate: req.body.categorydiscountexpiryDate || null,
 
     };
-
 
     const categories = await category.find({})
 
@@ -507,7 +579,31 @@ const postupdatecategory = async (req, res) => {
       res.render('admin/editcategory', { err: 'Category already exists', categories: categories })
     } else {
 
-      await category.findOneAndUpdate({ _id: id }, { $set: categorydetails });
+      const updatedCategory = await category.findOneAndUpdate({ _id: id }, { $set: categorydetails }, { new: true });
+
+
+      if (categorydiscountper > 0) {
+        console.log('inside discount of category ')
+
+        const productsToUpdate = await product.find({ category: updatedCategory._id, status: false, discountprice: 0 });
+
+        console.log(updatedCategory._id, "id of category")
+
+        console.log(productsToUpdate, "consoling the products for updating the offer price")
+
+        productsToUpdate.forEach(async (productToUpdate) => {
+          // Calculate discounted price based on category discount percentage
+          const discountedPrice = Math.floor((1 - categorydiscountper / 100) * productToUpdate.price);
+
+
+          // Update product with category offer
+          await product.findByIdAndUpdate(productToUpdate._id, {
+            discountprice: discountedPrice,
+            // discount_type : 'CategoryOffer',
+            discountexpiryDate: categorydiscountexpiryDate,
+          });
+        });
+      }
       res.redirect('/admin/category');
     }
   } catch (error) {

@@ -119,7 +119,6 @@
                                 <div
                                   class="col-md-5 text-muted text-right mt-4"
                                 >
-
                                   &#8377;<%=item.Price%> <% if (["Requested",
                                   "Accepted"].includes(item.status)) { %>
                                   <p style="color: green">
@@ -129,7 +128,8 @@
                                   <p style="color: red">
                                     Return <%= item.status %>
                                   </p>
-                                  <% } else if(order.Status === "Delivered") { %>
+                                  <% } else if(order.Status === "Delivered") {
+                                  %>
                                   <button
                                     class="btn btn-sm mr-0"
                                     style="
@@ -261,7 +261,12 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary" id="confirmReturnBtn">
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #000000; color: #eee"
+              id="confirmReturnBtn"
+            >
               Confirm Return
             </button>
           </div>

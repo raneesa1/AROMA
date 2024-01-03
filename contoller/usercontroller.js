@@ -439,7 +439,7 @@ const getselectaddress = async (req, res) => {
 
         const userId = User._id;
         const currentDate = new Date();
-      
+
 
         const newcart = await cart.findOne({ userId: userId }).populate("products.productId");
 
@@ -494,7 +494,7 @@ const getselectaddress = async (req, res) => {
         newcart.products.forEach(item => {
             const { discountprice, discountexpiryDate } = item.productId;
             if (discountexpiryDate && discountexpiryDate > new Date()) {
-                totalProductDiscount += discountprice * item.quantity;
+                totalProductDiscount += Math.floor(discountprice * item.quantity);
             }
         });
 
@@ -514,7 +514,7 @@ const getselectaddress = async (req, res) => {
             availableCoupons: availableCoupons,
             User,
             totalProductDiscount,
-            totalWithDiscount: total - totalProductDiscount,
+            totalWithDiscount: Math.floor(total - totalProductDiscount),
             walletBalance: formattedWalletBalance,
         });
     } catch (error) {

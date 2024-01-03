@@ -249,14 +249,18 @@
                   Top <span style="color: orangered">5</span> Selling Products
                 </h3>
                 <br />
-                <table id="topSellingProductsTableid" class="table-responsive-lg table-light ">
+                <table
+                  id="topSellingProductsTableid"
+                  class="table-responsive-lg table-light"
+                >
+                  <% if(topSellingProducts){%>
                   <tr class="pt-5 mt-0">
                     <th>Product Image</th>
                     <th>Product Name</th>
                     <th>Number of orders</th>
                   </tr>
-                  <% if(topSellingProducts){%> <% for (const product of
-                  topSellingProducts) { %>
+
+                  <% for (const product of topSellingProducts) { %>
                   <tr>
                     <td>
                       <img
@@ -270,6 +274,7 @@
                     <td class="h6"><%= product.totalOrders %></td>
                   </tr>
                   <% } %> <% } else { %>
+
                   <tr>
                     <td colspan="3">No top selling products available</td>
                   </tr>
@@ -335,7 +340,7 @@
         .addEventListener("change", function () {
           // alert("gneognwerog");
           const selectedDays = this.value;
-          alert(selectedDays, "selected days - ");
+          // alert(selectedDays, "selected days - ");
 
           // Fetch updated data based on the selected filter
           fetch(`/admin/dashboard?days=${selectedDays}`, {
@@ -346,8 +351,8 @@
           })
             .then((response) => response.json())
             .then((data) => {
-              alert(data);
-              console.log(data);
+              // alert(data);
+              // console.log(data);
               updateDashboardUI(data);
             })
             .catch((error) => {
@@ -356,8 +361,7 @@
         });
 
       function updateDashboardUI(data) {
-        console.log(data);
-        alert(data.data.sales);
+
 
         // Update sales
         const salesElement = document.getElementById("salesValue");

@@ -204,14 +204,18 @@
           <td>&#8377;<%= x.TotalPrice %></td>
           <td>
 
-              <% if (x.Status !== 'Cancelled') { %>
+              <% if (x.Status !== 'Cancelled' ) { %>
                 <% const currentStatus = x.Status || 'Order Placed'; %>
+                <% if (currentStatus !== 'Delivered') { %>
                 <select id="statusSelect<%= x %>" onchange="updateOrderStatus('<%= x._id %>', this.value)">
                   <option value="Order Placed" <%= currentStatus === 'Order Placed' ? 'selected' : '' %>>Order Placed</option>
                   <option value="Shipped" <%= currentStatus === 'Shipped' ? 'selected' : '' %>>Shipped </option>
                   <option value="Delivered" <%= currentStatus === 'Delivered' ? 'selected' : '' %>>Delivered</option>
                   <option value="Rejected" <%= currentStatus === 'Rejected' ? 'selected' : '' %>>Rejected</option>
                 </select>
+                <% } else { %>
+    <p class="text-success">Delivered</p>
+  <% } %>
               <% } else { %>
                <p class="text-danger"> Cancelled</p>
               <% } %>
@@ -278,6 +282,7 @@
       .then((data) => {
         if (data.success) {
           alert('Order status updated successfully!');
+          window.location.reload()
         } else {
           alert('Failed to update order status.');
         }
@@ -299,13 +304,17 @@ document.getElementById("downloadBtn").addEventListener("click", function () {
   const endDate = document.getElementById("endDate").value;
   const format = document.getElementById("format").value;
 
-  console.log(startDate)
-  console.log(endDate)
-  console.log(format)
+  const currentDate = new Date().toISOString().split('T')[0];
+
 
   if (startDate && endDate) {
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(endDate);
+
+      if (startDate > currentDate || endDate > currentDate) {
+      alert("Start date and end date should be on or before the current date");
+      return;
+    }
 
     if (startDateObj > endDateObj) {
       alert("End date should be after the start date");
@@ -315,9 +324,7 @@ document.getElementById("downloadBtn").addEventListener("click", function () {
     alert("Please provide both start date and end date");
     return; 
   }
-  alert(startDate)
-  alert(endDate)
-  alert(format)
+
    fetch('/admin/download-sales-report', {
     method: 'POST',
     headers: {

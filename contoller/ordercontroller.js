@@ -420,6 +420,7 @@ const genereatesalesReport = async (req, res) => {
 
 
             await page.setContent(htmlContent);
+            console.log(htmlContent,"html content for pdf")
 
             // Generate PDF
             const pdfBuffer = await page.pdf();
