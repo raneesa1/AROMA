@@ -1,43 +1,5 @@
-.brandname {
-  height: 200px;
-  background-color: rgb(182, 182, 182);
-  padding-top: 40px;
-  padding-bottom: 0px;
-}
-.product-box {
-  border: 1px solid #ddd;
-  margin: 29px;
-  align-items: center;
-  padding-bottom: 12px;
-  margin: 10px 0;
-  text-align: center;
-  width: 300px;
-  border: none;
-}
-
-.product-title {
-  font-size: 15px;
-  margin: 4px 0;
-}
-
-.product-description {
-  font-size: 12px;
-}
-
-.product-price {
-  font-size: 14px;
-  color: #030202;
-  font-weight: 500;
-  margin: 5px 0;
-}
-
-.add-to-cart {
-  /* background-color: #000000; */
-  color: #fff;
-  font-size: 10px;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
+.table-edit {
+  font-family: tahoma;
 }
 .d-flex p {
   padding: 3px; /* Adjust the top padding to bring the text closer */
@@ -61,7 +23,7 @@
   flex: 2;
 }
 .flex3 {
-  flex: 3;
+  flex: 45;
 }
 
 button.siteLink {
@@ -114,7 +76,6 @@ button.siteLink {
 #mainNavigation {
   transition: transform 200ms linear;
   background: #fff;
-  height: 130px;
 }
 .drawMenu > #menuDrawer {
   transform: translateX(0%);
@@ -130,21 +91,33 @@ a.nav-menu-item:hover {
   border-left: 10px solid black;
 }
 a.nav-menu-item {
-  a.nav-menu-item {
-    transition: border 200ms linear;
-    text-decoration: none;
-    display: block;
-    /* padding: 18px; */
-
-    /* padding-top: 30px; Adjust this value to bring the text down */
-    border-bottom: 1px solid #eaeaea;
-    font-weight: bold;
-    color: #000000;
-  }
+  transition: border 200ms linear;
+  text-decoration: none;
+  display: block;
+  padding: 18px;
+  padding-left: 32px;
+  border-bottom: 1px solid #eaeaea;
+  font-weight: bold;
+  color: #000000;
 }
 select.noStyle {
   border: none;
   outline: none;
+}
+.box {
+  padding: 23px;
+  height: 500px;
+  color: rgb(0, 0, 0);
+  border: 200px;
+  width: 100%;
+  font-size: 12px;
+  /* justify-content: center;/ */
+  gap: 12px;
+  /* align-items: center; */
+  /* position: absolute; */
+  /* left: 35%; */
+  /* right: 50%; */
+  top: 20%;
 }
 * {
   margin: 0;
@@ -162,11 +135,51 @@ select.noStyle {
   height: 20px; /* Adjust the height accordingly */
   fill: #000; /* Modify the color if needed */
 }
-.banner-font {
-  font-size: larger;
-  font-family: gill sans;
-  text-align: center;
+.menu-section {
+  color: #595959; /* Set text color */
+  padding: 22px; /* Adjust padding as needed */
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  margin: 7px;
+  flex-direction: column;
+  border-right: 1px solid #d7d7d7;
 }
+
+.menu-item {
+  margin: 14px 0; /* Adjust margin between menu items */
+  font-family: tahoma;
+  font-size: 18px;
+  font-weight: bold;
+  color: #6d6d6d;
+  width: 170px;
+  text-decoration: none;
+}
+.menu-item:hover {
+  color: #000;
+}
+
+table.table-bordered thead th {
+  border: none; /* Remove border from table header cells */
+  font-size: 16px;
+  color: #696969;
+  font-weight: 600;
+  font-family: arial;
+}
+.menu-section a {
+  text-decoration: none;
+}
+table.table-bordered td {
+  border: none; /*Remove border from table data cells */
+  font-size: 15px;
+}
+.table-edit {
+  margin: 12px;
+  padding: 12px;
+  width: 100%;
+
+}
+
+
 .footer-style {
   background: #000000;
   width: 100%;
@@ -187,55 +200,16 @@ footer {
   color: #fff5f5;
   padding: 10px 0 30px;
   border-top-right-radius: 85px;
-  font-size: 11px;
+  font-size: 17px;
   line-height: 20px;
 }
-a {
-  text-decoration: none;
-  color: black;
-}
-/* Add a different color when the anchor tag is hovered */
-a:hover {
-  color: #000000; /* Change to the desired color on hover (e.g., Bootstrap's primary blue) */
-  text-decoration: none; /* Remove the underline on hover */
-}
-.col-size {
-  /* width: 25%; You can adjust the percentage as needed */
-  padding: 0;
-}
-
-.pagination {
+.row-style {
+  width: 85%;
+  margin: auto;
   display: flex;
-  list-style: none;
-  padding: 0;
-  justify-content: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  line-height: 9px;
 }
-
-.pagination li {
-  margin: 0 5px;
-  display: inline-block;
-}
-
-.pagination a {
-  color: #333;
-  text-decoration: none;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.pagination a:hover {
-  background-color: #ddd;
-}
-
-/* Updated style for the active page */
-.pagination .active a {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-  border-color: #000000 !important; /* Add this line to set the border color */
-}
-
-/* Additional styles for the active page */
-.pagination .active a:hover {
-  background-color: #000000; /* Change the background color on hover if needed */
-}
+/* Add a media query to control the column width on smaller screens */

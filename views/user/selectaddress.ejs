@@ -15,7 +15,7 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/selectaddress.css" />
+    <link rel="stylesheet" href="/css/selectaddress.css" />
 
     <title>checkout</title>
   </head>
@@ -36,62 +36,6 @@
               <i class="fas fa-search"></i>
             </button>
           </div>
-          <!-- 
-          <div class="flex2 text-end d-none d-md-block align-content-lg-end">
-            <div class="d-flex justify-content-end align-items-center pr-5">
-              <div class="icon-box">
-                <a href=""
-                  ><i
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="17"
-                      height="17"
-                      style="color: black"
-                      fill="currentColor"
-                      class="bi bi-search"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-                      /></svg></i
-                ></a>
-              </div>
-              <div class="icon-box">
-                <a href="profile"
-                  ><i
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-person-circle"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                      <path
-                        fill-rule="evenodd"
-                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-                      /></svg></i
-                ></a>
-              </div>
-              <div class="icon-box">
-                <a href=""
-                  ><i
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-cart3"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
-                      /></svg></i
-                ></a>
-              </div>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
@@ -414,18 +358,31 @@
                       required
                     />
                     Deliver here
+ </div>
 
-                    <!-- <button class="btn">Deliver here</button> -->
-                    <!-- <span style="margin-left: 164px;"> <button class="btn ">Edit</button></span> -->
-                  </div>
-
-                  <!-- </button> -->
+                
                 </a>
               </div>
                  <% }); %>
  <% } else { %>
-</div>
-<div></div>
+ <div
+                id="address"
+                class="addaddress pl-5"
+                style="font-size: 17px;margin-right: 122px;"
+              >
+                <span class="font3 w-75">
+                  <h3 class="text-lowercase" style="margin-right:652px;"></h3>
+                  <span class="text-muted">
+                  </span
+                  ></span
+                >
+                <a>
+                  <div class="ml-1 mt-4">
+                  </div>
+
+               
+                </a>
+              </div>
 
               <!-- <p>No address found for the user.</p> -->
               <% } %>
@@ -474,7 +431,7 @@
       
       <div>
         <div
-          class="col-xl-12 col-lg- d-flex justify-content-center justify-content-lg-end"
+          class="col-xl-12 col-lg- d-flex  "
           style="
             margin-top: 60px;
             padding-left: 120px;
@@ -560,16 +517,16 @@
                 </a>
                 <div class="price text-muted "  id="productPrice">
                   <% if (item.productId.discountexpiryDate && item.productId.discountexpiryDate > new Date()) { %>
-        <!-- Display the discounted price when there is an active offer -->
+       
         <div class="price text-muted ml-3">
           <span>&#8377;<%= item.productId.price - item.productId.discountprice %></span>
-          <!-- Display the original price with a strikethrough -->
+        
           <span class="text-danger" style="text-decoration: line-through; font-size: 80%;">
             &#8377;<%= item.productId.price %>
           </span>
         </div>
       <% } else { %>
-        <!-- Display the regular price when there is no active offer -->
+      
         <div class="price text-muted ml-3">
           &#8377;<%= item.productId.price %>
         </div>
@@ -588,20 +545,7 @@
             >
               PLACE ORDER
               
-              <!-- <svg
-                class="mb-1"
-                xmlns="http://www.w3.org/2000/svg"
-                width="25"
-                height="25"
-                fill="currentColor"
-                class="bi bi-arrow-right"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-                />
-              </svg> -->
+           
             
             </button>
               </form>
@@ -705,12 +649,12 @@
         </button>
       </div>
       <div class="modal-body">
-        <!-- Content of your modal goes here -->
+
         <p>Here are some available coupons:</p>
        <% availableCoupons.forEach(coupon => { %>
             <li><%= coupon.Coupon_code %></li>
           <% }); %>
-        <!-- Add more coupons or customize as needed -->
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1016,14 +960,15 @@
                     }
                     var rzp1 = new Razorpay(options);
                     rzp1.on('payment.failed', function (response) {
-                        alert("fail")
-                        alert(response.error.code);
-                        alert(response.error.description);
-                        alert(response.error.source);
-                        alert(response.error.step);
-                        alert(response.error.reason);
-                        alert(response.error.metadata.order_id);
-                        alert(response.error.metadata.payment_id);
+                       alert('Unfortunately, your payment failed. Please check your details and try again.')
+                        console.log("fail")
+                        console.log(response.error.code);
+                        console.log(response.error.description);
+                        console.log(response.error.source);
+                        console.log(response.error.step);
+                        console.log(response.error.reason);
+                        console.log(response.error.metadata.order_id);
+                        console.log(response.error.metadata.payment_id);
                     });
                     rzp1.open();
                 }else{
@@ -1188,6 +1133,28 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="paymentFailedModal" tabindex="-1" role="dialog" aria-labelledby="paymentFailedModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentFailedModalLabel">Payment Failed</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Display detailed error information here if needed -->
+                <p>Unfortunately, your payment failed. Please check your details and try again.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
   </body>
 </html>

@@ -18,8 +18,11 @@ const getwalletpage = async (req, res) => {
             User_id: userId
         })
 
-        walletinfo.Transactions.sort((a, b) => b.Date - a.Date);
-        res.render('user/wallet', { walletinfo })
+        if (walletinfo && walletinfo.Transactions) {
+            
+            walletinfo.Transactions.sort((a, b) => b.Date - a.Date);
+            res.render('user/wallet', { walletinfo })
+        }
     } catch (error) {
         console.log('error', error)
 

@@ -19,7 +19,7 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/productm.css" />
+    <link rel="stylesheet" href="/css/productm.css" />
 
     <title>Product Management</title>
   </head>
@@ -202,26 +202,26 @@
           <td><%= orderDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %></td>
           <td><%=x.paymentMethod%></td>
           <td>&#8377;<%= x.TotalPrice %></td>
-          <td>
+         <td>
+    <% if (x.Status !== 'Cancelled') { %>
+        <% const currentStatus = x.Status || 'Order Placed'; %>
+        <select id="statusSelect<%= x._id %>" onchange="updateOrderStatus('<%= x._id %>', this.value)">
+            <% if (currentStatus === 'Delivered') { %>
+                <option value="Delivered" selected>Delivered</option>
+            <% } else if (currentStatus === 'Cancelled') { %>
+                <p class="text-danger">Cancelled</p>
+            <% } else { %>
+                <option value="Order Placed" <%= currentStatus === 'Order Placed' ? 'selected' : '' %>>Order Placed</option>
+                <option value="Shipped" <%= currentStatus === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                <option value="Delivered" <%= currentStatus === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                <option value="Rejected" <%= currentStatus === 'Rejected' ? 'selected' : '' %>>Rejected</option>
+            <% } %>
+        </select>
+    <% } else { %>
+        <p class="text-danger">Cancelled</p>
+    <% } %>
+</td>
 
-              <% if (x.Status !== 'Cancelled' ) { %>
-                <% const currentStatus = x.Status || 'Order Placed'; %>
-                <% if (currentStatus !== 'Delivered') { %>
-                <select id="statusSelect<%= x %>" onchange="updateOrderStatus('<%= x._id %>', this.value)">
-                  <option value="Order Placed" <%= currentStatus === 'Order Placed' ? 'selected' : '' %>>Order Placed</option>
-                  <option value="Shipped" <%= currentStatus === 'Shipped' ? 'selected' : '' %>>Shipped </option>
-                  <option value="Delivered" <%= currentStatus === 'Delivered' ? 'selected' : '' %>>Delivered</option>
-                  <option value="Rejected" <%= currentStatus === 'Rejected' ? 'selected' : '' %>>Rejected</option>
-                </select>
-                <% } else { %>
-    <p class="text-success">Delivered</p>
-  <% } %>
-              <% } else { %>
-               <p class="text-danger"> Cancelled</p>
-              <% } %>
-              
-
-          </td>
           <td><a href="/admin/moredetials/<%-x._id%>"><button type="button" class="btn btn-light" style="border-color: rgb(139, 138, 138);">View</button></a></td>
         </tr>
       <% }) %>

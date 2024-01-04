@@ -198,30 +198,30 @@ const postinvoice = async (req, res) => {
         const { orderId } = req.body;
         const invoiceData = await generateInvoiceData(orderId);
 
-        // Create HTML content for the invoice
+
         const htmlContent = invoiceData
 
-        // Launch a headless browser
+
         const browser = await puppeteer.launch({ headless: "new" });
         const page = await browser.newPage();
 
-        // Set the content of the page with your HTML
+
         await page.setContent(htmlContent);
 
-        // Generate PDF from the HTML content
+
         const pdfBuffer = await page.pdf({
             format: 'A4',
             printBackground: true,
         });
 
-        // Close the browser
+
         await browser.close();
 
-        // Set the response headers
+
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `attachment; filename=Invoice_${orderId}.pdf`);
 
-        // Send the PDF buffer as the response
+
         res.send(pdfBuffer);
     } catch (error) {
         console.error('Error generating the invoice:', error);

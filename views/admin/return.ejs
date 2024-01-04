@@ -19,9 +19,9 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/productm.css" />
+    <link rel="stylesheet" href="/css/productm.css" />
 
-    <title>Product Management</title>
+    <title>Return Management</title>
   </head>
   <body>
     <div style="background-color: black; height: 4px" class="w-100"></div>
@@ -155,17 +155,24 @@
     <td><%= y.orderDate ? y.orderDate.toISOString().split('T')[0] :
                   '' %></td>
     <td>&#8377;<%= y.price %></td>
-    <td>
-        <% const currentStatus = y.Status || 'Return Request'; %>
-        <select
-            id="statusSelect<%= y._id %>"
-            onchange="updateReturnStatus('<%= y._id %>', this.value)"
-        >
+   <td>
+    <% const currentStatus = y.Status || 'Return Request'; %>
+    <select
+        id="statusSelect<%= y._id %>"
+        onchange="updateReturnStatus('<%= y._id %>', this.value)"
+    >
+        <% if (currentStatus === 'Accepted') { %>
+            <option value="Accepted" selected>Accepted</option>
+        <% } else if (currentStatus === 'Rejected') { %>
+            <option value="Rejected" selected>Rejected</option>
+        <% } else { %>
             <option value="Requested" <%= currentStatus === 'Request' ? 'selected' : '' %>>Requested</option>
             <option value="Accepted" <%= currentStatus === 'Accepted' ? 'selected' : '' %>>Accepted</option>
             <option value="Rejected" <%= currentStatus === 'Rejected' ? 'selected' : '' %>>Rejected</option>
-        </select>
-    </td>
+        <% } %>
+    </select>
+</td>
+
 </tr>
 <% }); %>    
             </tbody>
@@ -200,7 +207,7 @@
       });
     </script>
     <script>
-    // Add this code to your frontend script
+
 function updateReturnStatus(returnId, newStatus) {
   const data = { status: newStatus };
 
@@ -219,7 +226,8 @@ function updateReturnStatus(returnId, newStatus) {
     .then(data => {
       if (data.success) {
         alert('Return status updated successfully');
-        // Optionally, update the UI or perform additional actions
+        window.location.reload()
+
       } else {
         alert(data.message);
       }

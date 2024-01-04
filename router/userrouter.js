@@ -173,6 +173,8 @@ router.post('/cancel-order/:orderId', verifyuser, ordercontoller.postcancelorder
 router.post('/return-order', uploadreturn.array('images', 3), verifyuser, ordercontoller.returnOrder)
 
 
+router.get('/404',usercontroller.errorpage)
+
 
 
 

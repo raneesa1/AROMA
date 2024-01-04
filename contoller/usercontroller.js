@@ -12,6 +12,7 @@ const category = require('../model/category')
 const user = require('../model/users')
 const cart = require('../model/cart')
 const { render } = require('ejs')
+const banner = require('../model/banner')
 const crypto = require('crypto');
 const Coupon = require('../model/coupon')
 require("dotenv").config()
@@ -22,7 +23,9 @@ require("dotenv").config()
 
 const getlanding = async (req, res) => {
     const products = await product.find({ status: false }).sort({ date: -1 }).limit(3)
-    res.render('user/landing', { products })
+    const bannerinfo = await banner.find()
+    console.log(bannerinfo, "detials of the banners")
+    res.render('user/landing', { products, banner: bannerinfo })
 }
 const login = (req, res) => {
     console.log(req.query, "query data ")
@@ -166,10 +169,11 @@ const gethome = async (req, res) => {
 
         const userId = req.query.id
         console.log(userId)
+        const bannerinfo = await banner.find()
         const products = await product.find({ status: false }).sort({ date: -1 }).limit(8)
         const userdata = await user.findOne({ id: userId })
         // const categorydata=await category.find()
-        res.render('user/home', { products, userdata })
+        res.render('user/home', { products, userdata ,banner:bannerinfo})
 
     }
 
@@ -531,5 +535,10 @@ const getproductlist = async (req, res) => {
 
 
 
-module.exports = { getproductlist, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
+const errorpage = (req,res)=>{
+    res.render('user/404')
+}
+
+
+module.exports = { errorpage, getproductlist, getselectaddress, geteditprofile, posteditprofile, postchangepassword, postresetpassword, getresetpassword, login, loginpost, signupget, signuppost, productget, getlanding, gethome, getprofile, getlogout, getcheckout, getforgotpassword, postforgotpassword, getchangepassword, getaccountdetials, geteditdetails }
 

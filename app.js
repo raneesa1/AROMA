@@ -47,6 +47,10 @@ app.use(flash());
 const cartRoutes = require('./contoller/cartcontroller')
 
 
+app.use((req, res, next) => {
+    res.status(404).render('user/404'); // Assuming you have a '404.ejs' template for your 404 page
+});
+
 
 app.listen(port, (req, res) => {
     console.log(api)

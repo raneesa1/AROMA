@@ -57,24 +57,38 @@ const verifyOtp = async function (req, res) {
 
             if (storedOtp && storedOtp.otp === enteredOtp) {
 
-                await new user(data).save();
+
+
+                const newUser =  await new user(data).save();
+                const newUserWallet = await wallet.findOne({ User_id: newUser._id });
+
+                if (!newUserWallet) {
+                    const newWallet = new wallet({
+                        User_id: newUser._id,
+                        Account_balance: 0,
+                        Transactions: [],
+                    });
+
+                    await newWallet.save();
+                    console.log('wallet created for user')
+                }
                 const enteredReferralCode = req.session.EnteredReferalcode;
                 const referringUser = await user.findOne({ Referalcode: enteredReferralCode });
 
                 if (referringUser) {
 
                     console.log('inside the if condition of referring user')
-                    const referralBonus = 100; 
+                    const referralBonus = 100;
 
-                    console.log(referralBonus,"bonus amount")
-                    console.log(referringUser._id,"id for adding money to wallet")
+                    console.log(referralBonus, "bonus amount")
+                    console.log(referringUser._id, "id for adding money to wallet")
                     const referringUserWallet = await wallet.findOne({ User_id: referringUser._id });
 
                     if (!referringUserWallet) {
 
                         const newWallet = new wallet({
                             User_id: referringUser._id,
-                            Account_balance: 0, 
+                            Account_balance: 0,
                             Transactions: [],
                         });
 
@@ -104,6 +118,9 @@ const verifyOtp = async function (req, res) {
                     console.log('Referring user not found');
                 }
 
+
+
+
                 req.session.isauth = true;
                 const userExists = await user.findOne({ email: email });
                 req.session.email = userExists.email
@@ -111,7 +128,7 @@ const verifyOtp = async function (req, res) {
 
                 res.redirect('/home');
             } else {
-               
+
                 res.render('user/otp', { err: 'OTP is incorrect' });
 
             }

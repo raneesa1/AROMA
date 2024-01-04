@@ -15,7 +15,7 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="css/wallet.css" />
+    <link rel="stylesheet" href="/css/wallet.css" />
 
     <title>acccount details</title>
   </head>
@@ -75,7 +75,7 @@
                   </button>
                   <button
                     type="button"
-                    style="background-color: black; color: #eee;"
+                    style="background-color: black; color: #eee"
                     class="btn btn"
                     onclick="addMoney()"
                     data-dismiss="modal"
@@ -265,7 +265,7 @@
         </div>
       </div>
     </div>
-
+    <%- include('./partial/footer') %>
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -307,7 +307,12 @@
               currency: "INR",
               order_id: order.id,
               name: "AROMA",
+              name: "AROMA",
               description: "Add money to wallet",
+              theme: {
+                color: "#000000", // Set color to black
+              },
+
               handler: function (response) {
                 console.log("Payment successful:", response);
 
