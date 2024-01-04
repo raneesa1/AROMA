@@ -304,10 +304,12 @@ const generateRandomString = (length) => {
 const placeOrder = async (req, res) => {
 
 
+    console.log('this functuion started working')
 
     try {
 
 
+        console.log('function started working')
 
         const userData = await user.findOne({ email: req.session.email });
         const userId = userData._id;

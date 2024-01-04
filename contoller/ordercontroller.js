@@ -41,7 +41,7 @@ const getmyorder = async (req, res) => {
 
         const options = {
             page: req.query.page || 1,
-            limit: 2,
+            limit: 5,
             sort: { OrderDate: -1 },
         };
 
@@ -326,11 +326,16 @@ const returnOrder = async (req, res) => {
 
 const genereatesalesReport = async (req, res) => {
     try {
-        const startDate = new Date(req.body.startDate);
+        // const startDate = new Date(req.body.startDate);
         const format = req.body.downloadFormat;
+        // const endDate = new Date(req.body.endDate);
+
+
+        const startDate = new Date(req.body.startDate);
+        startDate.setHours(0, 0, 0, 0); // Set the start time to midnight
+
         const endDate = new Date(req.body.endDate);
-
-
+        endDate.setHours(23, 59, 59, 999); // Set the end time to 23:59:59:999
         console.log(startDate, endDate, format, '==========')
 
 
@@ -420,7 +425,7 @@ const genereatesalesReport = async (req, res) => {
 
 
             await page.setContent(htmlContent);
-            console.log(htmlContent,"html content for pdf")
+            console.log(htmlContent, "html content for pdf")
 
             // Generate PDF
             const pdfBuffer = await page.pdf();

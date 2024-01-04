@@ -429,6 +429,10 @@
 
       </div>
       
+      <div id="overlay" class="overlay"></div>
+
+<div id="loader" class="loader"></div>
+
       <div>
         <div
           class="col-xl-12 col-lg- d-flex  "
@@ -868,6 +872,9 @@
 
           if(selectedPaymentMethod === "cod" ||selectedPaymentMethod === "wallet"){
           try {
+              overlay.style.display = "block";
+            loader.style.display = "block";
+            
             const response = await fetch("/topaymentpage", {
               method: "POST",
               headers: {
@@ -878,16 +885,25 @@
            
 
             if (response.ok) {
-                        console.log("Order successful");
-                        window.location.href = "/ordermessage";
+                       setTimeout(() => {
+                    // Hide overlay and loader
+                    overlay.style.display = "none";
+                    loader.style.display = "none";
+                    console.log("Order successful");
+                    window.location.href = "/ordermessage";
+                }, 3000);
             } else {
               console.error("Failed to send selected address");
             }
              const result = await response.json();
           } catch (error) {
+              overlay.style.display = "none";
+                loader.style.display = "none";
             console.error("Error during fetch:", error);
           }
         } else if(selectedPaymentMethod === "online"){
+           overlay.style.display = "block";
+            loader.style.display = "block";
 
            var paymentId;
             fetch('/generateRazorpayPayment',{
@@ -931,8 +947,14 @@
                                         }).then(response => response.json()).then((res) => {
                                             if (res.status) {
 
-                                                window.location.href = "/ordermessage";
-                                                console.log('success')
+
+                                                setTimeout(() => {
+                    // Hide overlay and loader
+                    overlay.style.display = "none";
+                    loader.style.display = "none";
+                    console.log("Order successful");
+                    window.location.href = "/ordermessage";
+                }, 3000);
                                             }
                                         });
                                         
@@ -960,6 +982,8 @@
                     }
                     var rzp1 = new Razorpay(options);
                     rzp1.on('payment.failed', function (response) {
+                        overlay.style.display = "none";
+                loader.style.display = "none";
                        alert('Unfortunately, your payment failed. Please check your details and try again.')
                         console.log("fail")
                         console.log(response.error.code);
@@ -977,6 +1001,8 @@
             })
         }
       
+    }else{
+      alert('please provide your address')
     }
   }
 
