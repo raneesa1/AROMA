@@ -411,6 +411,10 @@
               "Additional information must be at least 60 characters";
             event.preventDefault();
           }
+          if(!isEmpty(offerDiscountValue) && offerDiscountValue == 0 ){
+             offerDiscountError.textContent = "Discount cant be 0"
+          }
+          
 
           if (
             offerDiscountValue < 0
@@ -430,7 +434,20 @@
         "Discount amount cannot be greater than or equal to the product price";
       event.preventDefault();
     }
+     const currentDate = new Date();
+            const enteredOfferDate = new Date(offerDateValue);
 
+            if (enteredOfferDate <= currentDate) {
+                offerDateError.textContent = "Offer expiry date must be after the current date";
+                event.preventDefault();
+            }
+            if (!isEmpty(offerDateValue) && isEmpty(offerDiscountValue)) {
+                offerDiscountError.textContent = "Please provide the offer discount amount";
+                event.preventDefault();
+            }
+
+
+            
 
         });
     </script>

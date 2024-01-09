@@ -19,7 +19,7 @@ categorySchema.pre('save', function (next) {
     const currentDate = new Date();
 
     if (this.categorydiscountexpiryDate && this.categorydiscountexpiryDate <= currentDate) {
-        this.categorydiscountper = 0;
+        this.categorydiscountper = null;
         this.categorydiscountexpiryDate = null;
     }
 

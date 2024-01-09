@@ -128,12 +128,15 @@
             </a>
           </div>
 
-          <table class="table table-bordered" id="categoryTable">
-            <thead>
+          <table class="table table-bordered text-center" id="categoryTable">
+            <thead >
               <tr>
                 <th>Category name</th>
                 <th>category desciption</th>
                 <th>Added Date</th>
+                <th>Offer Percentage </th>
+                <!-- <th>Offer expiry Date</th> -->
+
                 <th>Edit Action</th>
               </tr>
             </thead>
@@ -147,6 +150,8 @@
                   <%let date1=new Date(data.date)%>
                   <%-date1.getDate()%>-<%-date1.getMonth()+1%>-<%-date1.getFullYear()%>
                 </td>
+                <td><%-data.categorydiscountper%>%</td>
+                <!-- <td><%-data.categorydiscountexpiryDate%></td> -->
                 <td>
                   <a href="/admin/editcategory/<%=data._id%>"
                     ><i

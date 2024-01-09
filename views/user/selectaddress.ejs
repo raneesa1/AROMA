@@ -453,21 +453,21 @@
     <div class="d-flex justify-content-between">
       <p class="mb-2">Discount (product offer):</p>
       <p class="" style="color: green" id="discount">
-        - &#8377;<%= totalProductDiscount %>
+      ₹ <%= totalProductDiscount %>
       </p>
     </div>
   <% } %>
                <% if(!coupon){%>
                       <div style="display: none;" class="d-flex justify-content-between ">
                         <p class="mb-2">Discount(coupon):</p>
-                        <p  class=""style="color: green" id="discount">-0</p>
+                        <p  class=""style="color: green" id="coupondiscount">₹ 0</p>
                       </div>
                       <% }else{%>
 
                       <div style="display: block;" class="d-flex justify-content-between mb-4">
-                        <p class="">Discount(coupon):</p>
-                        <p class="" style="color: green" id="discount">
-                          - &#8377;<%=coupon%>
+                        <p class="">Discount(coupon): </p>
+                        <p class="" style="color: green" id="coupondiscount">
+                         ₹ <%=coupon%>
                         </p>
                       </div>
                       <% }%>
@@ -1010,6 +1010,8 @@
          function applyCoupon() {
         const couponCode = document.getElementById("couponCode").value;
 
+
+      
         fetch("/apply-coupon", {
           method: "POST",
           headers: {
@@ -1023,9 +1025,14 @@
           .then((data) => {
             if (data.success) {
               showSuccessMessage("Coupon applied successfully");
+
+const productDiscount = "<%-totalProductDiscount%>"
+
               console.log("Coupon applied successfully");
-              $("#TotalPrice").text(data.TotalPrice);
-              $("#discount").text("- ₹" + data.coupon);
+              $("#TotalPrice").text(data.TotalPrice-productDiscount);
+              $("#coupondiscount").text(data.coupon)
+              // $("#discount(coupon)").text(data.coupon);
+              // alert(data.coupon)
               const apply=document.getElementById('applybtn').style.display='none'
              const cancelOrderBtn=document.getElementById('cancelCouponBtn').style.display='block'
   
@@ -1038,7 +1045,7 @@
           })
           .catch((error) => {
             console.error("Fetch error:", error);
-            showErrorMessage("An error occurred while applying the coupon");
+            // showErrorMessage("An error occurred while applying the coupon");
           });
       }
 
@@ -1075,8 +1082,13 @@
 
               if (data.success) {
                 alert("Coupon canceled successfully");
-                 $("#discount").text("- ₹" + 0);
-                  $("#TotalPrice").text(data.TotalPrice);
+
+
+
+
+const productDiscount = "<%-totalProductDiscount%>"
+                  $("#TotalPrice").text(data.TotalPrice-productDiscount);
+                  $("#coupondiscount").text(data.coupon);
                   // alert(data)
                   console.log(data)
                   const apply=document.getElementById('applybtn').style.display='block'
@@ -1090,7 +1102,7 @@
             } catch (error) {
               console.error("Error canceling the coupon:", error);
               // Display an error message
-              alert("Error canceling the coupon");
+              // alert("Error canceling the coupon");
 
             }
           // }

@@ -162,6 +162,15 @@
                                 <%=order.paymentMethod%>
                               </p>
                             </div>
+                             <div
+                              class="d-flex justify-content-between mb-2"
+                              style="font-size: 16px"
+                            >
+                              <p class="text-muted">Discount</p>
+                              <p class="text-muted text-uppercase">
+                                <%=order.Discount%>
+                              </p>
+                            </div>
                             <div
                               class="d-flex justify-content-between mb-2 ml-1"
                               style="font-size: 13px"
@@ -177,7 +186,7 @@
                         <div>
                           <p id="cancellationAlert"></p>
                           <% if (order.Status !== "Cancelled" && order.Status
-                          !== "Rejected" && order.Status !== "Delivered") { %>
+                          !== "Rejected" && order.Status !== "Delivered" && order.Status !== "Shipped") { %>
                           <button
                             class="btn btn-block"
                             style="border-color: #acacac"

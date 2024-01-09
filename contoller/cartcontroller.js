@@ -50,6 +50,7 @@ const getcart = async (req, res) => {
                 coupon: 0,
                 gstAmount: 0,
                 totalQuantity: 0,
+                productdiscount: 0,
                 User,
 
             });
@@ -109,6 +110,7 @@ const getcart = async (req, res) => {
             gstAmount: gstAmount.toFixed(2),
             totalQuantity: totalQuantity,
             TotalPrice: total,
+            productdiscount: Math.floor(totalDiscount),
             User,
         });
 
@@ -313,7 +315,11 @@ const placeOrder = async (req, res) => {
 
         const userData = await user.findOne({ email: req.session.email });
         const userId = userData._id;
+        console.log(userData, "user dataaaaaa")
+        console.log(userData._id, "user id manual")
+        console.log(userId, "user id defined")
         const addressinfo = await address.findOne({ userId: userData });
+        console.log(addressinfo, "address fromplaceorder")
         const paymentMethod = req.body.selectedPaymentMethod
         const orderNumber = generateRandomString(8);
         const selectedAddressId = req.body.selectedAddressId;
@@ -349,6 +355,7 @@ const placeOrder = async (req, res) => {
 
         let totalDiscount = 0;
 
+
         item.forEach(items => {
             const { quantity, discountprice, discountexpiryDate } = items;
 
@@ -369,12 +376,21 @@ const placeOrder = async (req, res) => {
 
         }
 
-          const totalPrice = price - totalDiscount;
+        const totalPrice = price - totalDiscount;
 
-          req.session.totalPrice = totalPrice
-          req.session.totalDiscount = totalDiscount;
-          console.log(req.session.totalPrice,"session total price")
-          console.log(totalPrice,"total price from place order function")
+        let cartdiscount
+        if (cartDetails.coupon) {
+            cartdiscount = totalDiscount - cartDetails.coupon
+
+        } else {
+            cartdiscount = totalDiscount
+        }
+
+
+        req.session.totalPrice = totalPrice
+        req.session.totalDiscount = totalDiscount;
+        console.log(req.session.totalPrice, "session total price")
+        console.log(totalPrice, "total price from place order function")
 
 
 
@@ -412,6 +428,7 @@ const placeOrder = async (req, res) => {
             UserID: userId,
             orderNumber: orderNumber,
             TotalPrice: totalPrice,
+            Discount: cartdiscount,
             Address: {
 
                 Addressname: selectedAddress.name,
@@ -492,7 +509,7 @@ const generateRazorpay = async (req, res) => {
         const productOfferDiscount = calculateProductOfferDiscount(cartData.products);
         const totalPriceAfterProductOffer = totalPriceAfterCoupon - productOfferDiscount;
 
-        console.log(totalPrice,"total price from razorpay function")
+        console.log(totalPrice, "total price from razorpay function")
         // const amount = req.session.subtotal;
 
         const razorpayInstance = new razorpay({
@@ -510,7 +527,7 @@ const generateRazorpay = async (req, res) => {
 
         console.log('creating an order , console just above creating the order function')
 
-      
+
         const createOrder = () => {
             return new Promise((resolve, reject) => {
                 razorpayInstance.orders.create(options, (error, order) => {

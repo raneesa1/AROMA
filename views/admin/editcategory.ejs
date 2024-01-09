@@ -156,7 +156,6 @@
                     id="categoryediteddiscountprice"
                     class="form-control form-control-lg"
                     value="<%-categories.categorydiscountper%>"
-                    
                   />
                   <small
                     id="categoryeditedofferDiscountError"
@@ -252,6 +251,10 @@
               "discount percentage should not be more than or equal to 100%";
             event.preventDefault();
           }
+          if (!isEmpty(editedDiscountValue) && editedDiscountValue == 0) {
+            editedDiscountError.textContent = "discount percentage cant be 0%";
+            event.preventDefault();
+          }
           if (editedDiscountValue !== "" && isEmpty(editedExpiryDateValue)) {
             editedExpiryDateError.textContent =
               "Expiry date is required when discount amount is entered";
@@ -263,6 +266,11 @@
           ) {
             editedExpiryDateError.textContent =
               "Expiry date should be after the current date";
+            event.preventDefault();
+          }
+          if (!isEmpty(editedExpiryDateValue) && isEmpty(editedDiscountValue)) {
+            editedDiscountError.textContent =
+              "Discount percentage is required when an expiry date is entered";
             event.preventDefault();
           }
         });

@@ -22,7 +22,7 @@ async function generateInvoiceData(orderId) {
                         <td>${productDetails.name}</td>
                         <td>${item.quantity}</td>
                         <td>${item.Price}</td>
-                        <td>${item.quantity * item.Price}</td> <!-- Calculate total for each product -->
+                        <td>${orders.TotalPrice}</td> <!-- Calculate total for each product -->
                     </tr>
                 `;
             });
@@ -134,8 +134,10 @@ async function generateInvoiceData(orderId) {
                     <h2>Invoice Summary</h2>
                     <p><strong>Subtotal:</strong> ₹${calculateSubtotal(orders.Items)}</p>
                     <p><strong>GST (${gstRate}%):</strong> ₹${calculateGST(orders.Items, gstRate)}</p>
+                    <p><strong>Discount:</strong>- ₹${orders.Discount}</p>
+
                     <hr>
-                    <p><strong>Total: </strong> ₹${calculateTotal(orders.Items, gstRate)}</p>
+                    <p><strong>Total: </strong> ₹${orders.TotalPrice}</p>
                 </section>
                 <footer>
                     <p>Thank You For Your Purchase</p>

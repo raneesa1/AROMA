@@ -246,6 +246,11 @@
               "discount percentage should not be more than or equal to 100%";
             event.preventDefault();
           }
+          if (!isEmpty(discountValue) && discountValue == 0) {
+            discountError.textContent = "percentage cant be 0 ";
+            event.preventDefault();
+          }
+
           if (discountValue !== "" && isEmpty(expiryDateValue)) {
             expiryDateError.textContent =
               "Expiry date is required when discount amount is entered";
@@ -257,6 +262,11 @@
           ) {
             expiryDateError.textContent =
               "Expiry date should be after the current date";
+            event.preventDefault();
+          }
+          if (!isEmpty(expiryDateValue) && isEmpty(discountValue)) {
+            discountError.textContent =
+              "Discount percentage is required when an expiry date is entered";
             event.preventDefault();
           }
         });

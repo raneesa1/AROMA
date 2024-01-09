@@ -79,7 +79,6 @@ const postaddcoupon = async (req, res) => {
 
 
 
-
             const coupons = new coupon({
                 CouponName: req.body.CouponName,
                 Coupon_code: req.body.Coupon_code,
@@ -176,6 +175,9 @@ const posteditcoupon = async (req, res) => {
 const useCoupon = async (req, res) => {
     try {
         // console.log("coupon added"); 
+
+
+        console.log(req.session,"consoleing the session from the use coupons")
         const { couponCode } = req.body;
         console.log(couponCode);
         const userData = await user.findOne({ email: req.session.email })
@@ -241,12 +243,16 @@ const useCoupon = async (req, res) => {
 
         // const updateOrder = await order.findOne({})
 
+
+        console.log(discountedAmount,totalAfterDiscount,"conseled data xomng")
+
         return res.json({
             success: true,
             message: 'Coupon applied successfully',
             coupon: discountedAmount,
             discountedAmount: discountedAmount,
-            TotalPrice: totalAfterDiscount
+            TotalPrice: totalAfterDiscount,
+            coupon: discountedAmount
         });
 
 
@@ -293,7 +299,8 @@ const cancelcoupon = async (req, res) => {
 
         return res.json({
             success: true, message: 'Coupon canceled successfully.', coupon: 0,
-            TotalPrice: purchaseAmount
+            TotalPrice: purchaseAmount,
+            coupon:0
         });
     } catch (error) {
         console.error(error);

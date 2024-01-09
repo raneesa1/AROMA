@@ -424,14 +424,33 @@
               "Additional information must be at least 60 characters";
             event.preventDefault();
           }
-          if (editedOfferDiscountValue <= 0) {
+          if (editedOfferDiscountValue < 0) {
             editedOfferDiscountError.textContent =
               "Discount amount must be a valid number";
             event.preventDefault();
           }
+          if (editedOfferDiscountValue == 0) {
+            editedOfferDiscountError.textContent = "Discount amount cant be 0";
+            event.preventDefault();
+          }
+
           if (editedOfferDiscountValue >= editedPriceValue) {
             editedOfferDiscountError.textContent =
               "Discount amount cannot be greater than or equal to the product price";
+            event.preventDefault();
+          }
+          const currentDate = new Date();
+          const enteredOfferDate = new Date(offerDateValue);
+
+          if (enteredOfferDate <= currentDate) {
+            offerDateError.textContent =
+              "Offer expiry date must be after the current date";
+            event.preventDefault();
+          }
+
+          if (!isEmpty(offerDateValue) && isNaN(editedOfferDiscountValue)) {
+            editedOfferDiscountError.textContent =
+              "Please provide the offer amount";
             event.preventDefault();
           }
         });

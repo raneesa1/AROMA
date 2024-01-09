@@ -39,6 +39,7 @@ const OrderSchema = new mongoose.Schema({
     CoupenID: { type: mongoose.Schema.Types.ObjectId, },
     OrderDate: { type: Date },
     PaymentId: { type: Number },
+    Discount: {type:Number}
 });
 
 
