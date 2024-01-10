@@ -394,8 +394,8 @@
         const imageError = document.getElementById("imageError");
         const profileImage = document.getElementById("profileImage");
 
-        if (imagesInput.files.length === 0) {
-          imageError.textContent = "Please select at least one image";
+        if (imagesInput.files.length === 2) {
+          imageError.textContent = "Please select one image";
           return false;
         } else {
           const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
