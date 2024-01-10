@@ -273,7 +273,7 @@
                   class="rounded-circle img-fluid"
                   style="width: 150px"
                 />
-                 <small id="imagesError" class="text-danger"></small>
+                <small id="imageError" class="text-danger"></small>
               </div>
 
               <!-- Name -->
@@ -373,28 +373,29 @@
     </script>
     <script>
       function validateForm() {
-        // event.preventDefault();
-        // Custom validation for the profile photo file extension
-
+        // Custom validation for the name
         const nameInput = document.getElementById("editName");
         const nameError = document.getElementById("nameError");
         const nameRegex = /^[a-zA-Z\s]+$/;
 
-        if (!nameRegex.test(trimmedName)) {
+        if (!nameRegex.test(nameInput.value.trim())) {
           nameError.textContent =
             "Invalid name. Only letters and spaces are allowed.";
           return false;
-        } else if (trimmedName.length > 12) {
+        } else if (nameInput.value.trim().length > 12) {
           nameError.textContent = "Name cannot be more than 12 characters.";
           return false;
         } else {
           nameError.textContent = "";
         }
-        const imagesInput = document.getElementById("profileImage");
-        const imagesError = document.getElementById("imagesError");
+
+        // Image validation logic
+        const imagesInput = document.getElementById("editProfilePhoto");
+        const imageError = document.getElementById("imageError");
+        const profileImage = document.getElementById("profileImage");
 
         if (imagesInput.files.length === 0) {
-          imagesError.textContent = "Please select at least one image";
+          imageError.textContent = "Please select at least one image";
           return false;
         } else {
           const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
@@ -404,11 +405,20 @@
           });
 
           if (invalidFiles.length > 0) {
-            imagesError.textContent =
+            imageError.textContent =
               "Please select only image files (jpg, jpeg, png, gif, webp)";
             return false;
           } else {
-            imagesError.textContent = "";
+            imageError.textContent = "";
+
+            // Display the selected image (optional)
+            if (imagesInput.files[0]) {
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                profileImage.src = e.target.result;
+              };
+              reader.readAsDataURL(imagesInput.files[0]);
+            }
           }
         }
 
@@ -416,6 +426,7 @@
         return true;
       }
     </script>
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const profileImage = document.getElementById("profileImage");

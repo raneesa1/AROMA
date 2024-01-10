@@ -683,73 +683,68 @@
 
 
 
+document.getElementById("addressForm").addEventListener("submit", function (event) {
+  function isEmpty(value) {
+    const trimmedValue = value.trim();
+    return trimmedValue === "";
+  }
 
-    document.getElementById("addressForm").addEventListener("submit", function (event) {
-      function isEmpty(value) {
-        const trimmedValue = value.trim();
-        return trimmedValue === "";
-      }
-        function validateAddress(address) {
+  function validateAddress(address) {
     const minLength = 40;
-    const maxLength = 200; // Change this to your desired maximum length
+    const maxLength = 200;
     const trimmedAddress = address.trim();
     return trimmedAddress.length >= minLength && trimmedAddress.length <= maxLength;
   }
 
-      
-      function validateAddress(address) {
-        const minLength = 40;
-        return address.trim().length >= minLength;
-      }
+  function validatePhone(phonenumber) {
+    const phoneRegex = /^\d{10}$/;
+    return phoneRegex.test(phonenumber);
+  }
 
-      function validatePhone(phonenumber) {
-        const phoneRegex = /^\d{10}$/;
-        return phoneRegex.test(phonenumber);
-      }
+  function validatePincode(pincode) {
+    const pinRegex = /^\d{6}$/;
+    return pinRegex.test(pincode);
+  }
 
-      function validatePinc(pincode) {
-        const pinRegex = /^\d{6}$/;
-        return pinRegex.test(pincode);
-      }
+  const maxFieldLength = 50; // Set your desired maximum field length
 
+  const checkoutFirstname = document.getElementById("checkoutFirstname");
+  const checkoutFirstnameValue = checkoutFirstname.value;
+  const checkoutFirstnameError = document.getElementById("checkoutFirstNameError");
 
-      const checkoutFirstname = document.getElementById("checkoutFirstname");
-      const checkoutFirstnameValue = checkoutFirstname.value;
-      const checkoutFirstnameError = document.getElementById("checkoutFirstNameError");
+  const checkoutSecondname = document.getElementById("checkoutSecondname");
+  const checkoutSecondnameValue = checkoutSecondname.value;
+  const checkoutSecondnameError = document.getElementById("checkoutSecondNameError");
 
-      const checkoutSecondname = document.getElementById("checkoutSecondname");
-      const checkoutSecondnameValue = checkoutSecondname.value;
-      const checkoutSecondnameError = document.getElementById("checkoutSecondNameError");
+  const checkoutAddress = document.getElementById("checkoutAddress");
+  const checkoutAddressValue = checkoutAddress.value;
+  const checkoutAddressError = document.getElementById("checkoutAddressError");
 
-      const checkoutAddress = document.getElementById("checkoutAddress");
-      const checkoutAddressValue = checkoutAddress.value;
-      const checkoutAddressError = document.getElementById("checkoutAddressError");
+  const checkoutState = document.getElementById("checkoutState");
+  const checkoutStateValue = checkoutState.value;
+  const checkoutStateError = document.getElementById("checkoutStateError");
 
-      const checkoutState = document.getElementById("checkoutState");
-      const checkoutStateValue = checkoutState.value;
-      const checkoutStateError = document.getElementById("checkoutStateError");
+  const checkoutCity = document.getElementById("checkoutCity");
+  const checkoutCityValue = checkoutCity.value;
+  const checkoutCityError = document.getElementById("checkoutCityError");
 
-      const checkoutCity = document.getElementById("checkoutCity");
-      const checkoutCityValue = checkoutCity.value;
-      const checkoutCityError = document.getElementById("checkoutCityError");
+  const checkoutPincode = document.getElementById("checkoutPincode");
+  const checkoutPincodeValue = checkoutPincode.value;
+  const checkoutPincodeError = document.getElementById("checkoutPincodeError");
 
-      const checkoutPincode = document.getElementById("checkoutPincode");
-      const checkoutPincodeValue = checkoutPincode.value;
-      const checkoutPincodeError = document.getElementById("checkoutPincodeError");
+  const checkoutPhonenumber = document.getElementById("checkoutPhonenumber");
+  const checkoutPhonenumberValue = checkoutPhonenumber.value;
+  const checkoutPhonenumberError = document.getElementById("checkoutPhonenumberError");
 
-      const checkoutPhonenumber = document.getElementById("checkoutPhonenumber");
-      const checkoutPhonenumberValue = checkoutPhonenumber.value;
-      const checkoutPhonenumberError = document.getElementById("checkoutPhonenumberError");
+  checkoutFirstnameError.textContent = "";
+  checkoutSecondnameError.textContent = "";
+  checkoutAddressError.textContent = "";
+  checkoutStateError.textContent = "";
+  checkoutCityError.textContent = "";
+  checkoutPincodeError.textContent = "";
+  checkoutPhonenumberError.textContent = "";
 
-      checkoutFirstnameError.textContent = "";
-      checkoutSecondnameError.textContent = "";
-      checkoutAddressError.textContent = "";
-      checkoutStateError.textContent = "";
-      checkoutCityError.textContent = "";
-      checkoutPincodeError.textContent = "";
-      checkoutPhonenumberError.textContent = "";
-
-       if (checkoutFirstnameValue.length > maxFieldLength) {
+  if (checkoutFirstnameValue.length > maxFieldLength) {
     checkoutFirstnameError.textContent = "First name is too long";
     event.preventDefault();
   }
@@ -759,62 +754,57 @@
     event.preventDefault();
   }
 
-
   if (!validateAddress(checkoutAddressValue)) {
-    checkoutAddressError.textContent = "Address should have between 40 and 200 characters";
+    checkoutAddressError.textContent = "Address should have between 40 and 50 characters";
     event.preventDefault();
   }
 
-      if (isEmpty(checkoutFirstnameValue)) {
-        checkoutFirstnameError.textContent = "First name can't be empty";
-        event.preventDefault();
-      }
+  if (isEmpty(checkoutFirstnameValue)) {
+    checkoutFirstnameError.textContent = "First name can't be empty";
+    event.preventDefault();
+  }
 
-      if (isEmpty(checkoutSecondnameValue)) {
-        checkoutSecondnameError.textContent = "Second name can't be empty";
-        event.preventDefault();
-      }
+  if (isEmpty(checkoutSecondnameValue)) {
+    checkoutSecondnameError.textContent = "Second name can't be empty";
+    event.preventDefault();
+  }
 
-      if (isEmpty(checkoutAddressValue)) {
-        checkoutAddressError.textContent = "Address field can't be empty";
-        event.preventDefault();
-      }
+  if (isEmpty(checkoutAddressValue)) {
+    checkoutAddressError.textContent = "Address field can't be empty";
+    event.preventDefault();
+  }
 
-      if (isEmpty(checkoutStateValue)) {
-        checkoutStateError.textContent = "State field can't be be empty";
-        event.preventDefault();
-      }
+  if (isEmpty(checkoutStateValue)) {
+    checkoutStateError.textContent = "State field can't be empty";
+    event.preventDefault();
+  }
 
-      if (isEmpty(checkoutCityValue)) {
-        checkoutCityError.textContent = "City field can't be empty";
-        event.preventDefault();
-      }
+  if (isEmpty(checkoutCityValue)) {
+    checkoutCityError.textContent = "City field can't be empty";
+    event.preventDefault();
+  }
 
-      if (isEmpty(checkoutPincodeValue)) {
-        checkoutPincodeError.textContent = "Pincode field can't be empty";
-        event.preventDefault();
-      }
+  if (isEmpty(checkoutPincodeValue)) {
+    checkoutPincodeError.textContent = "Pincode field can't be empty";
+    event.preventDefault();
+  }
 
-      if (isEmpty(checkoutPhonenumberValue)) {
-        checkoutPhonenumberError.textContent = "Phone number field can't be empty";
-        event.preventDefault();
-      }
+  if (isEmpty(checkoutPhonenumberValue)) {
+    checkoutPhonenumberError.textContent = "Phone number field can't be empty";
+    event.preventDefault();
+  }
 
-      if (!validatePhone(checkoutPhonenumberValue)) {
-        checkoutPhonenumberError.textContent = "Phone number must contain 10 characters";
-        event.preventDefault();
-      }
+  if (!validatePhone(checkoutPhonenumberValue)) {
+    checkoutPhonenumberError.textContent = "Phone number must contain 10 numeric characters";
+    event.preventDefault();
+  }
 
-      if (!validatePinc(checkoutPincodeValue)) {
-        checkoutPincodeError.textContent = "Enter a valid pincode";
-        event.preventDefault();
-      }
+  if (!validatePincode(checkoutPincodeValue)) {
+    checkoutPincodeError.textContent = "Enter a valid pincode";
+    event.preventDefault();
+  }
+});
 
-      if (!validateAddress(checkoutAddressValue)) {
-        checkoutAddressError.textContent = "Address should have at least 40 characters";
-        event.preventDefault();
-      }
-    });
 </script>
 
 
