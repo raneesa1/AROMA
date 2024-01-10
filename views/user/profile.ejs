@@ -273,6 +273,7 @@
                   class="rounded-circle img-fluid"
                   style="width: 150px"
                 />
+                 <small id="imagesError" class="text-danger"></small>
               </div>
 
               <!-- Name -->
@@ -330,7 +331,7 @@
         </div>
       </div>
     </div>
-     <%- include('./partial/footer') %>
+    <%- include('./partial/footer') %>
     <script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/toastify-js"
@@ -379,13 +380,39 @@
         const nameError = document.getElementById("nameError");
         const nameRegex = /^[a-zA-Z\s]+$/;
 
-        if (!nameRegex.test(nameInput.value.trim())) {
+        if (!nameRegex.test(trimmedName)) {
           nameError.textContent =
             "Invalid name. Only letters and spaces are allowed.";
+          return false;
+        } else if (trimmedName.length > 12) {
+          nameError.textContent = "Name cannot be more than 12 characters.";
           return false;
         } else {
           nameError.textContent = "";
         }
+        const imagesInput = document.getElementById("profileImage");
+        const imagesError = document.getElementById("imagesError");
+
+        if (imagesInput.files.length === 0) {
+          imagesError.textContent = "Please select at least one image";
+          return false;
+        } else {
+          const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+          const invalidFiles = Array.from(imagesInput.files).filter((file) => {
+            const extension = file.name.split(".").pop().toLowerCase();
+            return !allowedExtensions.includes(extension);
+          });
+
+          if (invalidFiles.length > 0) {
+            imagesError.textContent =
+              "Please select only image files (jpg, jpeg, png, gif, webp)";
+            return false;
+          } else {
+            imagesError.textContent = "";
+          }
+        }
+
+        // If all validations pass, return true
         return true;
       }
     </script>
