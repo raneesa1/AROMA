@@ -3,7 +3,7 @@
 const product = require("../model/product");
 const user = require("../model/users");
 const cart = require("../model/cart");
-const easyinvoice = require('easyinvoice')
+// const easyinvoice = require('easyinvoice')
 const returns = require('../model/return')
 const mongoosePaginate = require('mongoose-paginate-v2');
 const wallet = require('../model/wallet')
