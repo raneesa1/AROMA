@@ -6,7 +6,18 @@ const mongoose = require('mongoose')
 
 const getproduct = async (req, res) => {
     const productId = req.query.id
-    const products = await product.findOne({ _id: productId });
+    let products;
+    if (productId) {
+        // Use try-catch for better error handling
+        try {
+            products = await product.findOne({ _id: ObjectId(productId) });  // Assuming productId is a valid ObjectId
+        } catch (error) {
+            console.error('Error fetching product:', error);
+            // Handle the error appropriately (e.g., send an error response)
+            return res.status(500).send('Internal Server Error');
+        }
+    }
+    // const products = await product.findOne({ _id: productId });
     const related = await product.find({ status: false }).sort({ date: -1 }).limit(3);
     const categorydata = await category.find()
     res.render('user/product1', { products, related, categorydata })

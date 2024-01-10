@@ -20,13 +20,19 @@ require("dotenv").config()
 
 
 
-
 const getlanding = async (req, res) => {
-    const products = await product.find({ status: false }).sort({ date: -1 }).limit(3)
-    const bannerinfo = await banner.find()
-    console.log(bannerinfo, "detials of the banners")
-    res.render('user/landing', { products, banner: bannerinfo })
-}
+    try {
+        const products = await product.find({ status: false }).sort({ date: -1 }).limit(3);
+        const bannerInfo = await banner.find();
+        console.log(bannerInfo, "details of the banners");
+        res.render('user/landing', { products, banner: bannerInfo });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+};
+
+
 const login = (req, res) => {
     console.log(req.query, "query data ")
     req.session.EnteredReferalcode = req.query.id
