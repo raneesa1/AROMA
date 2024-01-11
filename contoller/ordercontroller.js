@@ -10,14 +10,14 @@ const wallet = require('../model/wallet')
 
 const PDFDocument = require('pdfkit');
 const exceljs = require('exceljs');
-const pdfMake = require('pdfmake/build/pdfmake');
-const vfsFonts = require('pdfmake/build/vfs_fonts');
+// const pdfMake = require('pdfmake/build/pdfmake');
+// const vfsFonts = require('pdfmake/build/vfs_fonts');
 
 const { ObjectId } = require('mongodb');
 
 
-const pdfFonts = require('pdfmake/build/vfs_fonts');
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// const pdfFonts = require('pdfmake/build/vfs_fonts');
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
 
@@ -28,7 +28,7 @@ const { json } = require("express");
 const mongoose = require('mongoose');
 const { productget } = require("./usercontroller");
 
-const { generateInvoiceData } = require('../servise/invoice');
+
 const { log } = require("util");
 
 
@@ -237,6 +237,206 @@ const postcancelorder = async (req, res) => {
 
 
 
+// const easyinvoice = require('easyinvoice');
+
+// async function generateInvoiceData(orderId) {
+//     try {
+//         const orders = await order.findOne({ _id: orderId });
+
+//         const gstRate = 18;
+//         if (!orders) {
+//             throw new Error('Order not found');
+//         }
+
+//         const items = orders.Items.map(async (item) => {
+//             const productDetails = await product.findOne({ _id: item.productId });
+
+//             return {
+//                 quantity: item.quantity,
+//                 description: productDetails.name,
+//                 tax: {
+//                     amount: ((item.Price * item.quantity) * gstRate) / 100,
+//                     percentage: gstRate
+//                 },
+//                 price: item.Price
+//             };
+//         });
+
+//         const invoiceData = {
+//             documentTitle: 'INVOICE',
+//             currency: 'INR',
+//             taxNotation: 'GST',
+//             marginTop: 25,
+//             marginRight: 25,
+//             marginLeft: 25,
+//             marginBotom: 25,
+//             sender: {
+//                 company: 'AROMA',
+//                 address: 'Kozhikode, Kerala, India',
+//                 email: 'your-email@example.com',
+//                 phone: '123-456-7890'
+//             },
+//             client: {
+//                 company: `${orders.Address.Firstname} ${orders.Address.Secondname}`,
+//                 address: `${orders.Address.Address}, ${orders.Address.City}, ${orders.Address.State}, ${orders.Address.Pincode}, ${orders.Address.Country}`,
+//                 email: 'client-email@example.com',
+//                 phone: orders.Address.PhoneNumber
+//             },
+//             invoiceNumber: `Invoice_${orderId}`,
+//             products: await Promise.all(items),
+//             bottomNotice: 'Thank You For Your Purchase'
+//         };
+
+//         return invoiceData;
+//     } catch (error) {
+//         console.error('Error generating invoice data:', error);
+//         throw error;
+//     }
+// }
+
+// const postinvoice = async (req, res) => {
+//     try {
+//         const { orderId } = req.body;
+//         const invoiceData = await generateInvoiceData(orderId);
+
+//         const pdfBuffer = await easyinvoice.createInvoice(invoiceData).catch((error) => {
+//             console.error('Error generating invoice:', error);
+//             throw error;
+//         });
+
+
+//         res.setHeader('Content-Type', 'application/pdf');
+//         res.setHeader('Content-Disposition', `attachment; filename=Invoice_${orderId}.pdf`);
+
+//         console.log('pdfBuffer:', pdfBuffer);
+
+//         res.send(pdfBuffer);
+//     } catch (error) {
+//         console.error('Error generating the invoice:', error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// }
+
+
+
+
+const pdfMake = require('pdfmake/build/pdfmake');
+const pdfFonts = require('pdfmake/build/vfs_fonts');
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+function calculateSubtotal(items) {
+    return items.reduce((subtotal, item) => subtotal + item.Price * item.quantity, 0);
+}
+
+function calculateGST(items, gstRate) {
+    const subtotal = calculateSubtotal(items);
+    return (subtotal * gstRate) / 100;
+}
+
+function calculateTotal(items, gstRate, discount) {
+    const subtotal = calculateSubtotal(items);
+    const gstAmount = calculateGST(items, gstRate);
+    return subtotal + gstAmount - discount;
+}
+
+async function generateInvoiceData(orderId) {
+    try {
+        const orders = await order.findOne({ _id: orderId }).populate({
+            path: 'Items.productId',
+            model: 'product',
+        });
+
+        if (!orders) {
+            throw new Error('Order not found');
+        }
+
+        const items = orders.Items.map((item) => {
+            const productDetails = item.productId; // Access product details directly
+            return [
+                productDetails.name,
+                item.quantity,
+                item.Price,
+                item.Price * item.quantity,
+            ];
+        });
+
+        const total = calculateTotal(orders.Items, 18, orders.Discount);
+
+        const invoiceData = {
+            from: 'AROMA, Kozhikode, Kerala, India',
+            to: `${orders.Address.Firstname} ${orders.Address.Secondname} ${orders.Address.Address} ${orders.Address.City}, ${orders.Address.State}, ${orders.Address.Pincode}, ${orders.Address.Country}, ${orders.Address.PhoneNumber}`,
+            items: items,
+            subtotal: calculateSubtotal(orders.Items),
+            gst: calculateGST(orders.Items, 18),
+            discount: orders.Discount,
+            total: total,
+        };
+
+        return invoiceData;
+    } catch (error) {
+        console.error('Error generating invoice data:', error);
+        throw error;
+    }
+}
+
+const postinvoice = async (req, res) => {
+    try {
+        const { orderId } = req.body;
+        const invoiceData = await generateInvoiceData(orderId);
+
+        const docDefinition = {
+            content: [
+                { text: 'INVOICE', style: 'header' },
+                { text: `From: ${invoiceData.from}`, margin: [0, 10] },
+                { text: `To: ${invoiceData.to}`, margin: [0, 5] },
+                {
+                    table: {
+                        headerRows: 1,
+                        widths: ['*', 'auto', 'auto', 'auto'],
+                        body: [
+                            ['Product Name', 'Quantity', 'Price', 'Total'],
+                            ...invoiceData.items,
+                        ],
+                    },
+                    margin: [0, 10],
+                },
+                { text: `Subtotal: ₹${invoiceData.subtotal}`, margin: [0, 10] },
+                { text: `GST (18%): ₹${invoiceData.gst}`, margin: [0, 5] },
+                { text: `Discount: - ₹${invoiceData.discount}`, margin: [0, 5] },
+                { text: `Total: ₹${invoiceData.total}`, margin: [0, 10] },
+                { text: 'Thank You For Your Purchase', style: 'footer', margin: [0, 20] },
+            ],
+            styles: {
+                header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] },
+                footer: { fontSize: 14, bold: true },
+            },
+        };
+
+        const pdfBuffer = await new Promise((resolve, reject) => {
+            const pdfDoc = pdfMake.createPdf(docDefinition);
+            pdfDoc.getBuffer((buffer) => resolve(buffer), (error) => reject(error));
+        });
+
+        console.log('Generated PDF Buffer:', pdfBuffer.toString());
+
+        if (pdfBuffer && pdfBuffer.length > 0) {
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=Invoice_${orderId}.pdf`);
+            res.setHeader('Content-Length', pdfBuffer.length);
+            res.write(pdfBuffer, 'binary');
+            res.end(null, 'binary');
+        } else {
+            console.error('Empty PDF Buffer');
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    } catch (error) {
+        console.error('Error generating the invoice:', error);
+        res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    }
+};
+
+
+
 
 
 const returnOrder = async (req, res) => {
@@ -381,10 +581,10 @@ const genereatesalesReport = async (req, res) => {
                                 ['Order Number', 'User Id', 'Date', 'Payment Method', 'Total Price'],
                                 ...orders.map((order) => [
                                     order.orderNumber,
-                                    order.UserID || '', 
+                                    order.UserID || '',
                                     order.OrderDate ? order.OrderDate.toISOString().split('T')[0] : '',
-                                    order.paymentMethod || '', 
-                                    order.TotalPrice ? order.TotalPrice.toFixed(2) : '', 
+                                    order.paymentMethod || '',
+                                    order.TotalPrice ? order.TotalPrice.toFixed(2) : '',
                                 ]),
                             ],
 
@@ -446,4 +646,4 @@ const genereatesalesReport = async (req, res) => {
     }
 };
 
-module.exports = { genereatesalesReport, returnOrder, postcancelorder, getmyorder, getorderdetials }
+module.exports = { postinvoice, genereatesalesReport, returnOrder, postcancelorder, getmyorder, getorderdetials }

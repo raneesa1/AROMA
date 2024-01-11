@@ -135,7 +135,7 @@ router.post('/addMoneyToWallet', verifyuser, walletcontroller.addMoneyToWallet)
 
 
 //invoice-------------------------------------------------------
-// router.post('/downloadinvoice', verifyuser, ordercontoller.postinvoice)
+router.post('/downloadinvoice', verifyuser, ordercontoller.postinvoice)
 
 
 //wishlist
