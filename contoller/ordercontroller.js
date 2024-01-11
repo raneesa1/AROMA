@@ -402,15 +402,18 @@ const postinvoice = async (req, res) => {
                     },
                     margin: [0, 10],
                 },
-                { text: `Subtotal: ₹${invoiceData.subtotal}`, margin: [0, 10] },
-                { text: `GST (18%): ₹${invoiceData.gst}`, margin: [0, 5] },
-                { text: `Discount: - ₹${invoiceData.discount}`, margin: [0, 5] },
-                { text: `Total: ₹${invoiceData.total}`, margin: [0, 10] },
+                { text: `Subtotal: ₹${invoiceData.subtotal}`, style: 'rightAlign' },
+                { text: `GST (18%): ₹${invoiceData.gst}`, style: 'rightAlign' },
+                { text: `Discount: - ₹${invoiceData.discount}`, style: 'rightAlign' },
+                { text: `Total: ₹${invoiceData.total}`, style: 'rightAlign' },
+
                 { text: 'Thank You For Your Purchase', style: 'footer', margin: [0, 20] },
             ],
             styles: {
-                header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] },
-                footer: { fontSize: 14, bold: true },
+                header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10], alignment: 'center' },
+                footer: { fontSize: 14, bold: true ,alignment: 'center' },
+                rightAlign: { alignment: 'right', margin: [0, 0, 0, 10] },
+                
             },
         };
 
