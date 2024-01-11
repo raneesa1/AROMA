@@ -17,10 +17,9 @@ const ProductSchema = new mongoose.Schema({
   price: { type: Number },
   specification: { type: String },
   status: { type: Boolean, default: false },
-  discountprice: { type: Number, default: 0 }, 
-  discountexpiryDate: { type: Date }, 
+  discountprice: { type: Number, default: 0 },
+  discountexpiryDate: { type: Date },
 });
-
 
 const product = mongoose.model(process.env.PRODUCT_COLLECTION, ProductSchema)
 module.exports = product

@@ -112,14 +112,15 @@ const postaddproduct = async (req, res) => {
         stock: req.body.stock,
         image: req.files.map((file) => '/photos/' + file.filename),
         date: Date.now(),
-        discountprice: req.body.discountprice || 0,
+        discountprice: req.body.discountprice || null,
         discountexpiryDate: req.body.discountexpiryDate || null,
         // discount_type: discountType
 
       }
 
+
       console.log(categoryDetails.categorydiscountper, "category offer percentage from the selected category while adding a new product")
-      if (!req.body.discountprice && categoryDetails && categoryDetails.categorydiscountper > 0) {
+      if (!req.body.discountprice && categoryDetails && categoryDetails.categorydiscountper > 0 && products.discountprice <= 0) {
         const discountedPrice = Math.floor((1 - categoryDetails.categorydiscountper / 100) * products.price);
 
         console.log(discountedPrice, "discount amount after converting from percentage")
@@ -277,7 +278,7 @@ const postupdateproduct = async (req, res) => {
         category: new ObjectId(req.body.category),
         price: req.body.price,
         stock: req.body.stock,
-        discountprice: req.body.discountprice || 0,
+        discountprice: req.body.discountprice || null,
         discountexpiryDate: req.body.discountexpiryDate || null,
         specification: req.body.specification,
 
@@ -585,7 +586,7 @@ const postupdatecategory = async (req, res) => {
       if (categorydiscountper > 0) {
         console.log('inside discount of category ')
 
-        const productsToUpdate = await product.find({ category: updatedCategory._id, status: false, discountprice: 0 });
+        const productsToUpdate = await product.find({ category: updatedCategory._id, status: false, discountprice: 0 || null });
 
         console.log(updatedCategory._id, "id of category")
 

@@ -10,11 +10,16 @@ const wallet = require('../model/wallet')
 
 const PDFDocument = require('pdfkit');
 const exceljs = require('exceljs');
+const pdfMake = require('pdfmake/build/pdfmake');
+const vfsFonts = require('pdfmake/build/vfs_fonts');
 
 const { ObjectId } = require('mongodb');
 
 
 const puppeteer = require('puppeteer');
+
+const pdfFonts = require('pdfmake/build/vfs_fonts');
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
 
@@ -357,91 +362,64 @@ const genereatesalesReport = async (req, res) => {
         orders.forEach((order) => {
             totalSales += order.TotalPrice || 0;
         });
+        const editedstartdate = startDate.toDateString()
+        const editedenddate = endDate.toDateString()
 
         if (format.toLowerCase() === 'pdf') {
-            const editedstartdate = startDate.toDateString()
-            const editedenddate = endDate.toDateString()
-            const browser = await puppeteer.launch({ headless: 'new' });
-            const page = await browser.newPage();
-
-            // Your HTML template for the sales report
-            const htmlContent = `
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     
-      <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous"
-    />
-                    <title>Sales Report</title>
-                </head>
-                <body>
-                <h1 class="text-center" style="margin-top:34px;">Sales Report </h1>
-                    <h4 class="text-center">from ${editedstartdate} to ${editedenddate}</h4>
-                    <p class="mt-5">Total Sales: ${totalSales.toFixed(2)}</p>
-
-                    <table class="table-bordered align-content-center text-center p-3 ">
-                        <thead >
-                            <tr>
-                                <th>Order Number</th>
-                                <th>User Id</th>
-                                <th>Date</th>
-                                <th>Payment Method</th>
-                                <th>Total Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${orders.map(order => `
-                                <tr>
-                                    <td>${order.orderNumber}</td>
-                                    <td>${order.UserID}</td>
-                                    <td>${order.OrderDate ? order.OrderDate.toISOString().split('T')[0] : ''}</td>
-                                    <td>${order.paymentMethod}</td>
-                                    <td>${order.TotalPrice.toFixed(2)}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </body>
-                </html>
-                 <script
-      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"
-    ></script>
-            `;
+            try {
 
 
-            await page.setContent(htmlContent);
-            console.log(htmlContent, "html content for pdf")
 
-            // Generate PDF
-            const pdfBuffer = await page.pdf();
+                // console.log(orders.Items[0].UserID,"consoleing the user id here")
+                const content = [
+                    { text: `Sales Report from ${editedstartdate} to ${editedenddate}`, style: 'header' },
+                    { text: `Total Sales: ${totalSales.toFixed(2)}`, margin: [0, 10, 0, 0] },
+                    {
+                        style: 'tableExample',
+                        table: {
+                            headerRows: 1,
+                            widths: [100, 100, 100, 100, 100],
+                            body: [
+                                ['Order Number', 'User Id', 'Date', 'Payment Method', 'Total Price'],
+                                ...orders.map((order) => [
+                                    order.orderNumber,
+                                    order.UserID || '', 
+                                    order.OrderDate ? order.OrderDate.toISOString().split('T')[0] : '',
+                                    order.paymentMethod || '', 
+                                    order.TotalPrice ? order.TotalPrice.toFixed(2) : '', 
+                                ]),
+                            ],
 
-            // Set response headers
-            res.setHeader('Content-Disposition', `attachment; filename="sales_report_${startDate}_${endDate}.pdf"`);
-            res.setHeader('Content-Type', 'application/pdf');
+                        },
+                    },
+                ];
+                console.log(content, "content of the sales report when option is pdf+++++++++++===============+++++++==========")
 
-            // Send the PDF buffer as the response
-            res.send(pdfBuffer);
+                const documentDefinition = {
+                    content: content,
+                    styles: {
+                        header: {
+                            fontSize: 18,
+                            bold: true,
+                            margin: [0, 0, 0, 10],
+                        },
+                        tableExample: {
+                            margin: [0, 5, 0, 15],
+                        },
+                    },
+                };
 
-            // Close the browser
-            await browser.close();
+                const pdfDoc = pdfMake.createPdf(documentDefinition);
+
+                pdfDoc.getBuffer((buffer) => {
+                    res.setHeader('Content-Disposition', `attachment; filename="sales_report_${startDate}_${endDate}.pdf"`);
+                    res.setHeader('Content-Type', 'application/pdf');
+                    res.end(buffer);
+                });
+            } catch (error) {
+                console.log(error, "error from sales report function - pdf")
+            }
+
         } else if (format.toLowerCase() === 'excel') {
             // Handle Excel logic using exceljs
             const workbook = new exceljs.Workbook();
