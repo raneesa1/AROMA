@@ -555,13 +555,17 @@ const genereatesalesReport = async (req, res) => {
                 $gte: startDate,
                 $lte: endDate,
             },
-        }).populate("Items.productId");
+        }).populate([
+            { path: "Items.productId" },
+            { path: "UserID", select: "name" } // Populate the user's name
+        ]);
 
         let totalSales = 0;
 
         orders.forEach((order) => {
             totalSales += order.TotalPrice || 0;
         });
+        console.log(orders,"infor of the orders from sales report")
         const editedstartdate = startDate.toDateString()
         const editedenddate = endDate.toDateString()
 
@@ -576,18 +580,21 @@ const genereatesalesReport = async (req, res) => {
                             headerRows: 1,
                             widths: [100, 100, 100, 100, 100],
                             body: [
-                                ['Order Number', 'User Id', 'Date', 'Payment Method', 'Total Price'],
-                                ...orders.map((order) => [
-                                    order.orderNumber,
-                                    order.UserID || '',
-                                    order.OrderDate ? order.OrderDate.toISOString().split('T')[0] : '',
-                                    order.paymentMethod || '',
-                                    order.TotalPrice ? order.TotalPrice.toFixed(2) : '',
-                                ]),
+                                ['Order Number', 'User Name', 'Date', 'Payment Method', 'Total Price'],
                             ],
                         },
                     },
                 ];
+
+                orders.forEach((order) => {
+                    content[2].table.body.push([
+                        order.orderNumber,
+                        order.UserID.name || '', // Use user's name instead of ID
+                        order.OrderDate ? order.OrderDate.toISOString().split('T')[0] : '',
+                        order.paymentMethod || '',
+                        order.TotalPrice ? order.TotalPrice.toFixed(2) : '',
+                    ]);
+                });
 
                 const documentDefinition = {
                     content: content,
@@ -613,17 +620,18 @@ const genereatesalesReport = async (req, res) => {
             } catch (error) {
                 console.log(error, "error from sales report function - pdf");
             }
+
         } else if (format.toLowerCase() === 'excel') {
             // Handle Excel logic using exceljs
             const workbook = new exceljs.Workbook();
             const worksheet = workbook.addWorksheet('Sales Report');
 
             // Add headers
-            worksheet.addRow(['Order Number', 'User Id', 'Date', 'Payment Method', 'TotalPrice']);
+            worksheet.addRow(['Order Number', 'User name', 'Date', 'Payment Method', 'TotalPrice']);
 
 
             orders.forEach((order) => {
-                worksheet.addRow([order.orderNumber, order.UserID, order.OrderDate, order.paymentMethod, order.TotalPrice]);
+                worksheet.addRow([order.orderNumber, order.UserID.name, order.OrderDate, order.paymentMethod, order.TotalPrice]);
             });
 
 
