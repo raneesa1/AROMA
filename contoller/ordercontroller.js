@@ -446,4 +446,4 @@ const genereatesalesReport = async (req, res) => {
     }
 };
 
-module.exports = { genereatesalesReport, returnOrder, postinvoice, postcancelorder, getmyorder, getorderdetials }
+module.exports = { genereatesalesReport, returnOrder, postcancelorder, getmyorder, getorderdetials }
