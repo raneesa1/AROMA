@@ -16,8 +16,6 @@ const vfsFonts = require('pdfmake/build/vfs_fonts');
 const { ObjectId } = require('mongodb');
 
 
-const puppeteer = require('puppeteer');
-
 const pdfFonts = require('pdfmake/build/vfs_fonts');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -198,44 +196,44 @@ const postcancelorder = async (req, res) => {
 
 
 
-const postinvoice = async (req, res) => {
-    try {
-        const { orderId } = req.body;
-        const invoiceData = await generateInvoiceData(orderId);
+// const postinvoice = async (req, res) => {
+//     try {
+//         const { orderId } = req.body;
+//         const invoiceData = await generateInvoiceData(orderId);
 
 
-        const htmlContent = invoiceData
+//         const htmlContent = invoiceData
 
 
-        const browser = await puppeteer.launch({
-            headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        });
-        const page = await browser.newPage();
+//         const browser = await puppeteer.launch({
+//             headless: true,
+//             args: ['--no-sandbox', '--disable-setuid-sandbox'],
+//         });
+//         const page = await browser.newPage();
 
 
-        await page.setContent(htmlContent);
+//         await page.setContent(htmlContent);
 
 
-        const pdfBuffer = await page.pdf({
-            format: 'A4',
-            printBackground: true,
-        });
+//         const pdfBuffer = await page.pdf({
+//             format: 'A4',
+//             printBackground: true,
+//         });
 
 
-        await browser.close();
+//         await browser.close();
 
 
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename=Invoice_${orderId}.pdf`);
+//         res.setHeader('Content-Type', 'application/pdf');
+//         res.setHeader('Content-Disposition', `attachment; filename=Invoice_${orderId}.pdf`);
 
 
-        res.send(pdfBuffer);
-    } catch (error) {
-        console.error('Error generating the invoice:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-}
+//         res.send(pdfBuffer);
+//     } catch (error) {
+//         console.error('Error generating the invoice:', error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// }
 
 
 
