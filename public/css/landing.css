@@ -5,15 +5,15 @@
   padding-bottom: 0px;
 }
 .product-box {
-  border: 1px solid #ddd;
- margin: 29px; 
-  align-items: center;
+  /* border: 1px solid #ddd; */
+  margin: 29px;
+  align-items: center !important;
+
   padding-bottom: 12px;
   margin: 10px 0;
   text-align: center;
-  width: 300px;
+  width: 100%;
   border: none;
-
 }
 
 .product-title {
@@ -162,7 +162,7 @@ select.noStyle {
   right: 50%;
   top: 20%;
 }
-*{
+* {
   margin: 0;
   padding: 0%;
   box-sizing: border-box;
@@ -238,7 +238,6 @@ a:hover {
   padding: 0;
 }
 
-
 /* Add a media query to control the column width on smaller screens */
 @media (max-width: 768px) {
   .col-size {
@@ -247,12 +246,22 @@ a:hover {
 }
 .product-container {
   display: flex;
-  flex-wrap: wrap; /* Wrap products to the next row when needed */
-  justify-content: center; /* Center products horizontally */
-  align-items: center; /* Center products vertically */
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 
-/* padding-left: 500px; */
+  /* padding-left: 500px; */
 }
+
+/* Optional: Center the entire content vertically */
+/* .product-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 400px;
+  /* Adjust the minimum height as needed */
+/* }  */
+
 .add-to-cart-btn {
   font-size: 17px;
   border: none;
@@ -269,7 +278,7 @@ a:hover {
 }
 /* Global Styles */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 /* Navbar Styles */
@@ -279,10 +288,13 @@ body {
 
 /* Banner Styles */
 img.img-fluid {
-  max-width: 100%;
+  /* max-width: 100%; */
   height: auto;
 }
 
+.product-box img {
+  margin: 0 auto; /* Center the image horizontally */
+}
 /* Product Grid Styles */
 .card {
   margin-bottom: 20px;
@@ -316,7 +328,6 @@ img.img-fluid {
     font-size: 18px;
     margin: 0;
   }
-
 }
 
 /* Media Query for Medium to Large Desktops */
@@ -327,7 +338,7 @@ img.img-fluid {
 }
 /* Global Styles */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 /* Navbar Styles */
@@ -396,7 +407,7 @@ img.img-fluid {
 }
 /* Global Styles */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 
   box-sizing: border-box;
 }

@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="d-flex" style="margin-left: 70px">
-      <div class="mt-5">
+      <div class="mt-5 ">
         <h1 class="pb-5">Choose Address and Payment Method</h1>
         Detailed address will help our delivery partner reach your doorstep
         quickly :
@@ -443,7 +443,7 @@
             border-left: 1px solid rgb(224, 224, 224);
           "
         >
-          <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px">
+          <div class="ms-lg-4 mt-4 mt-lg-0 mr-5" style="max-width: 300px">
             <h1 class="mb-3">Summary</h1>
             <div class="d-flex justify-content-between">
               <p class="mb-2">Sub Total :</p>
@@ -892,8 +892,8 @@ document.getElementById("addressForm").addEventListener("submit", function (even
             console.error("Error during fetch:", error);
           }
         } else if(selectedPaymentMethod === "online"){
-           overlay.style.display = "block";
-            loader.style.display = "block";
+          //  overlay.style.display = "block";
+            // loader.style.display = "block";
 
            var paymentId;
             fetch('/generateRazorpayPayment',{

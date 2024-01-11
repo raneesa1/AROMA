@@ -101,7 +101,7 @@
         <div
           class="d-flex justify-content-center"
           style="
-            /* align-items: center; */
+            align-items: center; 
             text-align: center;
             font-size: medium;
             font-size: 15px;
@@ -132,18 +132,19 @@
       class="container product-container align-content-center justify-content-center"
     >
       <!-- Added a container for the product grid -->
-      <div class="row">
+      <div class="row text-center  justify-content-center product-details-middle text-uppercase">
         <% products.forEach(product => { %>
         <a href="/products?id=<%=product._id%>">
-          <div class="col col-size">
+          <div class="col col-size text-center">
             <!-- Create a column for each product -->
-            <div class="product-box text-uppercase">
+            <div class="product-box text-uppercase align-content-center justify-content-center">
               <img
                 src="<%= product.image[0] %>"
                 alt="Product Name"
                 width="200"
                 height="200"
               />
+              
               <h4 class="product-title text-decoration-none">
                 <%= product.name%>
               </h4>
