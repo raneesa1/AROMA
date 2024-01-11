@@ -320,6 +320,8 @@ const postcancelorder = async (req, res) => {
 
 
 
+
+
 const pdfMake = require('pdfmake/build/pdfmake');
 const pdfFonts = require('pdfmake/build/vfs_fonts');
 
@@ -565,10 +567,6 @@ const genereatesalesReport = async (req, res) => {
 
         if (format.toLowerCase() === 'pdf') {
             try {
-
-
-
-                // console.log(orders.Items[0].UserID,"consoleing the user id here")
                 const content = [
                     { text: `Sales Report from ${editedstartdate} to ${editedenddate}`, style: 'header' },
                     { text: `Total Sales: ${totalSales.toFixed(2)}`, margin: [0, 10, 0, 0] },
@@ -587,11 +585,9 @@ const genereatesalesReport = async (req, res) => {
                                     order.TotalPrice ? order.TotalPrice.toFixed(2) : '',
                                 ]),
                             ],
-
                         },
                     },
                 ];
-                console.log(content, "content of the sales report when option is pdf+++++++++++===============+++++++==========")
 
                 const documentDefinition = {
                     content: content,
@@ -615,9 +611,8 @@ const genereatesalesReport = async (req, res) => {
                     res.end(buffer);
                 });
             } catch (error) {
-                console.log(error, "error from sales report function - pdf")
+                console.log(error, "error from sales report function - pdf");
             }
-
         } else if (format.toLowerCase() === 'excel') {
             // Handle Excel logic using exceljs
             const workbook = new exceljs.Workbook();
