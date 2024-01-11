@@ -3,6 +3,36 @@ const product = require('../model/product');
 const { ObjectId } = require('mongodb')
 const user = require('../model/users')
 const mongoose = require('mongoose')
+const cron = require('node-cron');
+
+
+
+cron.schedule('* * * * * *', async () => {
+    try {
+
+
+        const expiredProducts = await product.find({
+            discountexpiryDate: { $lt: new Date() },
+            discountprice: { $gt: 0 }, // Check if discountprice is set
+        });
+
+
+
+        const updatePromises = expiredProducts.map(async (product) => {
+            product.discountexpiryDate = null;
+            product.discountprice = null;
+            await product.save();
+        });
+
+
+        await Promise.all(updatePromises);
+
+
+    } catch (error) {
+        console.error('Error in cron job:', error);
+    }
+});
+
 
 const getproduct = async (req, res) => {
     const productId = req.query.id

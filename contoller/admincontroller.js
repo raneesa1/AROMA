@@ -8,6 +8,31 @@ const returns = require('../model/return');
 const wallet = require('../model/wallet');
 const moment = require('moment');
 
+const cron = require('node-cron');
+
+cron.schedule('* * * * * *', async () => {
+  try {
+
+
+    // Find categories with expired discounts
+    const expiredCategories = await category.find({
+      categorydiscountexpiryDate: { $lt: new Date() },
+      categorydiscountper: { $gt: 0 }, // Check if categorydiscountper is set
+    });
+
+
+    // Update the expired categories
+    const updatePromises = expiredCategories.map(async (category) => {
+      category.categorydiscountexpiryDate = null;
+      await category.save();
+    });
+
+    await Promise.all(updatePromises);
+
+  } catch (error) {
+    console.error('Error in category cron job:', error);
+  }
+});
 
 const getusermanagement = (async (req, res) => {
 
