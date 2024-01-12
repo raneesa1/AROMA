@@ -235,11 +235,13 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="Landmark"
+                  id="checkoutLandmark"
                   name="Landmark"
                 />
+                  <small id="checkoutLandmarkError" class="text-danger"></small>
 
               </div>
+
 
               <div class="form-group">
                 <label for="City">City:</label>
@@ -691,7 +693,7 @@ document.getElementById("addressForm").addEventListener("submit", function (even
 
   function validateAddress(address) {
     const minLength = 40;
-    const maxLength = 200;
+    const maxLength = 70;
     const trimmedAddress = address.trim();
     return trimmedAddress.length >= minLength && trimmedAddress.length <= maxLength;
   }
@@ -707,6 +709,8 @@ document.getElementById("addressForm").addEventListener("submit", function (even
   }
 
   const maxFieldLength = 50; // Set your desired maximum field length
+  const maxnamelimit=12
+  
 
   const checkoutFirstname = document.getElementById("checkoutFirstname");
   const checkoutFirstnameValue = checkoutFirstname.value;
@@ -736,6 +740,15 @@ document.getElementById("addressForm").addEventListener("submit", function (even
   const checkoutPhonenumberValue = checkoutPhonenumber.value;
   const checkoutPhonenumberError = document.getElementById("checkoutPhonenumberError");
 
+
+  const checkoutLandmark = document.getElementById("checkoutLandmark")
+  const checkoutLandmarkvalue = checkoutLandmark.value
+  const checkoutLandmarkError = document.getElementById("checkoutLandmarkError")
+
+
+
+
+
   checkoutFirstnameError.textContent = "";
   checkoutSecondnameError.textContent = "";
   checkoutAddressError.textContent = "";
@@ -743,13 +756,25 @@ document.getElementById("addressForm").addEventListener("submit", function (even
   checkoutCityError.textContent = "";
   checkoutPincodeError.textContent = "";
   checkoutPhonenumberError.textContent = "";
+  checkoutLandmarkError.textContent = ""
 
-  if (checkoutFirstnameValue.length > maxFieldLength) {
+
+
+  const trimmedfirstname = checkoutFirstnameValue.trim()
+  const trimmedSecondname = checkoutSecondnameValue.trim()
+  const trimmedState = checkoutStateValue.trim()
+  const trimmedCity = checkoutCityValue.trim()
+  const trimmedlandmark = checkoutLandmarkvalue.trim()
+  const landmarklimit =12
+  const StateLimit = 9
+  const CityLimit = 9
+
+  if (trimmedfirstname.length > maxnamelimit) {
     checkoutFirstnameError.textContent = "First name is too long";
     event.preventDefault();
   }
 
-  if (checkoutSecondnameValue.length > maxFieldLength) {
+  if (trimmedSecondname.length > maxnamelimit) {
     checkoutSecondnameError.textContent = "Second name is too long";
     event.preventDefault();
   }
@@ -803,6 +828,19 @@ document.getElementById("addressForm").addEventListener("submit", function (even
     checkoutPincodeError.textContent = "Enter a valid pincode";
     event.preventDefault();
   }
+  if(trimmedSecondname.length > StateLimit){
+    checkoutStateError.textContent = "Enter a valid State"
+    event.preventDefault()
+  } 
+  if(trimmedCity.length > CityLimit){
+    checkoutCityError.textContent = "Enter a valid City"
+    event.preventDefault()
+  }
+  if(trimmedlandmark.length > landmarklimit){
+    checkoutLandmarkError.textContent = "Land mark is too long"
+    event.preventDefault()
+  }
+
 });
 
 </script>

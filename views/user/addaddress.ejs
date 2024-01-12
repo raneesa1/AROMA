@@ -105,7 +105,7 @@
                       name="State"
                       id="state"
                       class="form-control"
-                      placeholder="palakkad"
+
                     />
 
                     <small id="stateError" class="text-danger"></small>
@@ -120,7 +120,6 @@
                       name="City"
                       id="city"
                       class="form-control"
-                      placeholder="palakkad"
                     />
                     <small id="cityError" class="text-danger"></small>
                     <!-- <small id="emailHelp" class="form-text text-muted"
@@ -131,10 +130,12 @@
                     <label for="City">Landmark(optional)</label>
                     <input
                       type="text"
+                      id="Landmark"
                       name="Landmark"
                       class="form-control"
                       placeholder=""
                     />
+                    <small id="LandmarkError" class="text-danger"></small>
                     <!-- <small id="emailHelp" class="form-text text-muted"
                       >We'll never share your email with anyone else.</small
                     > -->
@@ -197,7 +198,7 @@
         </div>
       </div>
     </section>
-       <%- include('./partial/footer') %>
+    <%- include('./partial/footer') %>
     <script>
       document
         .querySelector("form")
@@ -209,7 +210,12 @@
 
           function validateAddress(address) {
             const minLength = 40;
-            return address.trim().length >= minLength;
+            const maxLength = 70;
+            const trimmedAddress = address.trim();
+            return (
+              trimmedAddress.length >= minLength &&
+              trimmedAddress.length <= maxLength
+            );
           }
           function validatePhone(phonenumber) {
             const phoneRegex = /^\d{10}$/;
@@ -220,6 +226,10 @@
             const pinRegex = /^\d{6}$/;
             return pinRegex.test(pincode);
           }
+          const maxnamelimit = 8;
+          const optionallimit = 12;
+          const statelimit = 9
+          const citylimit = 9
 
           const firstname = document.getElementById("firstname");
           const firstnameValue = firstname.value;
@@ -249,6 +259,12 @@
           const phonenumberValue = phonenumber.value;
           const phonenumberError = document.getElementById("phonenumberError");
 
+          const Landmark = document.getElementById("Landmark");
+          const landmarkvalue = Landmark.value;
+          const LandmarkError = document.getElementById("LandmarkError");
+          const trimmesstate = stateValue.trim()
+          const citytrimmed = cityValue.trim()
+
           firstnameError.textContent = "";
           secondnameError.textContent = "";
           addressError.textContent = "";
@@ -256,6 +272,17 @@
           cityError.textContent = "";
           pincodeError.textContent = "";
           phonenumberError.textContent = "";
+          LandmarkError.textContent = "";
+
+
+
+          if (firstnameValue.length > maxnamelimit) {
+            firstnameError.textContent = "First name is too long";
+            event.preventDefault();
+          }
+          if (secondnameValue.length > maxnamelimit) {
+            secondnameError.textContent = "Second name is too long";
+          }
 
           if (isEmpty(firstnameValue)) {
             firstnameError.textContent = "First name can't be empty";
@@ -297,8 +324,18 @@
           }
           if (!validateAddress(addressValue)) {
             addressError.textContent =
-              "Address should have at least 40 characters";
+              "Address should have between 40 and 50 characters";
             event.preventDefault();
+          }
+          if (landmarkvalue.length > optionallimit) {
+            LandmarkError.textContent = "landmark is too long";
+            event.preventDefault();
+          }
+          if(trimmesstate.length > statelimit){
+            stateError.textContent = "Enter a valid State"
+          }
+          if(citytrimmed.length > citylimit){
+            cityError.textContent = "Enter a valid city"
           }
         });
     </script>
