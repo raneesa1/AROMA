@@ -41,6 +41,10 @@ const getproduct = async (req, res) => {
     const categorydata = await category.find()
     res.render('user/product1', { products, related, categorydata })
 }
+// Utility function to escape special characters in a string
+function escapeRegExp(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
 
 const updateProducts = async (req, res) => {
     try {
@@ -57,7 +61,8 @@ const updateProducts = async (req, res) => {
         }
 
         if (search) {
-            filterQuery.name = { $regex: `^${search}`, $options: 'i' };
+            const escapedSearchTerm = escapeRegExp(search);
+            filterQuery.name = { $regex: `^${escapedSearchTerm}`, $options: 'i' };
         }
 
         const sortOrderArray = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
@@ -86,6 +91,5 @@ const updateProducts = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
 
 module.exports = { getproduct, updateProducts }
