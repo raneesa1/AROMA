@@ -21,8 +21,14 @@
   </head>
   <body>
     <%- include('./partial/header') %>
+ <div class="fake-info">
+      <p class="mb-0 pb-0 text-muted ml-2">User:raneesak95@gmail.com</p>
+            <p class="mb-0 pb-0 text-muted ml-2">Admin:raneesak73@gmail.com</p>
+      <p class="mb-0 pb-0 text-muted ml-2">pass:raneesa123</p>
+    </div>
     <div class="fillbox">
       <form class="form-box" id="loginForm" action="/signup" method="post">
+        
         <h1 id="title" class="title">Sign up</h1>
         <div class="btn-field">
           <button type="button" id="signupbtn">Sign up</button>
@@ -58,6 +64,8 @@
             </p>
           </div>
           <%}%>
+
+          
           <div class="input-field" id="namefield">
             <input type="name" placeholder="name" name="name" id="name" />
             <div
@@ -179,6 +187,7 @@
         </div>
       </form>
     </div>
+
     <script>
       let signupbtn = document.getElementById("signupbtn");
       let loginbtn = document.getElementById("loginbtn");
