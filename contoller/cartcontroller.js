@@ -4,7 +4,7 @@ const user = require("../model/users");
 
 const cart = require("../model/cart");
 const { json } = require("express");
-
+const nodemailer = require('nodemailer')
 const mongoose = require('mongoose');
 const { productget } = require("./usercontroller");
 const address = require("../model/address");
@@ -15,6 +15,17 @@ const wallet = require("../model/wallet");
 require("dotenv").config()
 const { RAZORPAY_KEYID, RAZORPAY_KEY_SECRET } = process.env
 
+
+
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.AUTH_EMAIL,
+        pass: process.env.AUTH_PASS,
+
+    }
+});
 
 
 
@@ -315,6 +326,7 @@ const placeOrder = async (req, res) => {
 
         const userData = await user.findOne({ email: req.session.email });
         const userId = userData._id;
+        
         console.log(userData, "user dataaaaaa")
         console.log(userData._id, "user id manual")
         console.log(userId, "user id defined")
@@ -466,9 +478,9 @@ const placeOrder = async (req, res) => {
 
 
         res.redirect('/ordermessage')
-
-
-
+        console.log('before sending the email ')
+        sendOrderConfirmation(userData.email)
+        console.log('after sending the email')
 
 
         // req.session.grandTotal = undefined
@@ -483,6 +495,28 @@ const placeOrder = async (req, res) => {
 
 }
 
+const sendOrderConfirmation = (email) => {
+    try {
+
+    
+    let mailOptions = {
+        to: email,
+        subject: "Thankyou for placing the order with us ! your order is confirmed with aroma.shop. you can track your order in our offical website arooma.shop",
+        html: "<h1>Thankyou!</h1>"
+    };
+
+    transporter.sendMail(mailOptions,(error,info)=>{
+        if(error){
+            console.log('an error occured')
+        }else{
+            console.log('order email send')
+        }
+    })
+    } catch (error) {
+        console.log(error)
+    }
+
+}
 
 
 const generateRazorpay = async (req, res) => {
