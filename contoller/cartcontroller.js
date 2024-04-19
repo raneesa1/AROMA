@@ -502,7 +502,7 @@ const sendOrderConfirmation = (email) => {
     let mailOptions = {
         to: email,
         subject: "Thankyou for placing the order with us ! your order is confirmed with aroma.shop. you can track your order in our offical website arooma.shop",
-        html: "<h1>Thankyou!</h1>"
+        html: "<h1>order confirmed!</h1>"
     };
 
     transporter.sendMail(mailOptions,(error,info)=>{
