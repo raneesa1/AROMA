@@ -116,8 +116,7 @@ select.noStyle {
 .fillbox {
   width: 100%;
   height: 200px;
-
-  padding-top: 0%;
+  padding-top: -33%;
   position: relative;
   font-family: lucida;
 }
@@ -126,7 +125,7 @@ select.noStyle {
   font-family: lucida;
   max-width: 450px;
   position: absolute;
-  top: -150%;
+  top: -190%;
   max-width: 600px;
   left: 50%;
   background: #fff;
