@@ -162,7 +162,7 @@ select.noStyle {
   max-height: 65px;
   transition: max-height 0.5s;
   overflow: hidden;
-  font-size: 34px; /* Increase the font size for input fields */
+  font-size: 34px;
   height: 65px;
 }
 input {
@@ -229,17 +229,17 @@ form a {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-left: 6px; /* Add spacing between icons if needed */
+  margin-left: 6px; 
 }
 
 .icon-box svg {
-  width: 20px; /* Adjust the width to make the icons smaller */
-  height: 20px; /* Adjust the height accordingly */
-  fill: #000; /* Modify the color if needed */
+  width: 20px; 
+  height: 20px; 
+  fill: #000; 
 }
 .d-flex p {
-  padding: 3px; /* Adjust the top padding to bring the text closer */
-  margin: 0; /* Remove any margin to make it closer to the line */
+  padding: 3px; 
+  margin: 0;
   color: #000000;
   font-family: Tahoma;
 }
@@ -249,8 +249,8 @@ form a {
   align-items: center;
   margin: 0;
   margin-bottom: 0;
-  height: 50px; /* Adjust the height as needed */
-  width: 100%; /* Adjust the width as needed */
+  height: 50px; 
+  width: 100%;
 }
 
 .g {
